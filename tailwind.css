@@ -1,0 +1,333 @@
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .all-\[unset\] {
+    all: unset;
+  }
+  
+  .cch-intelligence-title {
+    font-family: var(--heading-normal-h3-step-5-font-family);
+    font-size: var(--heading-normal-h3-step-5-font-size);
+    font-style: var(--heading-normal-h3-step-5-font-style);
+    font-weight: var(--heading-normal-h3-step-5-font-weight);
+    letter-spacing: var(--heading-normal-h3-step-5-letter-spacing);
+    line-height: var(--heading-normal-h3-step-5-line-height);
+    color: var(--heading-normal-h3-step-5-color);
+    font-variant-numeric: var(--heading-normal-h3-step-5-font-variant-numeric);
+    font-feature-settings: var(--heading-normal-h3-step-5-font-feature-settings);
+  }
+}
+
+:root {
+  --black-000000: rgba(0, 0, 0, 1);
+  --blueshade1-005b92: rgba(0, 91, 146, 1);
+  --bluetint6-f2f8fc: rgba(242, 248, 252, 1);
+  --bluewkblue-007ac3: rgba(0, 122, 195, 1);
+  --body-light-light-14px-default-font-family: "Fira Sans", Helvetica;
+  --body-light-light-14px-default-font-size: 14px;
+  --body-light-light-14px-default-font-style: normal;
+  --body-light-light-14px-default-font-weight: 300;
+  --body-light-light-14px-default-letter-spacing: 0px;
+  --body-light-light-14px-default-line-height: 24px;
+  --body-medium-medium-14px-font-family: "Fira Sans", Helvetica;
+  --body-medium-medium-14px-font-size: 14px;
+  --body-medium-medium-14px-font-style: normal;
+  --body-medium-medium-14px-font-weight: 500;
+  --body-medium-medium-14px-letter-spacing: 0px;
+  --body-medium-medium-14px-line-height: 24px;
+  --body-normal-regular-font-family: "Fira Sans", Helvetica;
+  --body-normal-regular-font-size: 16px;
+  --body-normal-regular-font-style: normal;
+  --body-normal-regular-font-weight: 400;
+  --body-normal-regular-letter-spacing: 0px;
+  --body-normal-regular-line-height: 24px;
+  --body-regular-regular-default-14px-font-family: "Fira Sans", Helvetica;
+  --body-regular-regular-default-14px-font-size: 14px;
+  --body-regular-regular-default-14px-font-style: normal;
+  --body-regular-regular-default-14px-font-weight: 400;
+  --body-regular-regular-default-14px-letter-spacing: 0px;
+  --body-regular-regular-default-14px-line-height: 24px;
+  --body-small-medium-font-family: "Fira Sans", Helvetica;
+  --body-small-medium-font-size: 14px;
+  --body-small-medium-font-style: normal;
+  --body-small-medium-font-weight: 500;
+  --body-small-medium-letter-spacing: 0px;
+  --body-small-medium-line-height: 21px;
+  --body-small-regular-font-family: "Fira Sans", Helvetica;
+  --body-small-regular-font-size: 14px;
+  --body-small-regular-font-style: normal;
+  --body-small-regular-font-weight: 400;
+  --body-small-regular-letter-spacing: 0px;
+  --body-small-regular-line-height: 21px;
+  --button-label-font-family: "Fira Sans", Helvetica;
+  --button-label-font-size: 14px;
+  --button-label-font-style: normal;
+  --button-label-font-weight: 400;
+  --button-label-letter-spacing: 0px;
+  --button-label-line-height: 18px;
+  --cg3-elevation-overlay: 0px 6px 12px 0px rgba(0, 0, 0, 0.1);
+  --cg3-elevation-popout: 0px 12px 24px 0px rgba(0, 0, 0, 0.1);
+  --cg3-theme2023-lightinfobg: rgba(0, 122, 195, 1);
+  --cg3-theme2023-lightneutraltextinverse: rgba(255, 255, 255, 1);
+  --elevation-light-shadow-02: 0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px
+    0px rgba(0, 0, 0, 0.14);
+  --grayshade-1: rgba(53, 53, 53, 1);
+  --grayshade2-232323: rgba(35, 35, 35, 1);
+  --graytint1-757575: rgba(117, 117, 117, 1);
+  --graytint2-a3a3a3: rgba(163, 163, 163, 1);
+  --graytint4-dadada: rgba(218, 218, 218, 1);
+  --graytint5-ededed: rgba(237, 237, 237, 1);
+  --graytint6-f6f6f6: rgba(246, 246, 246, 1);
+  --graywkgray-474747: rgba(71, 71, 71, 1);
+  --greenshade1-648d18: rgba(100, 141, 24, 1);
+  --header-header-h4-font-family: "Fira Sans", Helvetica;
+  --header-header-h4-font-size: 21px;
+  --header-header-h4-font-style: normal;
+  --header-header-h4-font-weight: 500;
+  --header-header-h4-letter-spacing: 0px;
+  --header-header-h4-line-height: 20px;
+  --heading-EYEBROW-EYEBROW-step-1-font-family: "Fira Sans", Helvetica;
+  --heading-EYEBROW-EYEBROW-step-1-font-size: 12px;
+  --heading-EYEBROW-EYEBROW-step-1-font-style: normal;
+  --heading-EYEBROW-EYEBROW-step-1-font-weight: 500;
+  --heading-EYEBROW-EYEBROW-step-1-letter-spacing: 1px;
+  --heading-EYEBROW-EYEBROW-step-1-line-height: 16px;
+  --heading-normal-h3-step-5-font-family: "Fira Sans", Helvetica;
+  --heading-normal-h3-step-5-font-size: 20px;
+  --heading-normal-h3-step-5-font-style: normal;
+  --heading-normal-h3-step-5-font-weight: 500;
+  --heading-normal-h3-step-5-letter-spacing: 0px;
+  --heading-normal-h3-step-5-line-height: 26px;
+  --heading-normal-h3-step-5-color: #353535;
+  --heading-normal-h3-step-5-font-variant-numeric: lining-nums proportional-nums;
+  --heading-normal-h3-step-5-font-feature-settings: 'case' on, 'cpsp' on, 'dlig' on, 'mgrk' on, 'liga' off, 'clig' off;
+  --heading-normal-h5-step-3-font-family: "Fira Sans", Helvetica;
+  --heading-normal-h5-step-3-font-size: 16px;
+  --heading-normal-h5-step-3-font-style: normal;
+  --heading-normal-h5-step-3-font-weight: 500;
+  --heading-normal-h5-step-3-letter-spacing: 0px;
+  --heading-normal-h5-step-3-line-height: 20px;
+  --heading-small-medium-heading-step-2-font-family: "Fira Sans", Helvetica;
+  --heading-small-medium-heading-step-2-font-size: 14px;
+  --heading-small-medium-heading-step-2-font-style: normal;
+  --heading-small-medium-heading-step-2-font-weight: 500;
+  --heading-small-medium-heading-step-2-letter-spacing: 0px;
+  --heading-small-medium-heading-step-2-line-height: 18px;
+  --heading-small-regular-heading-step-2-font-family: "Fira Sans", Helvetica;
+  --heading-small-regular-heading-step-2-font-size: 14px;
+  --heading-small-regular-heading-step-2-font-style: normal;
+  --heading-small-regular-heading-step-2-font-weight: 400;
+  --heading-small-regular-heading-step-2-letter-spacing: 0px;
+  --heading-small-regular-heading-step-2-line-height: 18px;
+  --input-normal-input-font-family: "Fira Sans", Helvetica;
+  --input-normal-input-font-size: 16px;
+  --input-normal-input-font-style: normal;
+  --input-normal-input-font-weight: 400;
+  --input-normal-input-letter-spacing: 0px;
+  --input-normal-input-line-height: 20px;
+  --input-normal-placeholder-font-family: "Fira Sans", Helvetica;
+  --input-normal-placeholder-font-size: 16px;
+  --input-normal-placeholder-font-style: normal;
+  --input-normal-placeholder-font-weight: 300;
+  --input-normal-placeholder-letter-spacing: 0px;
+  --input-normal-placeholder-line-height: 20px;
+  --input-small-placeholder-font-family: "Fira Sans", Helvetica;
+  --input-small-placeholder-font-size: 14px;
+  --input-small-placeholder-font-style: normal;
+  --input-small-placeholder-font-weight: 300;
+  --input-small-placeholder-letter-spacing: 0px;
+  --input-small-placeholder-line-height: 18px;
+  --lightbackgroundbackground-1: rgba(255, 255, 255, 1);
+  --lightforegroundforeground-1: rgba(36, 36, 36, 1);
+  --lightforegroundforeground-2: rgba(66, 66, 66, 1);
+  --lightforegroundforeground-4: rgba(112, 112, 112, 1);
+  --lightstrokestroke-1: rgba(209, 209, 209, 1);
+  --lightstrokestroke-2: rgba(224, 224, 224, 1);
+  --link-body-small-font-family: "Fira Sans", Helvetica;
+  --link-body-small-font-size: 14px;
+  --link-body-small-font-style: normal;
+  --link-body-small-font-weight: 400;
+  --link-body-small-letter-spacing: 0px;
+  --link-body-small-line-height: 21px;
+  --link-heading-small-font-family: "Fira Sans", Helvetica;
+  --link-heading-small-font-size: 14px;
+  --link-heading-small-font-style: normal;
+  --link-heading-small-font-weight: 500;
+  --link-heading-small-letter-spacing: 0px;
+  --link-heading-small-line-height: 18px;
+  --link-micro-micro-link-font-family: "Fira Sans", Helvetica;
+  --link-micro-micro-link-font-size: 12px;
+  --link-micro-micro-link-font-style: normal;
+  --link-micro-micro-link-font-weight: 400;
+  --link-micro-micro-link-letter-spacing: 0px;
+  --link-micro-micro-link-line-height: 16px;
+  --link-nav-medium-active-font-family: "Fira Sans", Helvetica;
+  --link-nav-medium-active-font-size: 14px;
+  --link-nav-medium-active-font-style: normal;
+  --link-nav-medium-active-font-weight: 500;
+  --link-nav-medium-active-letter-spacing: 0px;
+  --link-nav-medium-active-line-height: 18px;
+  --link-nav-regular-font-family: "Fira Sans", Helvetica;
+  --link-nav-regular-font-size: 14px;
+  --link-nav-regular-font-style: normal;
+  --link-nav-regular-font-weight: 400;
+  --link-nav-regular-letter-spacing: 0px;
+  --link-nav-regular-line-height: 18px;
+  --orangewkorange-ea8f00: rgba(234, 143, 0, 1);
+  --redwkred-e5202e: rgba(229, 32, 46, 1);
+  --shadow-small: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
+  --type-scale-12px-0-750rem-font-family: "Fira Sans", Helvetica;
+  --type-scale-12px-0-750rem-font-size: 12px;
+  --type-scale-12px-0-750rem-font-style: normal;
+  --type-scale-12px-0-750rem-font-weight: 400;
+  --type-scale-12px-0-750rem-letter-spacing: 0px;
+  --type-scale-12px-0-750rem-line-height: 16px;
+  --web-body-1-strong-font-family: "Segoe UI", Helvetica;
+  --web-body-1-strong-font-size: 14px;
+  --web-body-1-strong-font-style: normal;
+  --web-body-1-strong-font-weight: 400;
+  --web-body-1-strong-letter-spacing: 0px;
+  --web-body-1-strong-line-height: 20px;
+  --web-caption-1-font-family: "Segoe UI", Helvetica;
+  --web-caption-1-font-size: 12px;
+  --web-caption-1-font-style: normal;
+  --web-caption-1-font-weight: 400;
+  --web-caption-1-letter-spacing: 0px;
+  --web-caption-1-line-height: 16px;
+  --web-caption-2-font-family: "Segoe UI", Helvetica;
+  --web-caption-2-font-size: 10px;
+  --web-caption-2-font-style: normal;
+  --web-caption-2-font-weight: 400;
+  --web-caption-2-letter-spacing: 0px;
+  --web-caption-2-line-height: 14px;
+  --white-ffffff: rgba(255, 255, 255, 1);
+  --wk-cg3-ct-button-font-size-s-1-125-default-font-family: "Fira Sans",
+    Helvetica;
+  --wk-cg3-ct-button-font-size-s-1-125-default-font-size: 14px;
+  --wk-cg3-ct-button-font-size-s-1-125-default-font-style: normal;
+  --wk-cg3-ct-button-font-size-s-1-125-default-font-weight: 400;
+  --wk-cg3-ct-button-font-size-s-1-125-default-letter-spacing: 0px;
+  --wk-cg3-ct-button-font-size-s-1-125-default-line-height: 15.800000190734863px;
+  --wk-cg3-ct-tag-font-size-tag-font-family: "Fira Sans", Helvetica;
+  --wk-cg3-ct-tag-font-size-tag-font-size: 11px;
+  --wk-cg3-ct-tag-font-size-tag-font-style: normal;
+  --wk-cg3-ct-tag-font-size-tag-font-weight: 500;
+  --wk-cg3-ct-tag-font-size-tag-letter-spacing: 0.800000011920929px;
+  --wk-cg3-ct-tag-font-size-tag-line-height: 12px;
+  --wk-cg3-st-body-font-size-s-1-125-normal-font-family: "Fira Sans", Helvetica;
+  --wk-cg3-st-body-font-size-s-1-125-normal-font-size: 14px;
+  --wk-cg3-st-body-font-size-s-1-125-normal-font-style: normal;
+  --wk-cg3-st-body-font-size-s-1-125-normal-font-weight: 400;
+  --wk-cg3-st-body-font-size-s-1-125-normal-letter-spacing: 0px;
+  --wk-cg3-st-body-font-size-s-1-125-normal-line-height: 15.800000190734863px;
+  --wk-cg3-st-body-font-size-s-1-25-normal-font-family: "Fira Sans", Helvetica;
+  --wk-cg3-st-body-font-size-s-1-25-normal-font-size: 14px;
+  --wk-cg3-st-body-font-size-s-1-25-normal-font-style: normal;
+  --wk-cg3-st-body-font-size-s-1-25-normal-font-weight: 400;
+  --wk-cg3-st-body-font-size-s-1-25-normal-letter-spacing: 0px;
+  --wk-cg3-st-body-font-size-s-1-25-normal-line-height: 17.5px;
+  --wk-cg3-st-body-font-size-xs-1-5-normal-font-family: "Fira Sans", Helvetica;
+  --wk-cg3-st-body-font-size-xs-1-5-normal-font-size: 12px;
+  --wk-cg3-st-body-font-size-xs-1-5-normal-font-style: normal;
+  --wk-cg3-st-body-font-size-xs-1-5-normal-font-weight: 400;
+  --wk-cg3-st-body-font-size-xs-1-5-normal-letter-spacing: 0px;
+  --wk-cg3-st-body-font-size-xs-1-5-normal-line-height: 18px;
+  --wk-cg3-st-heading-font-size-1-1-25-normal-font-family: "Fira Sans",
+    Helvetica;
+  --wk-cg3-st-heading-font-size-1-1-25-normal-font-size: 12px;
+  --wk-cg3-st-heading-font-size-1-1-25-normal-font-style: normal;
+  --wk-cg3-st-heading-font-size-1-1-25-normal-font-weight: 500;
+  --wk-cg3-st-heading-font-size-1-1-25-normal-letter-spacing: 0px;
+  --wk-cg3-st-heading-font-size-1-1-25-normal-line-height: 15px;
+  --wk-cg3-st-heading-font-size-5-1-25-normal-font-family: "Fira Sans",
+    Helvetica;
+  --wk-cg3-st-heading-font-size-5-1-25-normal-font-size: 20px;
+  --wk-cg3-st-heading-font-size-5-1-25-normal-font-style: normal;
+  --wk-cg3-st-heading-font-size-5-1-25-normal-font-weight: 500;
+  --wk-cg3-st-heading-font-size-5-1-25-normal-letter-spacing: 0px;
+  --wk-cg3-st-heading-font-size-5-1-25-normal-line-height: 25px;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: transparent;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --card: transparent;
+    --card-foreground: 213 31% 91%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}

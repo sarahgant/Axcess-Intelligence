@@ -1,0 +1,184 @@
+@use "../utilities/colors-variables";
+@use "../utilities/fonts";
+
+.tickmark {
+    background-image: none;
+    font-family: fonts.$font-family-axcess-common;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+
+    [class^='tickmark-'],
+    [class*=' tickmark-'] {
+        color: colors-variables.$wk-primary-gray-tint4 default;
+    }
+
+    &-estimate-annotation:before {
+        content: "\ea07";
+    }
+
+    &-override-annotation:before {
+        content: "\ea08";
+    }
+
+    &-input-check:before {
+        content: "\e9cc";
+    }
+
+    &-input-check-all:before {
+        content: "\e9d1";
+    }
+
+    &-circle-1:before {
+        content: "\e9a5";
+    }
+
+    &-circle-2:before {
+        content: "\e9a6";
+    }
+
+    &-circle-3:before {
+        content: "\e9a7";
+    }
+
+    &-circle-4:before {
+        content: "\e9a8";
+    }
+
+    &-circle-5:before {
+        content: "\e9a9";
+    }
+
+    &-circle-6:before {
+        content: "\e9aa";
+    }
+
+    &-circle-7:before {
+        content: "\e9ab";
+    }
+
+    &-circle-8:before {
+        content: "\e9ac";
+    }
+
+    &-circle-9:before {
+        content: "\e9ad";
+    }
+
+    &-circle-10:before {
+        content: "\e9ae";
+    }
+
+    &-circle-a:before {
+        content: "\e9af";
+    }
+
+    &-circle-b:before {
+        content: "\e9b0";
+    }
+
+    &-circle-c:before {
+        content: "\e9b1";
+    }
+
+    &-circle-d:before {
+        content: "\e9b2";
+    }
+
+    &-circle-e:before {
+        content: "\e9b3";
+    }
+
+    &-circle-f:before {
+        content: "\e9b4";
+    }
+
+    &-circle-g:before {
+        content: "\e9b5";
+    }
+
+    &-circle-h:before {
+        content: "\e9b6";
+    }
+
+    &-circle-i:before {
+        content: "\e9b7";
+    }
+
+    &-circle-j:before {
+        content: "\e9b8";
+    }
+
+    &-unreconciled-difference:before {
+        content: "\e9b9";
+    }
+
+    &-no-reply:before {
+        content: "\e9ba";
+    }
+
+    &-general-ledger:before {
+        content: "\e9bb";
+    }
+
+    &-prior-year:before {
+        content: "\e9bc";
+    }
+
+    &-tax-return:before {
+        content: "\e9bd";
+    }
+
+    &-trial-balance:before {
+        content: "\e9be";
+    }
+
+    &-consistent-comparable-py:before {
+        content: "\e9bf";
+    }
+
+    &-confirmed:before {
+        content: "\e9c0";
+    }
+
+    &-immaterial:before {
+        content: "\e9c1";
+    }
+
+    &-exception:before {
+        content: "\e9c2";
+    }
+
+    &-exception-cleared:before {
+        content: "\e9c3";
+    }
+
+    &-sum:before {
+        content: "\e9c4";
+    }
+
+    &-check:before {
+        content: "\e9c5";
+    }
+
+    &-calculated:before {
+        content: "\e9c6";
+    }
+
+    &-recalculated:before {
+        content: "\e9c7";
+    }
+
+    &-footed:before {
+        content: "\e9c8";
+    }
+
+    &-cross-footed:before {
+        content: "\e9c9";
+    }
+
+
+
+}

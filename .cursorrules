@@ -1,0 +1,257 @@
+# CCH Axcess Intelligence Vibed - Cursor Rules
+
+---
+inclusion: always
+---
+
+# Development Environment Rules
+
+## Primary Development Commands
+
+When the user asks to "run the app" or start development, ALWAYS use the clean startup system:
+
+### Primary Development Command (RECOMMENDED)
+```bash
+npm start
+```
+
+This command automatically:
+- Kills any processes running on development ports (5173, 3001, 3002, etc.)
+- Starts the Vite development server on port 5173
+- Provides colored output and error handling
+- Works cross-platform (Windows, macOS, Linux)
+
+### Alternative Clean Startup Commands
+```bash
+npm run start:clean              # Cross-platform clean startup
+npm run start:clean:windows      # Windows-specific with detailed output
+npm run run-app                  # Alternative explicit method
+```
+
+### Port Management
+- **Frontend (Vite)**: port 5173 - Main development server
+- **Backend (Future)**: port 3001 - API server (when implemented)
+- **WebSocket**: port 3002 - Real-time features (when implemented)
+- **Preview**: port 4173 - Production build preview
+- Additional ports (3000, 5000, 8080, 8000) are also cleaned during startup
+
+### Utility Commands
+```bash
+npm run ports:check     # Check what's using development ports
+npm run clean          # Kill processes on development ports only
+npm run fresh          # Complete clean install (removes node_modules)
+npm run doctor         # Check development environment health
+```
+
+### Development Workflow
+1. **ALWAYS use `npm start` for development** (clean startup)
+2. Use `npm run ports:check` to diagnose port conflicts
+3. Use `npm run clean` to kill port processes without starting server
+4. Use `npm run fresh` for dependency issues
+5. Monitor colored console output for status and errors
+
+### Automatic Port Conflict Resolution
+The enhanced startup system:
+1. Detects processes using development ports across platforms
+2. Gracefully terminates conflicting processes
+3. Provides detailed feedback about what was killed
+4. Handles errors gracefully with helpful suggestions
+5. Starts Vite with proper environment variables
+
+This ensures a robust development experience with automatic conflict resolution.
+
+# Core Persona & Approach
+## Sequential Thinking Protocol
+**MANDATORY**: You MUST use the sequential thinking tool before proceeding. 
+
+## Operating Principles
+- **Root Cause Focus**: Always investigate and fix underlying causes, never just symptoms
+- **Test-Driven Development**: Write tests FIRST, then implement code to pass them
+- **Clean Architecture**: Follow SOLID principles and maintain clear separation of concerns
+- **Non-Programmer Friendly**: Provide detailed, step-by-step explanations for all actions
+- **Proactive Excellence**: Anticipate issues and suggest improvements beyond immediate requirements
+
+# Project Structure Requirements
+## Required Project Organization
+```
+project-root/
+├── .cursorrules              # This file
+├── docs/
+│   ├── architecture.mermaid  # System architecture diagram
+│   ├── technical.md          # Technical specifications
+│   └── status.md            # Current progress tracking
+├── tasks/
+│   └── tasks.md             # Broken down development tasks
+├── tests/                   # Test files (organized by feature)
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+└── src/                     # Source code
+```
+
+## File Management Protocol
+**REQUIRED ACTIONS** on startup and before any changes:
+1. READ docs/architecture.mermaid to understand system structure
+2. CHECK docs/status.md for current progress
+3. REVIEW tasks/tasks.md for active requirements
+4. VALIDATE against docs/technical.md specifications
+
+# Development Workflow
+## Test-Driven Development (TDD) Process
+**MANDATORY ORDER**:
+1. **Write Tests First**: Create comprehensive test cases covering:
+   - Happy path scenarios
+   - Edge cases
+   - Error conditions
+   - Security considerations
+   - Performance requirements
+2. **Run Tests** (should fail initially)
+3. **Implement Code** to pass tests
+4. **Refactor** while maintaining test coverage
+5. **Update Documentation** in docs/status.md
+
+## Code Quality Standards
+- Use strict typing (avoid 'any' in TypeScript)
+- Follow SOLID principles
+- Write self-documenting code with clear variable names
+- Include comprehensive error handling
+- Add JSDoc comments for all public methods
+- Maintain test coverage above 80%
+
+# Problem-Solving Protocol
+## Mandatory Sequential Thinking Usage
+For complex issues, ALWAYS:
+1. Use sequential thinking tool to break down the problem
+2. Identify root causes, not just symptoms
+3. Consider architectural implications
+4. Plan implementation steps
+5. Validate solution against requirements
+
+## Debugging Approach
+1. **Reproduce**: Create minimal test case that demonstrates the issue
+2. **Analyze**: Use sequential thinking to trace root cause
+3. **Fix**: Address the underlying cause, not the symptom
+4. **Test**: Ensure fix doesn't break existing functionality
+5. **Document**: Update status.md with findings and solution
+
+# Communication Guidelines
+## For Non-Programmer Users
+- **Explain Before Doing**: Describe what you plan to do and why
+- **Step-by-Step**: Break complex tasks into digestible steps
+- **Use Plain Language**: Avoid unnecessary technical jargon
+- **Show Progress**: Regularly update on what's been completed
+- **Ask When Unclear**: Seek clarification before making assumptions
+
+## Documentation Updates
+**ALWAYS UPDATE** after changes:
+- docs/status.md: Current progress and any issues encountered
+- docs/technical.md: New patterns or architectural decisions
+- tasks/tasks.md: Mark completed items and update progress
+
+# Architecture & Design Principles
+## Clean Architecture Requirements
+- **Separation of Concerns**: Each module has a single responsibility
+- **Dependency Inversion**: Depend on abstractions, not concretions
+- **Interface Segregation**: Create focused, specific interfaces
+- **Single Responsibility**: Classes and functions do one thing well
+- **Open/Closed**: Open for extension, closed for modification
+
+## Code Organization
+- **Layered Architecture**: Presentation → Business Logic → Data Access
+- **Modular Design**: Feature-based folder structure
+- **Clear Boundaries**: Well-defined module interfaces
+- **Event-Driven**: Use events for cross-module communication when needed
+
+# Quality Assurance
+## Validation Checklist
+Before marking any task complete:
+- [ ] All tests pass (unit, integration, e2e)
+- [ ] Code follows style guidelines
+- [ ] Documentation is updated
+- [ ] No security vulnerabilities introduced
+- [ ] Performance impact assessed
+- [ ] Error handling implemented
+- [ ] Edge cases covered
+
+## Error Prevention
+- Validate input parameters
+- Handle null/undefined cases
+- Implement proper error boundaries
+- Log meaningful error messages
+- Provide user-friendly error responses
+
+# Autonomy Guidelines
+## Proceed Without Asking When:
+- Writing/running tests
+- Implementing code to pass existing tests
+- Refactoring while maintaining test coverage
+- Updating documentation
+- Following established patterns
+
+## Always Ask Before:
+- Making architectural changes
+- Modifying existing APIs
+- Adding new dependencies
+- Changing database schemas
+- Implementing features not in tasks.md
+
+# File Reference Protocol
+## Context Management
+When referencing files, use this format:
+- `@{docs/status.md}` for current progress
+- `@{docs/technical.md}` for specifications
+- `@{tasks/tasks.md}` for current requirements
+- `@{src/path/file.ts}` for existing code
+
+## Context Recovery
+When hitting context limits:
+1. Reference `@{docs/status.md}` to restore progress understanding
+2. Check `@{docs/technical.md}` for implementation guidelines
+3. Review `@{tasks/tasks.md}` for current task context
+
+# Success Criteria
+## Definition of Done
+A task is complete when:
+1. **Tests Written & Passing**: Comprehensive test coverage
+2. **Code Implemented**: Clean, well-documented implementation
+3. **Documentation Updated**: All relevant docs reflect changes
+4. **Architecture Validated**: Changes align with system design
+5. **User Guidance Provided**: Clear explanation of what was built and how to use it
+
+## Continuous Improvement
+- Suggest optimizations and improvements
+- Identify technical debt opportunities
+- Recommend architectural enhancements
+- Share learning opportunities for the user
+
+## CRITICAL UI RULES
+
+### Main Application Screen
+- The main chat interface is in src/screens/Home/Home.tsx
+- This is the ONLY place chat functionality should be implemented
+- DO NOT create separate chat components
+
+### When Adding Functionality
+- ALWAYS work in the existing Home.tsx file
+- NEVER create alternative implementations
+- The UI is already designed - just make it functional
+- Use existing HTML/JSX structure - don't rewrite it
+
+### File Structure Rules
+- Home.tsx contains ALL chat functionality
+- Do not create: ChatInput.tsx, MessageList.tsx, ChatInterface.tsx, etc.
+- All state management happens in Home.tsx
+- All event handlers go in Home.tsx
+
+### Icon Usage
+- All icons are in src/styles/WK Icons/ as PNG files
+- Use these icons, not React Icons or other libraries
+- Available icons: send.png, attach.png, plus-circle.png, search.png, etc.
+
+### UI Modifications
+- The UI design is FINAL - do not change it
+- Only add functionality to existing elements
+- Preserve all existing CSS classes and styles
+- Add state and handlers, not new UI elements
+
+Remember: Excellence comes from doing things right, not just making them work. Always prioritize quality, clarity, and maintainability over speed.

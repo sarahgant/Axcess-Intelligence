@@ -1,0 +1,230 @@
+@use "../utilities/colors-variables";
+@use "../utilities/fonts";
+
+.customglyphs {
+  background-image: none;
+  font-family: fonts.$font-family-axcess-common;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+
+  [class^='xcessglyphs-'],
+  [class*=' customglyphs-'] {
+    color: colors-variables.$wk-primary-gray-tint4 default;
+  }
+
+  &-unpin-filled:before {
+    content: "\e9db";
+  }
+
+  &-horizontal-splitpane:before {
+    content: "\e9dc";
+  }
+
+  &-dashboard:before {
+    content: "\e9da";
+  }
+
+  &-delete-return-data:before {
+    content: "\e9d2";
+  }
+
+  &-gov-form-override:before {
+    content: "\e9d3";
+  }
+
+  &-version-description:before {
+    content: "\e9d4";
+  }
+
+  &-return-to-list:before {
+    content: "\e9cd";
+  }
+
+  &-link-to-worksheet:before {
+    content: "\e9ce";
+  }
+
+  &-send-to-support:before {
+    content: "\e997";
+  }
+
+  &-send-password:before {
+    content: "\e998";
+  }
+
+  &-restore-database:before {
+    content: "\e999";
+  }
+
+  &-rebuild-database:before {
+    content: "\e99a";
+  }
+
+  &-file-update:before {
+    content: "\e99b";
+  }
+
+  &-file-history:before {
+    content: "\e99c";
+  }
+
+  &-client-dashboard:before {
+    content: "\e99d";
+  }
+
+  &-backup-database:before {
+    content: "\e99e";
+  }
+
+  &-upload-ef-report:before {
+    content: "\e99f";
+  }
+
+  &-print-blank-form:before {
+    content: "\e9a0";
+  }
+
+  &-folder-to-pfx:before {
+    content: "\e9a1";
+  }
+
+  &-cch-scan:before {
+    content: "\e9a2";
+  }
+
+  &-cch-intelliforms:before {
+    content: "\e9a3";
+  }
+
+  &-cch-answer-connect:before {
+    content: "\e9a4";
+  }
+
+  &-tax-template-recent:before {
+    content: '\e995';
+  }
+
+  &-tax-template:before {
+    content: '\e996';
+  }
+
+  &-unpin:before {
+    content: '\e994';
+  }
+
+  &-sidebar-collapse:before {
+    content: '\e992';
+  }
+
+  &-sidebar-expand:before {
+    content: '\e993';
+  }
+
+  &-form-list:before {
+    content: '\e991';
+  }
+
+  &-feedback-forum:before {
+    content: "\e98f";
+  }
+
+  &-diagnostic:before {
+    content: "\e98e";
+  }
+
+  &-pin:before {
+    content: "\e98d";
+  }
+
+  &-freeze:before {
+    content: "\e984";
+  }
+
+  &-unfreeze:before {
+    content: "\e985";
+  }
+
+  &-12-dot:before {
+    content: "\e981";
+    color: colors-variables.$wk-primary-gray;
+  }
+
+  &-consolidate-icon:before {
+    content: "\e92a";
+  }
+
+  &-html:before {
+    content: "\e902";
+  }
+
+  &-xls:before {
+    content: "\e903";
+  }
+
+  &-ppt:before {
+    content: "\e904";
+  }
+
+  &-message:before {
+    content: "\e905";
+  }
+
+  &-pdf:before {
+    content: "\e906";
+  }
+
+  &-text:before {
+    content: "\e907";
+  }
+
+  &-zip:before {
+    content: "\e978";
+  }
+
+  &-dropbox:before {
+    content: "\e979";
+  }
+
+  &-file:before {
+    content: "\e911";
+  }
+
+  &-image:before {
+    content: "\e947";
+  }
+
+  &-video:before {
+    content: "\e948";
+  }
+
+  &-all-notes:before {
+    content: "\e975";
+  }
+
+  &-note:before {
+    content: "\e976";
+  }
+
+  &-program-step-library:before {
+    content: "\e97f";
+  }
+
+  &-active-user:before {
+    content: "\e980";
+  }
+
+  &-columns:before {
+    content: "\e986";
+  }
+
+  &-rows:before {
+    content: "\e987";
+  }
+
+  &-split-pane:before {
+    content: "\e988";
+  }
+}

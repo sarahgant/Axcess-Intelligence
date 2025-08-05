@@ -1,0 +1,49 @@
+@use "../utilities/mixins";
+
+.icon-btn {
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 30px;
+    width: 30px;
+    font-size: 1rem;
+  line-height: 30px;
+    outline: none;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: all ease-out .2s;
+  -o-transition: all ease-out .2s;
+  transition: all ease-out .2s;
+  vertical-align: middle;
+
+  &:hover {
+    text-decoration: none;
+
+  }
+
+  &:focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+  }
+
+  >span {
+    font-weight: lighter;
+  }
+}
+
+.icon-btn-xs {
+  @include mixins.icon-button-size(15px);
+}
+
+.icon-btn-sm {
+  @include mixins.icon-button-size(22.5px);
+}
+
+.icon-btn-lg {
+  @include mixins.icon-button-size(37.5px);
+}
+
+.icon-btn-xl {
+  @include mixins.icon-button-size(45px);
+}

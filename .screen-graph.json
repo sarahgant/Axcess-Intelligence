@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "id": "src/screens/Document/Document.tsx",
+      "label": "Document",
+      "routes": [
+        "/*",
+        "/document-intelligenceu58-home-screen"
+      ],
+      "dataModelId": "8:49972",
+      "isRoot": true
+    },
+    {
+      "id": "src/screens/ExtractingDocument/ExtractingDocument.tsx",
+      "label": "ExtractingDocument",
+      "routes": [
+        "/extracting-document-insights-2"
+      ],
+      "dataModelId": "12:13304"
+    },
+    {
+      "id": "src/screens/ConductingTax/ConductingTax.tsx",
+      "label": "ConductingTax",
+      "routes": [
+        "/conducting-tax-research"
+      ],
+      "dataModelId": "11:9207"
+    },
+    {
+      "id": "src/screens/ExtractingDocumentScreen/ExtractingDocumentScreen.tsx",
+      "label": "ExtractingDocumentScreen",
+      "routes": [
+        "/extracting-document-insights-3b"
+      ],
+      "dataModelId": "13:15604"
+    }
+  ],
+  "edges": []
+}

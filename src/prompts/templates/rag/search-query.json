@@ -1,0 +1,47 @@
+{
+  "id": "rag.search.enhanced",
+  "name": "Enhanced RAG Search and Retrieval",
+  "category": "rag",
+  "template": "You are performing a search to answer the user's tax-related query using available knowledge sources.\n\n## Search Query:\n{{query}}\n\n## Available Context:\n{{context}}\n\n## Search Instructions:\n1. **Analyze the Query**: Break down the user's question into key components\n2. **Context Review**: Carefully examine all provided context for relevant information\n3. **Information Extraction**: Extract specific facts, figures, and regulatory guidance\n4. **Gap Identification**: Note any missing information that would be helpful\n5. **Source Prioritization**: Prioritize official tax sources (IRS, state agencies, CCH materials)\n\n## Response Format:\n### Direct Answer\n[Provide the most direct answer possible based on available context]\n\n### Supporting Details\n[Include relevant details, examples, and clarifications]\n\n### Sources Referenced\n[List the specific sources and sections referenced]\n\n### Additional Resources Needed\n[If applicable, note what additional information would be helpful]\n\n## Quality Checks:\n- ✓ Answer addresses the specific query\n- ✓ Information is current and accurate\n- ✓ Sources are properly attributed\n- ✓ Limitations are clearly stated\n\nSearch Focus: {{searchFocus}}\nCompliance Year: {{complianceYear}}",
+  "variables": ["query", "context", "searchFocus", "complianceYear"],
+  "modelSpecific": {
+    "anthropic": "Human: You are performing a search to answer the user's tax-related query using available knowledge sources.\n\n## Search Query:\n{{query}}\n\n## Available Context:\n{{context}}\n\n## Search Instructions:\n1. **Analyze the Query**: Break down the user's question into key components\n2. **Context Review**: Carefully examine all provided context for relevant information\n3. **Information Extraction**: Extract specific facts, figures, and regulatory guidance\n4. **Gap Identification**: Note any missing information that would be helpful\n5. **Source Prioritization**: Prioritize official tax sources (IRS, state agencies, CCH materials)\n\n## Response Format:\n### Direct Answer\n[Provide the most direct answer possible based on available context]\n\n### Supporting Details\n[Include relevant details, examples, and clarifications]\n\n### Sources Referenced\n[List the specific sources and sections referenced]\n\n### Additional Resources Needed\n[If applicable, note what additional information would be helpful]\n\n## Quality Checks:\n- ✓ Answer addresses the specific query\n- ✓ Information is current and accurate\n- ✓ Sources are properly attributed\n- ✓ Limitations are clearly stated\n\nSearch Focus: {{searchFocus}}\nCompliance Year: {{complianceYear}}\n\nAssistant:",
+    "openai": "You are performing a search to answer the user's tax-related query using available knowledge sources.\n\n## Search Query:\n{{query}}\n\n## Available Context:\n{{context}}\n\n## Search Instructions:\n1. **Analyze the Query**: Break down the user's question into key components\n2. **Context Review**: Carefully examine all provided context for relevant information\n3. **Information Extraction**: Extract specific facts, figures, and regulatory guidance\n4. **Gap Identification**: Note any missing information that would be helpful\n5. **Source Prioritization**: Prioritize official tax sources (IRS, state agencies, CCH materials)\n\n## Response Format:\n### Direct Answer\n[Provide the most direct answer possible based on available context]\n\n### Supporting Details\n[Include relevant details, examples, and clarifications]\n\n### Sources Referenced\n[List the specific sources and sections referenced]\n\n### Additional Resources Needed\n[If applicable, note what additional information would be helpful]\n\n## Quality Checks:\n- ✓ Answer addresses the specific query\n- ✓ Information is current and accurate\n- ✓ Sources are properly attributed\n- ✓ Limitations are clearly stated\n\nSearch Focus: {{searchFocus}}\nCompliance Year: {{complianceYear}}"
+  },
+  "version": "1.0.0",
+  "metadata": {
+    "author": "CCH Intelligence Team",
+    "lastModified": "2025-01-04T19:35:00.000Z",
+    "description": "Enhanced RAG search template for comprehensive tax research with structured output",
+    "tags": ["rag", "search", "retrieval", "tax-research", "structured"],
+    "usage": "Use for all RAG-based search operations when answering user queries",
+    "isCritical": false,
+    "estimatedTokens": 280
+  },
+  "validation": {
+    "required": ["query", "context"],
+    "optional": {
+      "searchFocus": "general tax research",
+      "complianceYear": "2024"
+    },
+    "types": {
+      "query": "string",
+      "context": "string",
+      "searchFocus": "string",
+      "complianceYear": "string"
+    }
+  },
+  "examples": [
+    {
+      "name": "Business Deduction Query",
+      "description": "Example search for business meal deduction information",
+      "variables": {
+        "query": "What are the 2024 business meal deduction rules?",
+        "context": "IRS Publication 463 states that business meals are generally 50% deductible when directly related to business...",
+        "searchFocus": "business deductions",
+        "complianceYear": "2024"
+      },
+      "expectedOutput": "Structured response with direct answer about 50% deductibility, supporting details about requirements, source citations to Pub 463, and any additional resources needed"
+    }
+  ]
+}

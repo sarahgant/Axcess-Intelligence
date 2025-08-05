@@ -1,0 +1,55 @@
+{
+  "id": "document.analysis.comprehensive",
+  "name": "Comprehensive Document Analysis",
+  "category": "document",
+  "template": "You are analyzing a tax-related document to extract key information and provide professional insights.\n\n## Document Information:\n**Document Type**: {{documentType}}\n**Analysis Purpose**: {{analysisPurpose}}\n**Client Context**: {{clientContext}}\n\n## Document Content:\n{{documentContent}}\n\n## Analysis Framework:\n\n### 1. Document Overview\n- Document type and purpose\n- Key dates and deadlines\n- Parties involved\n- Jurisdiction/applicable law\n\n### 2. Critical Information Extraction\n- Financial figures and calculations\n- Tax implications and consequences\n- Compliance requirements\n- Risk factors or red flags\n\n### 3. Professional Assessment\n- Accuracy and completeness review\n- Potential issues or concerns\n- Recommended actions or follow-up\n- Additional documentation needed\n\n### 4. Strategic Recommendations\n- Tax planning opportunities\n- Risk mitigation strategies\n- Process improvements\n- Timeline for action items\n\n## Special Focus Areas:\n{{specialFocus}}\n\n## Output Requirements:\n- Use professional tax terminology\n- Cite specific document sections\n- Highlight critical deadlines\n- Flag any inconsistencies or errors\n- Provide actionable recommendations\n\nAnalysis Date: {{analysisDate}}\nCompliance Year: {{complianceYear}}",
+  "variables": ["documentType", "analysisPurpose", "clientContext", "documentContent", "specialFocus", "analysisDate", "complianceYear"],
+  "modelSpecific": {
+    "anthropic": "Human: You are analyzing a tax-related document to extract key information and provide professional insights.\n\n## Document Information:\n**Document Type**: {{documentType}}\n**Analysis Purpose**: {{analysisPurpose}}\n**Client Context**: {{clientContext}}\n\n## Document Content:\n{{documentContent}}\n\n## Analysis Framework:\n\n### 1. Document Overview\n- Document type and purpose\n- Key dates and deadlines\n- Parties involved\n- Jurisdiction/applicable law\n\n### 2. Critical Information Extraction\n- Financial figures and calculations\n- Tax implications and consequences\n- Compliance requirements\n- Risk factors or red flags\n\n### 3. Professional Assessment\n- Accuracy and completeness review\n- Potential issues or concerns\n- Recommended actions or follow-up\n- Additional documentation needed\n\n### 4. Strategic Recommendations\n- Tax planning opportunities\n- Risk mitigation strategies\n- Process improvements\n- Timeline for action items\n\n## Special Focus Areas:\n{{specialFocus}}\n\n## Output Requirements:\n- Use professional tax terminology\n- Cite specific document sections\n- Highlight critical deadlines\n- Flag any inconsistencies or errors\n- Provide actionable recommendations\n\nAnalysis Date: {{analysisDate}}\nCompliance Year: {{complianceYear}}\n\nPlease provide a comprehensive analysis following the framework above.\n\nAssistant:",
+    "openai": "You are analyzing a tax-related document to extract key information and provide professional insights.\n\n## Document Information:\n**Document Type**: {{documentType}}\n**Analysis Purpose**: {{analysisPurpose}}\n**Client Context**: {{clientContext}}\n\n## Document Content:\n{{documentContent}}\n\n## Analysis Framework:\n\n### 1. Document Overview\n- Document type and purpose\n- Key dates and deadlines\n- Parties involved\n- Jurisdiction/applicable law\n\n### 2. Critical Information Extraction\n- Financial figures and calculations\n- Tax implications and consequences\n- Compliance requirements\n- Risk factors or red flags\n\n### 3. Professional Assessment\n- Accuracy and completeness review\n- Potential issues or concerns\n- Recommended actions or follow-up\n- Additional documentation needed\n\n### 4. Strategic Recommendations\n- Tax planning opportunities\n- Risk mitigation strategies\n- Process improvements\n- Timeline for action items\n\n## Special Focus Areas:\n{{specialFocus}}\n\n## Output Requirements:\n- Use professional tax terminology\n- Cite specific document sections\n- Highlight critical deadlines\n- Flag any inconsistencies or errors\n- Provide actionable recommendations\n\nAnalysis Date: {{analysisDate}}\nCompliance Year: {{complianceYear}}\n\nPlease provide a comprehensive analysis following the framework above."
+  },
+  "version": "1.0.0",
+  "metadata": {
+    "author": "CCH Intelligence Team",
+    "lastModified": "2025-01-04T19:35:00.000Z",
+    "description": "Comprehensive document analysis template for tax professionals with structured analytical framework",
+    "tags": ["document", "analysis", "tax", "professional", "comprehensive"],
+    "usage": "Use for detailed analysis of tax documents, forms, and financial statements",
+    "isCritical": false,
+    "estimatedTokens": 350
+  },
+  "validation": {
+    "required": ["documentType", "analysisPurpose", "documentContent"],
+    "optional": {
+      "clientContext": "General business client",
+      "specialFocus": "Standard tax compliance review",
+      "analysisDate": "current date",
+      "complianceYear": "2024"
+    },
+    "types": {
+      "documentType": "string",
+      "analysisPurpose": "string",
+      "clientContext": "string",
+      "documentContent": "string",
+      "specialFocus": "string",
+      "analysisDate": "string",
+      "complianceYear": "string"
+    }
+  },
+  "examples": [
+    {
+      "name": "Form 1120 Analysis",
+      "description": "Analysis of corporate tax return Form 1120",
+      "variables": {
+        "documentType": "Form 1120 - U.S. Corporation Income Tax Return",
+        "analysisPurpose": "Annual compliance review and tax planning",
+        "clientContext": "Mid-sized manufacturing corporation, C-Corp status",
+        "documentContent": "[Form 1120 data would be inserted here]",
+        "specialFocus": "R&D credits and depreciation strategies",
+        "analysisDate": "2024-01-04",
+        "complianceYear": "2023"
+      },
+      "expectedOutput": "Structured analysis covering document overview, critical extractions, professional assessment, and strategic recommendations specific to Form 1120"
+    }
+  ]
+}

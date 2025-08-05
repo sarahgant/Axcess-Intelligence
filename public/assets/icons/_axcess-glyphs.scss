@@ -1,0 +1,125 @@
+@use "../utilities/colors-variables";
+@use "../utilities/fonts";
+
+//todo don't repeat yourself.
+.axcessglyphs {
+  font-family: fonts.$font-family-axcess-common;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+
+  &::before {
+    color: colors-variables.$wk-primary-white;
+    margin-left: 5px;
+    padding: 10px;
+  }
+
+  //keeping this for backwards compatibility
+  [class^='axcessglyphs-'],
+  [class*=' axcessglyphs-'] {
+    &::before {
+      color: colors-variables.$wk-primary-white;
+      margin-left: 5px;
+      padding: 10px;
+    }
+  }
+
+  &-scan-optimizer:before {
+    background-color: colors-variables.$wk-secondary-purple;
+    content: "\ea04";
+  }
+
+  &-beneficial-ownership:before {
+    background-color: colors-variables.$wk-primary-blue;
+    content: "\e9cb";
+
+  }
+
+  &-business-intelligence:before {
+    background-color: colors-variables.$wk-primary-gray;
+    content: "\e929";
+  }
+
+  &-financial-prep:before {
+    background-color: colors-variables.$wk-secondary-orange;
+    content: "\e977";
+  }
+
+  &-administration:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e93d";
+  }
+
+  &-accounts-receivables:before {
+    background-color: colors-variables.$wk-primary-green;
+    content: "\e93e";
+  }
+
+  &-billing-invoicing:before {
+    background-color: colors-variables.$wk-primary-green;
+    content: "\e93f";
+  }
+
+  &-tax:before {
+    background-color: colors-variables.$wk-primary-blue;
+    content: "\e940";
+  }
+
+  &-document:before {
+    background-color: colors-variables.$wk-secondary-purple;
+    content: "\e92b";
+  }
+
+  &-workstream:before {
+    background-color: colors-variables.$wk-primary-red;
+    content: "\e92c";
+  }
+
+  &-staff:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e92d";
+  }
+
+  &-security:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e92e";
+  }
+
+  &-clients:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e92f";
+  }
+
+  &-reports:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e930";
+  }
+
+  &-time-capture:before {
+    background-color: colors-variables.$wk-primary-green;
+    content: "\e935";
+  }
+
+  &-settings:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e964";
+  }
+
+  &-firm:before {
+    background-color: colors-variables.$wk-secondary-green;
+    content: "\e97c";
+  }
+
+  &-knowledge-coach:before {
+    background-color: colors-variables.$wk-secondary-orange;
+    content: "\e97e";
+  }
+
+  &-workflow:before {
+    background-color: colors-variables.$wk-primary-red;
+    content: "\e982";
+  }
+
+}

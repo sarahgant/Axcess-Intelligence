@@ -1,0 +1,9 @@
+/* Import existing Tailwind CSS first */
+@import '../../tailwind.css';
+
+/* WK Theme - Main import with all components and utilities */
+@import 'node_modules/@wk/theme/assets/main';
+
+/* WK Theme - Font paths configuration */
+$font-path: 'node_modules/@wk/theme/assets/fonts/';
+$icon-font-path: "node_modules/@wk/theme/assets/fonts/bootstrap/";

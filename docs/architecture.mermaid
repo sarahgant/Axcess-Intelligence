@@ -1,0 +1,140 @@
+```mermaid
+graph TB
+    subgraph "CCH Axcess Intelligence Vibed - React Application"
+        subgraph "Entry Points"
+            HTML[index.html]
+            INDEX[src/index.tsx]
+            APP[src/App.tsx]
+        end
+        
+        subgraph "Routing Layer"
+            ROUTER[React Router<br/>- Document Intelligence Home<br/>- Extracting Document Insights<br/>- Conducting Tax Research<br/>- Document Screen]
+        end
+        
+        subgraph "Screen Components"
+            DOC[Document Screen<br/>Main Dashboard]
+            EXTRACT1[ExtractingDocument<br/>Document Analysis]
+            EXTRACT2[ExtractingDocumentScreen<br/>Document Insights]
+            TAX[ConductingTax<br/>Tax Research]
+        end
+        
+        subgraph "Document Screen Sections"
+            DOC_MAIN[Main Content<br/>- Search Interface<br/>- Suggestion Cards<br/>- Recent Activities]
+            DOC_NAV[Navigation Bar<br/>- Profile Menu<br/>- Settings<br/>- Help]
+        end
+        
+        subgraph "ExtractingDocument Sections"
+            EXTRACT_MAIN[MainContentSection<br/>- Document Upload<br/>- Analysis Results]
+            EXTRACT_NAV[NavigationBarSection<br/>- Breadcrumbs<br/>- Actions]
+        end
+        
+        subgraph "ExtractingDocumentScreen Sections"
+            EXTRACT2_CTX[ContextualInfoSection<br/>- Document Context<br/>- AI Insights]
+            EXTRACT2_LIST[DocumentListSection<br/>- Document Library<br/>- File Management]
+        end
+        
+        subgraph "ConductingTax Sections"
+            TAX_AI[AiContentSection<br/>- AI Research Assistant<br/>- Tax Code Analysis]
+            TAX_NAV[NavigationBarSection<br/>- Research Tools<br/>- History]
+        end
+        
+        subgraph "UI Components Library"
+            subgraph "Radix UI Components"
+                ACCORDION[Accordion]
+                DIALOG[Dialog]
+                SCROLL[ScrollArea]
+                SELECT[Select]
+                SEPARATOR[Separator]
+                TABS[Tabs]
+            end
+            
+            subgraph "Custom UI Components"
+                BADGE[Badge]
+                BUTTON[Button]
+                CARD[Card]
+                INPUT[Input]
+                TEXTAREA[TextArea]
+            end
+        end
+        
+        subgraph "Utilities & Configuration"
+            UTILS[lib/utils.ts<br/>- Tailwind Utilities<br/>- Helper Functions]
+            TAILWIND[Tailwind Config<br/>- Design System<br/>- Animations]
+            VITE[Vite Config<br/>- Build Setup<br/>- Dev Server]
+        end
+        
+        subgraph "Styling & Assets"
+            CSS[tailwind.css<br/>Global Styles]
+            ICONS[Lucide React Icons]
+        end
+    end
+    
+    %% Connections
+    HTML --> INDEX
+    INDEX --> APP
+    APP --> ROUTER
+    
+    ROUTER --> DOC
+    ROUTER --> EXTRACT1
+    ROUTER --> EXTRACT2
+    ROUTER --> TAX
+    
+    DOC --> DOC_MAIN
+    DOC --> DOC_NAV
+    
+    EXTRACT1 --> EXTRACT_MAIN
+    EXTRACT1 --> EXTRACT_NAV
+    
+    EXTRACT2 --> EXTRACT2_CTX
+    EXTRACT2 --> EXTRACT2_LIST
+    
+    TAX --> TAX_AI
+    TAX --> TAX_NAV
+    
+    %% UI Component Dependencies
+    DOC_MAIN --> BUTTON
+    DOC_MAIN --> CARD
+    DOC_MAIN --> INPUT
+    DOC_MAIN --> SEPARATOR
+    
+    EXTRACT_MAIN --> ACCORDION
+    EXTRACT_MAIN --> TABS
+    EXTRACT_MAIN --> SCROLL
+    
+    EXTRACT2_LIST --> SELECT
+    EXTRACT2_LIST --> DIALOG
+    
+    TAX_AI --> TEXTAREA
+    TAX_AI --> BADGE
+    
+    %% Utility Dependencies
+    DOC --> UTILS
+    EXTRACT1 --> UTILS
+    EXTRACT2 --> UTILS
+    TAX --> UTILS
+    
+    %% Styling
+    CSS --> TAILWIND
+    BUTTON --> CSS
+    CARD --> CSS
+    INPUT --> CSS
+    
+    %% Build System
+    VITE --> APP
+    VITE --> CSS
+    
+    %% External Dependencies
+    ICONS --> DOC_MAIN
+    ICONS --> EXTRACT_MAIN
+    ICONS --> TAX_AI
+    
+    classDef screen fill:#e1f5fe
+    classDef section fill:#f3e5f5
+    classDef component fill:#e8f5e8
+    classDef config fill:#fff3e0
+    
+    class DOC,EXTRACT1,EXTRACT2,TAX screen
+    class DOC_MAIN,DOC_NAV,EXTRACT_MAIN,EXTRACT_NAV,EXTRACT2_CTX,EXTRACT2_LIST,TAX_AI,TAX_NAV section
+    class BUTTON,CARD,INPUT,ACCORDION,DIALOG,SCROLL,SELECT,SEPARATOR,TABS,BADGE,TEXTAREA component
+    class UTILS,TAILWIND,VITE,CSS config
+```
