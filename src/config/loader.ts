@@ -9,6 +9,55 @@ import {
 import { DEFAULT_CONFIG, getEnvironmentOverrides, REQUIRED_ENV_VARS } from './defaults';
 
 /**
+ * Environment variables interface for type safety
+ */
+interface EnvironmentVariables {
+  ANTHROPIC_API_KEY?: string;
+  OPENAI_API_KEY?: string;
+  ANTHROPIC_BASE_URL?: string;
+  OPENAI_BASE_URL?: string;
+  OPENAI_ORGANIZATION?: string;
+  ANTHROPIC_DEFAULT_MODEL?: string;
+  OPENAI_DEFAULT_MODEL?: string;
+  ENCRYPTION_KEY?: string;
+  ENABLE_STREAMING?: boolean;
+  ENABLE_DOCUMENT_ANALYSIS?: boolean;
+  ENABLE_RAG_SEARCH?: boolean;
+  ENABLE_CHAT_HISTORY?: boolean;
+  MAX_DOCUMENTS_PER_SESSION?: number;
+  MAX_CHAT_HISTORY_ENTRIES?: number;
+  DOCUMENT_RETENTION_HOURS?: number;
+  ENABLE_DEBUG_MODE?: boolean;
+  ALLOWED_ORIGINS?: string;
+  ENABLE_CORS?: boolean;
+  RATE_LIMIT_PER_MINUTE?: number;
+  CACHE_ENABLED?: boolean;
+  CACHE_TTL_MINUTES?: number;
+  ENABLE_SERVICE_WORKER?: boolean;
+  MAX_CONCURRENT_REQUESTS?: number;
+  NODE_ENV?: string;
+  LOG_LEVEL?: string;
+  [key: string]: any; // For other environment variables
+}
+
+/**
+ * Configuration validation result interface
+ */
+interface ConfigValidationResult {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+}
+
+/**
+ * Configuration merge result interface
+ */
+interface ConfigMergeResult {
+  merged: Partial<AppConfig>;
+  conflicts: string[];
+}
+
+/**
  * Configuration loader class for managing application configuration
  * Supports loading from environment variables, local config files, and defaults
  */
@@ -142,7 +191,7 @@ export class ConfigLoader {
       // Parse environment variables 
       // In browser: use import.meta.env for VITE_ prefixed vars
       // For API keys: they should be handled by the server/build process
-      let envVars: any = {};
+      let envVars: EnvironmentVariables = {};
       
       if (typeof window !== 'undefined') {
         // Browser environment - use Vite env vars
@@ -166,7 +215,7 @@ export class ConfigLoader {
         };
       } else {
         // Node.js environment
-        envVars = process.env;
+        envVars = process.env as EnvironmentVariables;
       }
       
       const envResult = EnvSchema.safeParse(envVars);
@@ -266,119 +315,140 @@ export class ConfigLoader {
   }
 
   /**
-   * Validate configuration against schema
+   * Validate configuration structure and values
    */
-  private static validateConfiguration(config: any): ConfigLoadResult {
-    try {
-      const validatedConfig = AppConfigSchema.parse(config);
-      
-      // Check for missing required values
-      const errors: ConfigValidationError[] = [];
-      const warnings: string[] = [];
+  private static validateConfiguration(config: Partial<AppConfig>): ConfigValidationResult {
+    const errors: string[] = [];
+    const warnings: string[] = [];
 
-      // Validate required API keys
-      if (!validatedConfig.providers.anthropic.apiKey) {
-        errors.push({
-          field: 'providers.anthropic.apiKey',
-          message: 'Anthropic API key is required',
-          code: 'MISSING_REQUIRED'
-        });
+    // Validate providers configuration
+    if (config.providers) {
+      if (config.providers.anthropic) {
+        if (!config.providers.anthropic.apiKey) {
+          errors.push('Anthropic API key is required');
+        }
+        if (config.providers.anthropic.apiKey && config.providers.anthropic.apiKey.length < 10) {
+          warnings.push('Anthropic API key appears to be invalid (too short)');
+        }
       }
 
-      if (!validatedConfig.providers.openai.apiKey) {
-        errors.push({
-          field: 'providers.openai.apiKey',
-          message: 'OpenAI API key is required',
-          code: 'MISSING_REQUIRED'
-        });
-      }
-
-      // Validate encryption key
-      if (!validatedConfig.security.encryptionKey || validatedConfig.security.encryptionKey.length < 32) {
-        errors.push({
-          field: 'security.encryptionKey',
-          message: 'Encryption key must be at least 32 characters long',
-          code: 'INVALID_VALUE'
-        });
-      }
-
-      // Add warnings for development environment
-      if (validatedConfig.environment === 'development') {
-        warnings.push('Running in development mode - some security features are disabled');
-      }
-
-      if (errors.length > 0) {
-        return {
-          success: false,
-          errors,
-          warnings
-        };
-      }
-
-      return {
-        success: true,
-        config: validatedConfig,
-        warnings
-      };
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errors: ConfigValidationError[] = error.issues.map(issue => ({
-          field: issue.path.join('.'),
-          message: issue.message,
-          code: issue.code
-        }));
-
-        return {
-          success: false,
-          errors
-        };
-      }
-
-      return {
-        success: false,
-        errors: [{
-          field: 'general',
-          message: error instanceof Error ? error.message : 'Unknown validation error',
-          code: 'VALIDATION_ERROR'
-        }]
-      };
-    }
-  }
-
-  /**
-   * Deep merge two configuration objects
-   */
-  private static mergeConfigs(base: any, override: any): any {
-    const result = { ...base };
-    
-    for (const key in override) {
-      if (override[key] !== undefined) {
-        if (typeof override[key] === 'object' && override[key] !== null && !Array.isArray(override[key])) {
-          result[key] = this.mergeConfigs(result[key] || {}, override[key]);
-        } else {
-          result[key] = override[key];
+      if (config.providers.openai) {
+        if (!config.providers.openai.apiKey) {
+          errors.push('OpenAI API key is required');
+        }
+        if (config.providers.openai.apiKey && config.providers.openai.apiKey.length < 10) {
+          warnings.push('OpenAI API key appears to be invalid (too short)');
         }
       }
     }
-    
-    return result;
+
+    // Validate features configuration
+    if (config.features) {
+      if (config.features.maxDocumentsPerSession && config.features.maxDocumentsPerSession <= 0) {
+        errors.push('maxDocumentsPerSession must be greater than 0');
+      }
+      if (config.features.maxChatHistoryEntries && config.features.maxChatHistoryEntries <= 0) {
+        errors.push('maxChatHistoryEntries must be greater than 0');
+      }
+      if (config.features.documentRetentionHours && config.features.documentRetentionHours <= 0) {
+        errors.push('documentRetentionHours must be greater than 0');
+      }
+    }
+
+    // Validate security configuration
+    if (config.security) {
+      if (config.security.encryptionKey && config.security.encryptionKey.length < 16) {
+        warnings.push('Encryption key should be at least 16 characters long');
+      }
+      if (config.security.rateLimitPerMinute && config.security.rateLimitPerMinute <= 0) {
+        errors.push('rateLimitPerMinute must be greater than 0');
+      }
+    }
+
+    // Validate performance configuration
+    if (config.performance) {
+      if (config.performance.cacheTTLMinutes && config.performance.cacheTTLMinutes <= 0) {
+        errors.push('cacheTTLMinutes must be greater than 0');
+      }
+      if (config.performance.maxConcurrentRequests && config.performance.maxConcurrentRequests <= 0) {
+        errors.push('maxConcurrentRequests must be greater than 0');
+      }
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
+
+  /**
+   * Merge configuration objects with conflict detection
+   */
+  private static mergeConfigs(base: Partial<AppConfig>, override: Partial<AppConfig>): ConfigMergeResult {
+    const merged = { ...base };
+    const conflicts: string[] = [];
+
+    // Helper function to merge nested objects
+    const mergeNested = (baseObj: Record<string, unknown>, overrideObj: Record<string, unknown>, path: string): void => {
+      for (const [key, value] of Object.entries(overrideObj)) {
+        const fullPath = `${path}.${key}`;
+        
+        if (key in baseObj) {
+          if (typeof value === 'object' && value !== null && typeof baseObj[key] === 'object' && baseObj[key] !== null) {
+            // Recursively merge nested objects
+            mergeNested(baseObj[key] as Record<string, unknown>, value as Record<string, unknown>, fullPath);
+          } else if (baseObj[key] !== value) {
+            // Conflict detected
+            conflicts.push(`${fullPath}: base="${baseObj[key]}" vs override="${value}"`);
+            merged[key] = value;
+          }
+        } else {
+          // New property
+          merged[key] = value;
+        }
+      }
+    };
+
+    // Merge top-level properties
+    for (const [key, value] of Object.entries(override)) {
+      if (key in merged) {
+        if (typeof value === 'object' && value !== null && typeof merged[key] === 'object' && merged[key] !== null) {
+          // Recursively merge nested objects
+          mergeNested(merged[key] as Record<string, unknown>, value as Record<string, unknown>, key);
+        } else if (merged[key] !== value) {
+          // Conflict detected
+          conflicts.push(`${key}: base="${merged[key]}" vs override="${value}"`);
+          merged[key] = value;
+        }
+      } else {
+        // New property
+        merged[key] = value;
+      }
+    }
+
+    return {
+      merged,
+      conflicts
+    };
   }
 
   /**
    * Remove undefined values from configuration object
    */
-  private static removeUndefinedValues(obj: any): any {
-    const result: any = {};
+  private static removeUndefinedValues(obj: Record<string, unknown>): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
     
-    for (const key in obj) {
-      if (obj[key] !== undefined) {
-        if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
-          const nestedResult = this.removeUndefinedValues(obj[key]);
-          if (Object.keys(nestedResult).length > 0) {
-            result[key] = nestedResult;
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined) {
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          // Recursively clean nested objects
+          const cleaned = this.removeUndefinedValues(value as Record<string, unknown>);
+          if (Object.keys(cleaned).length > 0) {
+            result[key] = cleaned;
           }
         } else {
-          result[key] = obj[key];
+          result[key] = value;
         }
       }
     }
@@ -387,32 +457,43 @@ export class ConfigLoader {
   }
 
   /**
-   * Get configuration summary for debugging
+   * Get a summary of the current configuration for debugging
    */
-  static getConfigSummary(): any {
-    if (!this.instance) {
-      return { loaded: false };
-    }
-
-    // Return config with sensitive values masked
-    const summary = { ...this.instance };
+  static getConfigSummary(): Record<string, unknown> {
+    const config = this.getInstance();
     
-    // Mask API keys
-    if (summary.providers.anthropic.apiKey) {
-      summary.providers.anthropic.apiKey = '***' + summary.providers.anthropic.apiKey.slice(-4);
-    }
-    if (summary.providers.openai.apiKey) {
-      summary.providers.openai.apiKey = '***' + summary.providers.openai.apiKey.slice(-4);
-    }
-    
-    // Mask encryption key
-    if (summary.security.encryptionKey) {
-      summary.security.encryptionKey = '***' + summary.security.encryptionKey.slice(-4);
-    }
-
     return {
-      loaded: true,
-      config: summary
+      environment: config.environment,
+      logLevel: config.logLevel,
+      providers: {
+        anthropic: {
+          configured: !!config.providers.anthropic.apiKey,
+          hasBaseUrl: !!config.providers.anthropic.baseUrl,
+          model: config.providers.anthropic.defaultModel
+        },
+        openai: {
+          configured: !!config.providers.openai.apiKey,
+          hasBaseUrl: !!config.providers.openai.baseUrl,
+          model: config.providers.openai.defaultModel
+        }
+      },
+      features: {
+        streaming: config.features.enableStreaming,
+        documentAnalysis: config.features.enableDocumentAnalysis,
+        ragSearch: config.features.enableRAGSearch,
+        chatHistory: config.features.enableChatHistory,
+        debugMode: config.features.enableDebugMode
+      },
+      security: {
+        hasEncryptionKey: !!config.security.encryptionKey,
+        corsEnabled: config.security.enableCORS,
+        rateLimit: config.security.rateLimitPerMinute
+      },
+      performance: {
+        cacheEnabled: config.performance.cacheEnabled,
+        serviceWorker: config.performance.enableServiceWorker,
+        maxConcurrent: config.performance.maxConcurrentRequests
+      }
     };
   }
 }

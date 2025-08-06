@@ -11,6 +11,7 @@ import {
   PromptValidationError,
   PromptCompilationError
 } from './types';
+import { logger } from '../core/logging/logger';
 
 /**
  * Central registry for managing prompt templates
@@ -64,10 +65,18 @@ export class PromptRegistry {
       });
 
       if (this.config.enableLogging) {
-        console.debug(`📝 Registered prompt template: ${prompt.id} (${prompt.name})`);
+        logger.debug(`Registered prompt template: ${prompt.id} (${prompt.name})`, { 
+          component: 'PromptRegistry',
+          promptId: prompt.id,
+          promptName: prompt.name
+        });
       }
     } catch (error) {
-      console.error(`❌ Failed to register prompt '${prompt.id}':`, error);
+      logger.error(`Failed to register prompt '${prompt.id}'`, { 
+        component: 'PromptRegistry',
+        promptId: prompt.id,
+        error: error instanceof Error ? error.message : String(error)
+      });
       throw error;
     }
   }
@@ -90,11 +99,20 @@ export class PromptRegistry {
     }
 
     if (errors.length > 0) {
-      console.warn(`⚠️ Failed to register ${errors.length} prompts:`, errors);
+      logger.warn(`Failed to register ${errors.length} prompts`, { 
+        component: 'PromptRegistry',
+        errorCount: errors.length,
+        errors: errors.map(e => ({ id: e.id, error: e.error.message }))
+      });
     }
 
     if (this.config.enableLogging) {
-      console.log(`📝 Registered ${prompts.length - errors.length}/${prompts.length} prompt templates`);
+      logger.info(`Registered ${prompts.length - errors.length}/${prompts.length} prompt templates`, { 
+        component: 'PromptRegistry',
+        totalPrompts: prompts.length,
+        successfulRegistrations: prompts.length - errors.length,
+        failedRegistrations: errors.length
+      });
     }
   }
 

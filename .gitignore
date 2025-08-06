@@ -12,14 +12,12 @@ dist
 dist-ssr
 *.local
 
-# Environment variables (CRITICAL - Never commit API keys!)
+# Environment variables
 .env
-.env.*
-server/.env
-server/.env.*
-*.env
-!.env.example
-!server/env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Editor directories and files
 .vscode/*
@@ -32,31 +30,9 @@ server/.env.*
 *.sln
 *.sw?
 
-# Security & Secrets
+# Security
 *.pem
 *.key
 *.crt
-*.p12
-*.pfx
 /coverage/
 .nyc_output/
-
-# Production & Docker
-docker-compose.override.yml
-.docker/
-ssl/
-logs/
-*.log
-
-# Backend specific
-server/node_modules/
-server/logs/
-server/uploads/
-server/temp/
-
-# Development
-.vscode/settings.json
-.idea/
-*.swp
-*.swo
-*~

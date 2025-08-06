@@ -13,13 +13,21 @@ class AnthropicProvider {
         this.client = new Anthropic({
             apiKey: config.apiKey
         });
-        this.defaultModel = config.defaultModel || 'claude-3-sonnet-20240229';
+        // Map custom model names to actual API model IDs
+        const modelMapping = {
+            'claude-sonnet-4-20250514': 'claude-3-5-sonnet-20241022',
+            'claude-3.5-sonnet': 'claude-3-5-sonnet-20241022',
+            'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
+            'claude-3-sonnet-20240229': 'claude-3-sonnet-20240229'
+        };
+
+        this.defaultModel = modelMapping[config.defaultModel] || config.defaultModel || 'claude-3-5-sonnet-20241022';
 
         this.capabilities = {
             streaming: true,
             documentContext: true,
             retries: true,
-            models: ['claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307']
+            models: ['claude-3-5-sonnet-20241022', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307']
         };
 
         logger.info(`🤖 Anthropic provider initialized with model: ${this.defaultModel}`);

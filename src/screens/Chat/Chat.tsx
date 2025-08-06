@@ -1,8 +1,9 @@
 import React from "react";
+import { ScreenErrorBoundary } from "../../components/ScreenErrorBoundary";
 import { NavigationBarSection } from "./sections/NavigationBarSection";
 import { ChatSection } from "./sections/ChatSection";
 
-export const Chat: React.FC = () => {
+const ChatContent: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Navigation Bar */}
@@ -11,5 +12,13 @@ export const Chat: React.FC = () => {
       {/* Main Chat Area */}
       <ChatSection className="flex-1" />
     </div>
+  );
+};
+
+export const Chat: React.FC = () => {
+  return (
+    <ScreenErrorBoundary screenName="Chat">
+      <ChatContent />
+    </ScreenErrorBoundary>
   );
 };

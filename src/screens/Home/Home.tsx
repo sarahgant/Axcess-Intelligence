@@ -4,6 +4,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Separator } from "../../components/ui/separator";
 import { WKIcons } from "../../components/ui/wk-icon";
+import { ScreenErrorBoundary } from "../../components/ScreenErrorBoundary";
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
   DocumentUploadModal,
@@ -12,7 +13,11 @@ import {
   useDocuments,
   type CCHDocument
 } from "../../components/document-upload";
-import { apiClient, type StreamingCallbacks } from "../../services/api-client";
+import APIClient, { type StreamingCallbacks } from "../../services/api-client";
+import { logger } from "../../core/logging/logger";
+
+// Create API client instance
+const apiClient = new APIClient();
 
 // Enhanced type definitions for conversation management
 interface Message {
@@ -45,7 +50,7 @@ interface ConversationSection {
   isCollapsed: boolean;
 }
 
-export const Home = (): JSX.Element => {
+const HomeContent = (): JSX.Element => {
   // Document management
   const {
     documents,
@@ -125,7 +130,7 @@ export const Home = (): JSX.Element => {
 
     const initializeBackend = async () => {
       try {
-        console.log('🚀 Connecting to secure backend...');
+        logger.info('Connecting to secure backend', { component: 'Home' });
         setIsInitializingAI(true);
 
         // Check backend health
@@ -148,9 +153,16 @@ export const Home = (): JSX.Element => {
           setSelectedProvider(availableProvider.id);
         }
 
-        console.log('✅ Backend connected with providers:', providers.map(p => p.id));
+        logger.info('Backend connected successfully', {
+          component: 'Home',
+          providers: providers.map(p => p.id),
+          defaultProvider: availableProvider?.id
+        });
       } catch (error) {
-        console.error('❌ Failed to connect to backend:', error);
+        logger.error('Failed to connect to backend', {
+          component: 'Home',
+          error: error instanceof Error ? error.message : String(error)
+        });
         setIsBackendConnected(false);
         // In production, could show user notification about backend issues
       } finally {
@@ -267,7 +279,11 @@ export const Home = (): JSX.Element => {
         },
         {
           onStart: (data) => {
-            console.log('Started streaming response...');
+            logger.info('Started streaming response', {
+              component: 'Home',
+              provider: data.provider,
+              conversationId
+            });
           },
           onToken: (token: string) => {
             setConversations(prev => prev.map(conv =>
@@ -297,10 +313,18 @@ export const Home = (): JSX.Element => {
                 }
                 : conv
             ));
-            console.log('✅ Response complete from:', data.provider);
+            logger.info('Response complete', {
+              component: 'Home',
+              provider: data.provider,
+              conversationId
+            });
           },
           onError: (error: Error) => {
-            console.error('❌ Streaming error:', error);
+            logger.error('Streaming error', {
+              component: 'Home',
+              error: error.message,
+              conversationId
+            });
             setConversations(prev => prev.map(conv =>
               conv.id === conversationId
                 ? {
@@ -318,7 +342,11 @@ export const Home = (): JSX.Element => {
       );
 
     } catch (error) {
-      console.error('Failed to send message:', error);
+      logger.error('Failed to send message', {
+        component: 'Home',
+        error: error instanceof Error ? error.message : String(error),
+        conversationId
+      });
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: 'Sorry, I encountered an error while processing your request. Please try again.',
@@ -824,7 +852,11 @@ export const Home = (): JSX.Element => {
                                   button.style.backgroundColor = '';
                                   button.style.transform = '';
                                 }, 1000);
-                                console.log('👍 Positive feedback for message:', message.id);
+                                logger.info('Positive feedback submitted', {
+                                  component: 'Home',
+                                  messageId: message.id,
+                                  action: 'feedback_positive'
+                                });
                                 // Here you would typically send feedback to analytics/backend
                               }}
                             >
@@ -850,7 +882,11 @@ export const Home = (): JSX.Element => {
                                 setCurrentMessageId(message.id);
                                 setShowFeedbackModal(true);
 
-                                console.log('👎 Negative feedback for message:', message.id);
+                                logger.info('Negative feedback submitted', { 
+                                  component: 'Home',
+                                  messageId: message.id,
+                                  action: 'feedback_negative'
+                                });
                               }}
                             >
                               <img src="/src/styles/WK Icons/thumbs-down.png" alt="Poor" className="w-3 h-3 opacity-60 hover:opacity-100" />
@@ -1132,7 +1168,11 @@ export const Home = (): JSX.Element => {
                                 if (isAvailable) {
                                   setSelectedProvider(provider.id);
                                   setShowProviderDropdown(false);
-                                  console.log(`Switched to provider: ${provider.id}`);
+                                  logger.info('Provider switched', { 
+                                    component: 'Home',
+                                    providerId: provider.id,
+                                    action: 'provider_switch'
+                                  });
                                 }
                               }}
                               disabled={!isAvailable}
@@ -1197,7 +1237,10 @@ export const Home = (): JSX.Element => {
                         {/* Web Search */}
                         <button
                           onClick={() => {
-                            console.log('Web Search clicked');
+                            logger.info('Web Search tool clicked', { 
+                              component: 'Home',
+                              action: 'tool_web_search'
+                            });
                             setShowToolsDropdown(false);
                           }}
                           className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-t-lg"
@@ -1213,7 +1256,10 @@ export const Home = (): JSX.Element => {
                         {/* Analyze Data */}
                         <button
                           onClick={() => {
-                            console.log('Analyze Data clicked');
+                            logger.info('Analyze Data tool clicked', { 
+                              component: 'Home',
+                              action: 'tool_analyze_data'
+                            });
                             setShowToolsDropdown(false);
                           }}
                           className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -1229,7 +1275,10 @@ export const Home = (): JSX.Element => {
                         {/* Run Calculations */}
                         <button
                           onClick={() => {
-                            console.log('Run Calculations clicked');
+                            logger.info('Run Calculations tool clicked', { 
+                              component: 'Home',
+                              action: 'tool_run_calculations'
+                            });
                             setShowToolsDropdown(false);
                           }}
                           className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -1245,7 +1294,10 @@ export const Home = (): JSX.Element => {
                         {/* Generate Document */}
                         <button
                           onClick={() => {
-                            console.log('Generate Document clicked');
+                            logger.info('Generate Document tool clicked', { 
+                              component: 'Home',
+                              action: 'tool_generate_document'
+                            });
                             setShowToolsDropdown(false);
                           }}
                           className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-b-lg"
@@ -1358,7 +1410,11 @@ export const Home = (): JSX.Element => {
             <div className="flex gap-2 mt-4">
               <button
                 onClick={() => {
-                  console.log('👎 Detailed feedback submitted for message:', currentMessageId);
+                  logger.info('Detailed feedback submitted', { 
+                    component: 'Home',
+                    messageId: currentMessageId,
+                    action: 'feedback_detailed'
+                  });
                   setShowFeedbackModal(false);
                 }}
                 className="flex-1 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors text-sm font-medium"
@@ -1376,5 +1432,13 @@ export const Home = (): JSX.Element => {
         </div>
       )}
     </div>
+  );
+};
+
+export const Home = (): JSX.Element => {
+  return (
+    <ScreenErrorBoundary screenName="Home">
+      <HomeContent />
+    </ScreenErrorBoundary>
   );
 };

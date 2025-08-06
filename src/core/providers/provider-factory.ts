@@ -3,15 +3,17 @@
  * Handles initialization, registration, and selection of AI providers
  */
 
-import { 
-  BaseAIProvider, 
+import {
+  BaseAIProvider,
   ProviderRegistry,
-  ProviderCapabilities 
+  ProviderCapabilities
 } from './base-provider';
 import { AnthropicProvider } from './anthropic-provider';
 import { OpenAIProvider } from './openai-provider';
 import { getConfig, ConfigUtils } from '../../config';
 import type { AppConfig } from '../../config/schema';
+import { logger } from '../logging/logger';
+import { env } from '../../config/environment';
 
 /**
  * Provider factory configuration
@@ -41,7 +43,7 @@ class AIProviderRegistry implements ProviderRegistry {
 
   register(name: string, provider: BaseAIProvider): void {
     this.providers.set(name, provider);
-    
+
     // Set as default if it's the first provider
     if (!this.defaultProvider) {
       this.defaultProvider = name;
@@ -62,13 +64,13 @@ class AIProviderRegistry implements ProviderRegistry {
 
   remove(name: string): boolean {
     const removed = this.providers.delete(name);
-    
+
     // Update default if we removed it
     if (removed && this.defaultProvider === name) {
       const remaining = Array.from(this.providers.keys());
       this.defaultProvider = remaining.length > 0 ? remaining[0] : null;
     }
-    
+
     return removed;
   }
 
@@ -131,27 +133,27 @@ export class ProviderFactory {
    */
   async initialize(options: ProviderFactoryConfig = {}): Promise<Record<string, ProviderInitResult>> {
     const results: Record<string, ProviderInitResult> = {};
-    
-    console.log('🤖 Initializing AI providers...');
+
+    logger.info('🤖 Initializing AI providers...');
 
     // Initialize Anthropic provider if configured
     if (ConfigUtils.isProviderConfigured('anthropic')) {
       try {
         const provider = await this.createAnthropicProvider();
         const isHealthy = await this.validateProvider(provider);
-        
+
         this.registry.register('anthropic', provider);
         results.anthropic = { provider, isHealthy };
-        
-        console.log(`✅ Anthropic provider initialized (healthy: ${isHealthy})`);
+
+        logger.info(`✅ Anthropic provider initialized`, { isHealthy });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        results.anthropic = { 
-          provider: null as any, 
-          isHealthy: false, 
-          error: errorMessage 
+        results.anthropic = {
+          provider: null as any,
+          isHealthy: false,
+          error: errorMessage
         };
-        console.error('❌ Failed to initialize Anthropic provider:', errorMessage);
+        logger.error('❌ Failed to initialize Anthropic provider', { error: errorMessage });
       }
     }
 
@@ -160,37 +162,41 @@ export class ProviderFactory {
       try {
         const provider = await this.createOpenAIProvider();
         const isHealthy = await this.validateProvider(provider);
-        
+
         this.registry.register('openai', provider);
         results.openai = { provider, isHealthy };
-        
-        console.log(`✅ OpenAI provider initialized (healthy: ${isHealthy})`);
+
+        logger.info(`✅ OpenAI provider initialized`, { isHealthy });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        results.openai = { 
-          provider: null as any, 
-          isHealthy: false, 
-          error: errorMessage 
+        results.openai = {
+          provider: null as any,
+          isHealthy: false,
+          error: errorMessage
         };
-        console.error('❌ Failed to initialize OpenAI provider:', errorMessage);
+        logger.error('❌ Failed to initialize OpenAI provider', { error: errorMessage });
       }
     }
 
-    // Set default provider
-    const preferredProvider = options.defaultProvider || ConfigUtils.getPreferredProvider();
+    // Set default provider from environment or options
+    const preferredProvider = options.defaultProvider || env.ai.provider() || ConfigUtils.getPreferredProvider();
     if (preferredProvider && this.registry.get(preferredProvider)) {
       this.registry.setDefault(preferredProvider);
-      console.log(`🎯 Default provider set to: ${preferredProvider}`);
+      logger.info(`🎯 Default provider set to: ${preferredProvider}`);
+    } else {
+      logger.warn(`⚠️ Preferred provider '${preferredProvider}' not available, using first available provider`);
     }
 
     // Start health checks if enabled
     if (options.enableHealthChecks) {
-      this.startHealthChecks(options.healthCheckInterval || 30);
+      const healthCheckInterval = options.healthCheckInterval || 30;
+      this.startHealthChecks(healthCheckInterval);
+      logger.info(`🏥 Health checks enabled with ${healthCheckInterval} minute interval`);
     }
 
     this.isInitialized = true;
-    console.log(`🚀 Provider factory initialized with ${Object.keys(results).length} providers`);
-    
+    logger.info(`🚀 Provider factory initialized`, { providerCount: Object.keys(results).length });
+
     return results;
   }
 
@@ -199,7 +205,7 @@ export class ProviderFactory {
    */
   getRegistry(): ProviderRegistry {
     if (!this.isInitialized) {
-      console.warn('⚠️ Provider factory not initialized. Call initialize() first.');
+      logger.warn('⚠️ Provider factory not initialized. Call initialize() first.');
     }
     return this.registry;
   }
@@ -238,7 +244,7 @@ export class ProviderFactory {
   setDefaultProvider(name: string): boolean {
     const success = this.registry.setDefault(name);
     if (success) {
-      console.log(`🔄 Default provider changed to: ${name}`);
+      logger.info(`🔄 Default provider changed to: ${name}`);
     }
     return success;
   }
@@ -247,14 +253,14 @@ export class ProviderFactory {
    * Refresh configuration and reinitialize providers
    */
   async refresh(): Promise<Record<string, ProviderInitResult>> {
-    console.log('🔄 Refreshing provider configuration...');
-    
+    logger.info('🔄 Refreshing provider configuration...');
+
     // Clean up existing providers
     await this.dispose();
-    
+
     // Reload configuration
     this.config = getConfig();
-    
+
     // Reinitialize
     return this.initialize();
   }
@@ -263,20 +269,20 @@ export class ProviderFactory {
    * Clean shutdown
    */
   async dispose(): Promise<void> {
-    console.log('🧹 Disposing AI providers...');
-    
+    logger.info('🧹 Disposing AI providers...');
+
     // Stop health checks
     if (this.healthCheckTimer) {
       clearInterval(this.healthCheckTimer);
       this.healthCheckTimer = null;
     }
-    
+
     // Dispose all providers
     const providers = this.registry.getAll();
     await Promise.all(
       Object.values(providers).map(provider => provider.dispose())
     );
-    
+
     // Clear registry
     this.registry = new AIProviderRegistry();
     this.isInitialized = false;
@@ -287,7 +293,7 @@ export class ProviderFactory {
    */
   private async createAnthropicProvider(): Promise<AnthropicProvider> {
     const config = ConfigUtils.getProviderConfig('anthropic');
-    
+
     return new AnthropicProvider({
       apiKey: config.apiKey,
       baseUrl: config.baseUrl,
@@ -302,7 +308,7 @@ export class ProviderFactory {
    */
   private async createOpenAIProvider(): Promise<OpenAIProvider> {
     const config = ConfigUtils.getProviderConfig('openai');
-    
+
     return new OpenAIProvider({
       apiKey: config.apiKey,
       baseUrl: config.baseUrl,
@@ -331,7 +337,7 @@ export class ProviderFactory {
   private startHealthChecks(intervalMinutes: number): void {
     this.healthCheckTimer = setInterval(async () => {
       const providers = this.registry.getAll();
-      
+
       for (const [name, provider] of Object.entries(providers)) {
         try {
           const health = await provider.checkHealth();
@@ -356,13 +362,13 @@ export const ProviderUtils = {
   async initializeProviders(): Promise<ProviderFactory> {
     const config = getConfig();
     const factory = ProviderFactory.getInstance(config);
-    
+
     await factory.initialize({
       autoInitialize: true,
-      enableHealthChecks: ConfigUtils.isDevelopment(),
+      enableHealthChecks: env.isDevelopment() || ConfigUtils.isDevelopment(),
       healthCheckInterval: 30
     });
-    
+
     return factory;
   },
 
@@ -379,12 +385,12 @@ export const ProviderUtils = {
    */
   getProviderWithFallback(preferredName?: string): BaseAIProvider | null {
     const factory = ProviderFactory.getInstance();
-    
+
     if (preferredName) {
       const provider = factory.getProvider(preferredName);
       if (provider) return provider;
     }
-    
+
     return factory.getDefaultProvider();
   },
 

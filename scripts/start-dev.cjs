@@ -37,10 +37,10 @@ const config = {
   },
   backend: {
     command: 'npm',
-    args: ['run', 'server'],
+    args: ['run', 'server:dev'],
     name: 'BACKEND SERVER',
     color: colors.backend,
-    enabled: false  // Set to true when backend is implemented
+    enabled: true  // Backend is now implemented and ready
   }
 };
 
@@ -69,10 +69,10 @@ function logMessage(message, color = colors.reset, prefix = '') {
 function killPorts() {
   return new Promise((resolve, reject) => {
     logMessage('🧹 Cleaning up ports...', colors.warn);
-    
+
     const scriptPath = path.join(__dirname, 'kill-ports.ps1');
     const portsArg = config.ports.join(',');
-    
+
     // Check if PowerShell script exists
     if (!fs.existsSync(scriptPath)) {
       logMessage('⚠️  PowerShell script not found, using fallback method', colors.warn);
@@ -120,14 +120,16 @@ function killPorts() {
 function startService(serviceConfig) {
   return new Promise((resolve, reject) => {
     logMessage(`🚀 Starting ${serviceConfig.name}...`, serviceConfig.color);
-    
+
     const service = spawn(serviceConfig.command, serviceConfig.args, {
       stdio: ['inherit', 'pipe', 'pipe'],
       shell: true,
-      env: { 
-        ...process.env, 
+      windowsVerbatimArguments: false,
+      env: {
+        ...process.env,
         FORCE_COLOR: '1',
-        NODE_ENV: 'development'
+        NODE_ENV: 'development',
+        PATH: process.env.PATH
       }
     });
 
@@ -135,7 +137,9 @@ function startService(serviceConfig) {
     service.stdout.on('data', (data) => {
       const lines = data.toString().split('\n').filter(line => line.trim());
       lines.forEach(line => {
-        process.stdout.write(`${serviceConfig.color}[${serviceConfig.name}]${colors.reset} ${line}\n`);
+        // Avoid duplicate prefixes if the line already has them
+        const cleanLine = line.replace(/^\[.*?\]\s*/, '');
+        process.stdout.write(`${serviceConfig.color}[${serviceConfig.name}]${colors.reset} ${cleanLine}\n`);
       });
     });
 
@@ -177,12 +181,12 @@ function startService(serviceConfig) {
  */
 function handleShutdown() {
   console.log(`\n${colors.warn}🛑 Shutting down development environment...${colors.reset}`);
-  
+
   processes.forEach((process, index) => {
     if (process && !process.killed) {
       logMessage(`Stopping process ${index + 1}...`, colors.warn);
       process.kill('SIGTERM');
-      
+
       // Force kill after 5 seconds if process doesn't respond
       setTimeout(() => {
         if (!process.killed) {
@@ -211,7 +215,7 @@ async function startDevelopment() {
 
     // Step 2: Start frontend (always)
     await startService(config.frontend);
-    
+
     // Step 3: Start backend (if enabled)
     if (config.backend.enabled) {
       console.log('');

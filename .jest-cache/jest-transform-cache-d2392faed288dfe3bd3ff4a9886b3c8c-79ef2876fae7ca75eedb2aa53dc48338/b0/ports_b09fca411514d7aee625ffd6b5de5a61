@@ -1,0 +1,774 @@
+0efe577b514b5dd4d2c539cfb82f5d05
+"use strict";
+
+/**
+ * CCH Axcess Intelligence Vibed - Port Configuration
+ *
+ * Centralized port configuration for development environment
+ * This file defines all ports used by the application services
+ */
+/* istanbul ignore next */
+function cov_2j8cjd7onj() {
+  var path = "C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\config\\ports.ts";
+  var hash = "ee678ec4cb133f50193dc1636015b852f73273bb";
+  var global = new Function("return this")();
+  var gcv = "__coverage__";
+  var coverageData = {
+    path: "C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\config\\ports.ts",
+    statementMap: {
+      "0": {
+        start: {
+          line: 8,
+          column: 0
+        },
+        end: {
+          line: 8,
+          column: 62
+        }
+      },
+      "1": {
+        start: {
+          line: 9,
+          column: 0
+        },
+        end: {
+          line: 9,
+          column: 71
+        }
+      },
+      "2": {
+        start: {
+          line: 10,
+          column: 0
+        },
+        end: {
+          line: 10,
+          column: 56
+        }
+      },
+      "3": {
+        start: {
+          line: 11,
+          column: 0
+        },
+        end: {
+          line: 11,
+          column: 42
+        }
+      },
+      "4": {
+        start: {
+          line: 12,
+          column: 0
+        },
+        end: {
+          line: 12,
+          column: 34
+        }
+      },
+      "5": {
+        start: {
+          line: 13,
+          column: 0
+        },
+        end: {
+          line: 13,
+          column: 54
+        }
+      },
+      "6": {
+        start: {
+          line: 17,
+          column: 0
+        },
+        end: {
+          line: 26,
+          column: 2
+        }
+      },
+      "7": {
+        start: {
+          line: 31,
+          column: 0
+        },
+        end: {
+          line: 44,
+          column: 9
+        }
+      },
+      "8": {
+        start: {
+          line: 49,
+          column: 0
+        },
+        end: {
+          line: 53,
+          column: 2
+        }
+      },
+      "9": {
+        start: {
+          line: 58,
+          column: 4
+        },
+        end: {
+          line: 58,
+          column: 83
+        }
+      },
+      "10": {
+        start: {
+          line: 64,
+          column: 21
+        },
+        end: {
+          line: 64,
+          column: 58
+        }
+      },
+      "11": {
+        start: {
+          line: 65,
+          column: 4
+        },
+        end: {
+          line: 65,
+          column: 34
+        }
+      },
+      "12": {
+        start: {
+          line: 71,
+          column: 21
+        },
+        end: {
+          line: 71,
+          column: 58
+        }
+      },
+      "13": {
+        start: {
+          line: 72,
+          column: 4
+        },
+        end: {
+          line: 76,
+          column: 21
+        }
+      },
+      "14": {
+        start: {
+          line: 82,
+          column: 4
+        },
+        end: {
+          line: 100,
+          column: 5
+        }
+      },
+      "15": {
+        start: {
+          line: 84,
+          column: 12
+        },
+        end: {
+          line: 84,
+          column: 37
+        }
+      },
+      "16": {
+        start: {
+          line: 86,
+          column: 12
+        },
+        end: {
+          line: 86,
+          column: 39
+        }
+      },
+      "17": {
+        start: {
+          line: 88,
+          column: 12
+        },
+        end: {
+          line: 88,
+          column: 38
+        }
+      },
+      "18": {
+        start: {
+          line: 90,
+          column: 12
+        },
+        end: {
+          line: 90,
+          column: 36
+        }
+      },
+      "19": {
+        start: {
+          line: 92,
+          column: 12
+        },
+        end: {
+          line: 92,
+          column: 47
+        }
+      },
+      "20": {
+        start: {
+          line: 94,
+          column: 12
+        },
+        end: {
+          line: 94,
+          column: 36
+        }
+      },
+      "21": {
+        start: {
+          line: 97,
+          column: 12
+        },
+        end: {
+          line: 97,
+          column: 40
+        }
+      },
+      "22": {
+        start: {
+          line: 99,
+          column: 12
+        },
+        end: {
+          line: 99,
+          column: 52
+        }
+      },
+      "23": {
+        start: {
+          line: 102,
+          column: 0
+        },
+        end: {
+          line: 102,
+          column: 32
+        }
+      }
+    },
+    fnMap: {
+      "0": {
+        name: "getPortsForEnvironment",
+        decl: {
+          start: {
+            line: 57,
+            column: 9
+          },
+          end: {
+            line: 57,
+            column: 31
+          }
+        },
+        loc: {
+          start: {
+            line: 57,
+            column: 53
+          },
+          end: {
+            line: 59,
+            column: 1
+          }
+        },
+        line: 57
+      },
+      "1": {
+        name: "getCleanupPorts",
+        decl: {
+          start: {
+            line: 63,
+            column: 9
+          },
+          end: {
+            line: 63,
+            column: 24
+          }
+        },
+        loc: {
+          start: {
+            line: 63,
+            column: 27
+          },
+          end: {
+            line: 66,
+            column: 1
+          }
+        },
+        line: 63
+      },
+      "2": {
+        name: "isKnownPort",
+        decl: {
+          start: {
+            line: 70,
+            column: 9
+          },
+          end: {
+            line: 70,
+            column: 20
+          }
+        },
+        loc: {
+          start: {
+            line: 70,
+            column: 27
+          },
+          end: {
+            line: 77,
+            column: 1
+          }
+        },
+        line: 70
+      },
+      "3": {
+        name: "getServiceNameForPort",
+        decl: {
+          start: {
+            line: 81,
+            column: 9
+          },
+          end: {
+            line: 81,
+            column: 30
+          }
+        },
+        loc: {
+          start: {
+            line: 81,
+            column: 37
+          },
+          end: {
+            line: 101,
+            column: 1
+          }
+        },
+        line: 81
+      }
+    },
+    branchMap: {
+      "0": {
+        loc: {
+          start: {
+            line: 57,
+            column: 32
+          },
+          end: {
+            line: 57,
+            column: 51
+          }
+        },
+        type: "default-arg",
+        locations: [{
+          start: {
+            line: 57,
+            column: 38
+          },
+          end: {
+            line: 57,
+            column: 51
+          }
+        }],
+        line: 57
+      },
+      "1": {
+        loc: {
+          start: {
+            line: 58,
+            column: 11
+          },
+          end: {
+            line: 58,
+            column: 82
+          }
+        },
+        type: "binary-expr",
+        locations: [{
+          start: {
+            line: 58,
+            column: 11
+          },
+          end: {
+            line: 58,
+            column: 41
+          }
+        }, {
+          start: {
+            line: 58,
+            column: 45
+          },
+          end: {
+            line: 58,
+            column: 82
+          }
+        }],
+        line: 58
+      },
+      "2": {
+        loc: {
+          start: {
+            line: 65,
+            column: 11
+          },
+          end: {
+            line: 65,
+            column: 33
+          }
+        },
+        type: "binary-expr",
+        locations: [{
+          start: {
+            line: 65,
+            column: 11
+          },
+          end: {
+            line: 65,
+            column: 27
+          }
+        }, {
+          start: {
+            line: 65,
+            column: 31
+          },
+          end: {
+            line: 65,
+            column: 33
+          }
+        }],
+        line: 65
+      },
+      "3": {
+        loc: {
+          start: {
+            line: 82,
+            column: 4
+          },
+          end: {
+            line: 100,
+            column: 5
+          }
+        },
+        type: "switch",
+        locations: [{
+          start: {
+            line: 83,
+            column: 8
+          },
+          end: {
+            line: 84,
+            column: 37
+          }
+        }, {
+          start: {
+            line: 85,
+            column: 8
+          },
+          end: {
+            line: 86,
+            column: 39
+          }
+        }, {
+          start: {
+            line: 87,
+            column: 8
+          },
+          end: {
+            line: 88,
+            column: 38
+          }
+        }, {
+          start: {
+            line: 89,
+            column: 8
+          },
+          end: {
+            line: 90,
+            column: 36
+          }
+        }, {
+          start: {
+            line: 91,
+            column: 8
+          },
+          end: {
+            line: 92,
+            column: 47
+          }
+        }, {
+          start: {
+            line: 93,
+            column: 8
+          },
+          end: {
+            line: 94,
+            column: 36
+          }
+        }, {
+          start: {
+            line: 95,
+            column: 8
+          },
+          end: {
+            line: 95,
+            column: 18
+          }
+        }, {
+          start: {
+            line: 96,
+            column: 8
+          },
+          end: {
+            line: 97,
+            column: 40
+          }
+        }, {
+          start: {
+            line: 98,
+            column: 8
+          },
+          end: {
+            line: 99,
+            column: 52
+          }
+        }],
+        line: 82
+      }
+    },
+    s: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0,
+      "15": 0,
+      "16": 0,
+      "17": 0,
+      "18": 0,
+      "19": 0,
+      "20": 0,
+      "21": 0,
+      "22": 0,
+      "23": 0
+    },
+    f: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0
+    },
+    b: {
+      "0": [0],
+      "1": [0, 0],
+      "2": [0, 0],
+      "3": [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    inputSourceMap: {
+      file: "C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\config\\ports.ts",
+      mappings: ";AAAA;;;;;GAKG;;;AA0EH,wDAEC;AAKD,0CAGC;AAKD,kCAOC;AAKD,sDAoBC;AAzGD;;GAEG;AACU,QAAA,KAAK,GAAe;IAC/B,+CAA+C;IAC/C,QAAQ,EAAE,IAAI;IAEd,2CAA2C;IAC3C,OAAO,EAAE,IAAI;IAEb,8CAA8C;IAC9C,SAAS,EAAE,IAAI;IAEf,gDAAgD;IAChD,OAAO,EAAE,IAAI;CACL,CAAC;AAEX;;;GAGG;AACU,QAAA,SAAS,GAAqB,gCACtC,aAAK;IAER,gEAAgE;IAChE,SAAS,EAAE,CAAC,IAAI,EAAE,IAAI,EAAE,IAAI,EAAE,IAAI,CAAC;IAEnC,uDAAuD;IACvD,OAAO,EAAE;QACP,aAAK,CAAC,QAAQ;QACd,aAAK,CAAC,OAAO;QACb,aAAK,CAAC,SAAS;QACf,aAAK,CAAC,OAAO;QACb,IAAI,EAAG,oBAAoB;QAC3B,IAAI,EAAG,mBAAmB;QAC1B,IAAI,EAAG,kBAAkB;QACzB,IAAI,EAAG,uBAAuB;KAC/B,GACO,CAAC;AAEX;;;GAGG;AACU,QAAA,iBAAiB,GAAG;IAC/B,WAAW,EAAE,iBAAS;IACtB,UAAU,EAAE,aAAK;IACjB,IAAI,kCACC,aAAK,KACR,QAAQ,EAAE,IAAI,EACd,OAAO,EAAE,IAAI,EACb,SAAS,EAAE,IAAI,GAChB;CACO,CAAC;AAEX;;GAEG;AACH,SAAgB,sBAAsB,CAAC,MAAsC,aAAa;IACxF,OAAO,yBAAiB,CAAC,GAAG,CAAC,IAAI,yBAAiB,CAAC,WAAW,CAAC;AACjE,CAAC;AAED;;GAEG;AACH,SAAgB,eAAe;IAC7B,MAAM,QAAQ,GAAG,sBAAsB,CAAC,aAAa,CAAqB,CAAC;IAC3E,OAAO,QAAQ,CAAC,OAAO,IAAI,EAAE,CAAC;AAChC,CAAC;AAED;;GAEG;AACH,SAAgB,WAAW,CAAC,IAAY;IACtC,MAAM,QAAQ,GAAG,sBAAsB,CAAC,aAAa,CAAqB,CAAC;IAC3E,OAAO;QACL,GAAG,MAAM,CAAC,MAAM,CAAC,aAAK,CAAC;QACvB,GAAG,QAAQ,CAAC,SAAS;QACrB,GAAG,QAAQ,CAAC,OAAO;KACpB,CAAC,QAAQ,CAAC,IAAI,CAAC,CAAC;AACnB,CAAC;AAED;;GAEG;AACH,SAAgB,qBAAqB,CAAC,IAAY;IAChD,QAAQ,IAAI,EAAE,CAAC;QACb,KAAK,aAAK,CAAC,QAAQ;YACjB,OAAO,iBAAiB,CAAC;QAC3B,KAAK,aAAK,CAAC,OAAO;YAChB,OAAO,mBAAmB,CAAC;QAC7B,KAAK,aAAK,CAAC,SAAS;YAClB,OAAO,kBAAkB,CAAC;QAC5B,KAAK,aAAK,CAAC,OAAO;YAChB,OAAO,gBAAgB,CAAC;QAC1B,KAAK,IAAI;YACP,OAAO,2BAA2B,CAAC;QACrC,KAAK,IAAI;YACP,OAAO,gBAAgB,CAAC;QAC1B,KAAK,IAAI,CAAC;QACV,KAAK,IAAI;YACP,OAAO,oBAAoB,CAAC;QAC9B;YACE,OAAO,yBAAyB,IAAI,GAAG,CAAC;IAC5C,CAAC;AACH,CAAC;AAED,kBAAe,aAAK,CAAC",
+      names: [],
+      sources: ["C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\config\\ports.ts"],
+      sourcesContent: ["/**\r\n * CCH Axcess Intelligence Vibed - Port Configuration\r\n * \r\n * Centralized port configuration for development environment\r\n * This file defines all ports used by the application services\r\n */\r\n\r\nexport interface PortConfig {\r\n  frontend: number;\r\n  backend: number;\r\n  websocket: number;\r\n  preview: number;\r\n}\r\n\r\nexport interface DevelopmentPorts extends PortConfig {\r\n  /** Additional ports that might be used during development */\r\n  alternate: number[];\r\n  /** Ports to clean up during startup */\r\n  cleanup: number[];\r\n}\r\n\r\n/**\r\n * Primary port configuration for all services\r\n */\r\nexport const PORTS: PortConfig = {\r\n  /** Vite development server (React frontend) */\r\n  frontend: 5173,\r\n  \r\n  /** Express API server (Node.js backend) */\r\n  backend: 3001,\r\n  \r\n  /** WebSocket server for real-time features */\r\n  websocket: 3002,\r\n  \r\n  /** Vite preview server for production builds */\r\n  preview: 4173,\r\n} as const;\r\n\r\n/**\r\n * Development environment port configuration\r\n * Includes additional ports for cleanup and fallbacks\r\n */\r\nexport const DEV_PORTS: DevelopmentPorts = {\r\n  ...PORTS,\r\n  \r\n  /** Alternative ports to try if primary ports are unavailable */\r\n  alternate: [3000, 5000, 8080, 8000],\r\n  \r\n  /** All ports to clean up during development startup */\r\n  cleanup: [\r\n    PORTS.frontend,\r\n    PORTS.backend,\r\n    PORTS.websocket,\r\n    PORTS.preview,\r\n    3000,  // Common React port\r\n    5000,  // Common Node port\r\n    8080,  // Common dev port\r\n    8000,  // Alternative dev port\r\n  ],\r\n} as const;\r\n\r\n/**\r\n * Environment-specific port overrides\r\n * Can be used to configure different ports for different environments\r\n */\r\nexport const ENVIRONMENT_PORTS = {\r\n  development: DEV_PORTS,\r\n  production: PORTS,\r\n  test: {\r\n    ...PORTS,\r\n    frontend: 5174,\r\n    backend: 3003,\r\n    websocket: 3004,\r\n  },\r\n} as const;\r\n\r\n/**\r\n * Get port configuration for current environment\r\n */\r\nexport function getPortsForEnvironment(env: keyof typeof ENVIRONMENT_PORTS = 'development'): DevelopmentPorts | PortConfig {\r\n  return ENVIRONMENT_PORTS[env] || ENVIRONMENT_PORTS.development;\r\n}\r\n\r\n/**\r\n * Get all ports that should be cleaned up during startup\r\n */\r\nexport function getCleanupPorts(): number[] {\r\n  const devPorts = getPortsForEnvironment('development') as DevelopmentPorts;\r\n  return devPorts.cleanup || [];\r\n}\r\n\r\n/**\r\n * Check if a port is a known application port\r\n */\r\nexport function isKnownPort(port: number): boolean {\r\n  const devPorts = getPortsForEnvironment('development') as DevelopmentPorts;\r\n  return [\r\n    ...Object.values(PORTS),\r\n    ...devPorts.alternate,\r\n    ...devPorts.cleanup,\r\n  ].includes(port);\r\n}\r\n\r\n/**\r\n * Get service name for a given port\r\n */\r\nexport function getServiceNameForPort(port: number): string {\r\n  switch (port) {\r\n    case PORTS.frontend:\r\n      return 'Frontend (Vite)';\r\n    case PORTS.backend:\r\n      return 'Backend (Express)';\r\n    case PORTS.websocket:\r\n      return 'WebSocket Server';\r\n    case PORTS.preview:\r\n      return 'Preview (Vite)';\r\n    case 3000:\r\n      return 'React Dev Server (Legacy)';\r\n    case 5000:\r\n      return 'Node.js Server';\r\n    case 8080:\r\n    case 8000:\r\n      return 'Development Server';\r\n    default:\r\n      return `Unknown Service (Port ${port})`;\r\n  }\r\n}\r\n\r\nexport default PORTS;"],
+      version: 3
+    },
+    _coverageSchema: "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    hash: "ee678ec4cb133f50193dc1636015b852f73273bb"
+  };
+  var coverage = global[gcv] || (global[gcv] = {});
+  if (!coverage[path] || coverage[path].hash !== hash) {
+    coverage[path] = coverageData;
+  }
+  var actualCoverage = coverage[path];
+  {
+    // @ts-ignore
+    cov_2j8cjd7onj = function () {
+      return actualCoverage;
+    };
+  }
+  return actualCoverage;
+}
+cov_2j8cjd7onj();
+cov_2j8cjd7onj().s[0]++;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[1]++;
+exports.ENVIRONMENT_PORTS = exports.DEV_PORTS = exports.PORTS = void 0;
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[2]++;
+exports.getPortsForEnvironment = getPortsForEnvironment;
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[3]++;
+exports.getCleanupPorts = getCleanupPorts;
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[4]++;
+exports.isKnownPort = isKnownPort;
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[5]++;
+exports.getServiceNameForPort = getServiceNameForPort;
+/**
+ * Primary port configuration for all services
+ */
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[6]++;
+exports.PORTS = {
+  /** Vite development server (React frontend) */
+  frontend: 5173,
+  /** Express API server (Node.js backend) */
+  backend: 3001,
+  /** WebSocket server for real-time features */
+  websocket: 3002,
+  /** Vite preview server for production builds */
+  preview: 4173
+};
+/**
+ * Development environment port configuration
+ * Includes additional ports for cleanup and fallbacks
+ */
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[7]++;
+exports.DEV_PORTS = Object.assign(Object.assign({}, exports.PORTS), {
+  /** Alternative ports to try if primary ports are unavailable */
+  alternate: [3000, 5000, 8080, 8000],
+  /** All ports to clean up during development startup */
+  cleanup: [exports.PORTS.frontend, exports.PORTS.backend, exports.PORTS.websocket, exports.PORTS.preview, 3000,
+  // Common React port
+  5000,
+  // Common Node port
+  8080,
+  // Common dev port
+  8000 // Alternative dev port
+  ]
+});
+/**
+ * Environment-specific port overrides
+ * Can be used to configure different ports for different environments
+ */
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[8]++;
+exports.ENVIRONMENT_PORTS = {
+  development: exports.DEV_PORTS,
+  production: exports.PORTS,
+  test: Object.assign(Object.assign({}, exports.PORTS), {
+    frontend: 5174,
+    backend: 3003,
+    websocket: 3004
+  })
+};
+/**
+ * Get port configuration for current environment
+ */
+function getPortsForEnvironment(env =
+/* istanbul ignore next */
+(cov_2j8cjd7onj().b[0][0]++, 'development')) {
+  /* istanbul ignore next */
+  cov_2j8cjd7onj().f[0]++;
+  cov_2j8cjd7onj().s[9]++;
+  return /* istanbul ignore next */(cov_2j8cjd7onj().b[1][0]++, exports.ENVIRONMENT_PORTS[env]) ||
+  /* istanbul ignore next */
+  (cov_2j8cjd7onj().b[1][1]++, exports.ENVIRONMENT_PORTS.development);
+}
+/**
+ * Get all ports that should be cleaned up during startup
+ */
+function getCleanupPorts() {
+  /* istanbul ignore next */
+  cov_2j8cjd7onj().f[1]++;
+  const devPorts =
+  /* istanbul ignore next */
+  (cov_2j8cjd7onj().s[10]++, getPortsForEnvironment('development'));
+  /* istanbul ignore next */
+  cov_2j8cjd7onj().s[11]++;
+  return /* istanbul ignore next */(cov_2j8cjd7onj().b[2][0]++, devPorts.cleanup) ||
+  /* istanbul ignore next */
+  (cov_2j8cjd7onj().b[2][1]++, []);
+}
+/**
+ * Check if a port is a known application port
+ */
+function isKnownPort(port) {
+  /* istanbul ignore next */
+  cov_2j8cjd7onj().f[2]++;
+  const devPorts =
+  /* istanbul ignore next */
+  (cov_2j8cjd7onj().s[12]++, getPortsForEnvironment('development'));
+  /* istanbul ignore next */
+  cov_2j8cjd7onj().s[13]++;
+  return [...Object.values(exports.PORTS), ...devPorts.alternate, ...devPorts.cleanup].includes(port);
+}
+/**
+ * Get service name for a given port
+ */
+function getServiceNameForPort(port) {
+  /* istanbul ignore next */
+  cov_2j8cjd7onj().f[3]++;
+  cov_2j8cjd7onj().s[14]++;
+  switch (port) {
+    case exports.PORTS.frontend:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][0]++;
+      cov_2j8cjd7onj().s[15]++;
+      return 'Frontend (Vite)';
+    case exports.PORTS.backend:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][1]++;
+      cov_2j8cjd7onj().s[16]++;
+      return 'Backend (Express)';
+    case exports.PORTS.websocket:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][2]++;
+      cov_2j8cjd7onj().s[17]++;
+      return 'WebSocket Server';
+    case exports.PORTS.preview:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][3]++;
+      cov_2j8cjd7onj().s[18]++;
+      return 'Preview (Vite)';
+    case 3000:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][4]++;
+      cov_2j8cjd7onj().s[19]++;
+      return 'React Dev Server (Legacy)';
+    case 5000:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][5]++;
+      cov_2j8cjd7onj().s[20]++;
+      return 'Node.js Server';
+    case 8080:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][6]++;
+    case 8000:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][7]++;
+      cov_2j8cjd7onj().s[21]++;
+      return 'Development Server';
+    default:
+      /* istanbul ignore next */
+      cov_2j8cjd7onj().b[3][8]++;
+      cov_2j8cjd7onj().s[22]++;
+      return `Unknown Service (Port ${port})`;
+  }
+}
+/* istanbul ignore next */
+cov_2j8cjd7onj().s[23]++;
+exports.default = exports.PORTS;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJjb3ZfMmo4Y2pkN29uaiIsInBhdGgiLCJoYXNoIiwiZ2xvYmFsIiwiRnVuY3Rpb24iLCJnY3YiLCJjb3ZlcmFnZURhdGEiLCJzdGF0ZW1lbnRNYXAiLCJzdGFydCIsImxpbmUiLCJjb2x1bW4iLCJlbmQiLCJmbk1hcCIsIm5hbWUiLCJkZWNsIiwibG9jIiwiYnJhbmNoTWFwIiwidHlwZSIsImxvY2F0aW9ucyIsInMiLCJmIiwiYiIsImlucHV0U291cmNlTWFwIiwiZmlsZSIsIm1hcHBpbmdzIiwibmFtZXMiLCJzb3VyY2VzIiwic291cmNlc0NvbnRlbnQiLCJ2ZXJzaW9uIiwiX2NvdmVyYWdlU2NoZW1hIiwiY292ZXJhZ2UiLCJhY3R1YWxDb3ZlcmFnZSIsImV4cG9ydHMiLCJnZXRQb3J0c0ZvckVudmlyb25tZW50IiwiZ2V0Q2xlYW51cFBvcnRzIiwiaXNLbm93blBvcnQiLCJnZXRTZXJ2aWNlTmFtZUZvclBvcnQiLCJQT1JUUyIsImZyb250ZW5kIiwiYmFja2VuZCIsIndlYnNvY2tldCIsInByZXZpZXciLCJERVZfUE9SVFMiLCJPYmplY3QiLCJhc3NpZ24iLCJhbHRlcm5hdGUiLCJjbGVhbnVwIiwiRU5WSVJPTk1FTlRfUE9SVFMiLCJkZXZlbG9wbWVudCIsInByb2R1Y3Rpb24iLCJ0ZXN0IiwiZW52IiwiZGV2UG9ydHMiLCJwb3J0IiwidmFsdWVzIiwiaW5jbHVkZXMiLCJkZWZhdWx0Il0sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxzYXJhaFxcUmVwb3NcXENDSCBBeGNlc3MgSW50ZWxsaWdlbmNlIFZpYmVkXFxzcmNcXGNvbmZpZ1xccG9ydHMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXHJcbiAqIENDSCBBeGNlc3MgSW50ZWxsaWdlbmNlIFZpYmVkIC0gUG9ydCBDb25maWd1cmF0aW9uXHJcbiAqIFxyXG4gKiBDZW50cmFsaXplZCBwb3J0IGNvbmZpZ3VyYXRpb24gZm9yIGRldmVsb3BtZW50IGVudmlyb25tZW50XHJcbiAqIFRoaXMgZmlsZSBkZWZpbmVzIGFsbCBwb3J0cyB1c2VkIGJ5IHRoZSBhcHBsaWNhdGlvbiBzZXJ2aWNlc1xyXG4gKi9cclxuXHJcbmV4cG9ydCBpbnRlcmZhY2UgUG9ydENvbmZpZyB7XHJcbiAgZnJvbnRlbmQ6IG51bWJlcjtcclxuICBiYWNrZW5kOiBudW1iZXI7XHJcbiAgd2Vic29ja2V0OiBudW1iZXI7XHJcbiAgcHJldmlldzogbnVtYmVyO1xyXG59XHJcblxyXG5leHBvcnQgaW50ZXJmYWNlIERldmVsb3BtZW50UG9ydHMgZXh0ZW5kcyBQb3J0Q29uZmlnIHtcclxuICAvKiogQWRkaXRpb25hbCBwb3J0cyB0aGF0IG1pZ2h0IGJlIHVzZWQgZHVyaW5nIGRldmVsb3BtZW50ICovXHJcbiAgYWx0ZXJuYXRlOiBudW1iZXJbXTtcclxuICAvKiogUG9ydHMgdG8gY2xlYW4gdXAgZHVyaW5nIHN0YXJ0dXAgKi9cclxuICBjbGVhbnVwOiBudW1iZXJbXTtcclxufVxyXG5cclxuLyoqXHJcbiAqIFByaW1hcnkgcG9ydCBjb25maWd1cmF0aW9uIGZvciBhbGwgc2VydmljZXNcclxuICovXHJcbmV4cG9ydCBjb25zdCBQT1JUUzogUG9ydENvbmZpZyA9IHtcclxuICAvKiogVml0ZSBkZXZlbG9wbWVudCBzZXJ2ZXIgKFJlYWN0IGZyb250ZW5kKSAqL1xyXG4gIGZyb250ZW5kOiA1MTczLFxyXG4gIFxyXG4gIC8qKiBFeHByZXNzIEFQSSBzZXJ2ZXIgKE5vZGUuanMgYmFja2VuZCkgKi9cclxuICBiYWNrZW5kOiAzMDAxLFxyXG4gIFxyXG4gIC8qKiBXZWJTb2NrZXQgc2VydmVyIGZvciByZWFsLXRpbWUgZmVhdHVyZXMgKi9cclxuICB3ZWJzb2NrZXQ6IDMwMDIsXHJcbiAgXHJcbiAgLyoqIFZpdGUgcHJldmlldyBzZXJ2ZXIgZm9yIHByb2R1Y3Rpb24gYnVpbGRzICovXHJcbiAgcHJldmlldzogNDE3MyxcclxufSBhcyBjb25zdDtcclxuXHJcbi8qKlxyXG4gKiBEZXZlbG9wbWVudCBlbnZpcm9ubWVudCBwb3J0IGNvbmZpZ3VyYXRpb25cclxuICogSW5jbHVkZXMgYWRkaXRpb25hbCBwb3J0cyBmb3IgY2xlYW51cCBhbmQgZmFsbGJhY2tzXHJcbiAqL1xyXG5leHBvcnQgY29uc3QgREVWX1BPUlRTOiBEZXZlbG9wbWVudFBvcnRzID0ge1xyXG4gIC4uLlBPUlRTLFxyXG4gIFxyXG4gIC8qKiBBbHRlcm5hdGl2ZSBwb3J0cyB0byB0cnkgaWYgcHJpbWFyeSBwb3J0cyBhcmUgdW5hdmFpbGFibGUgKi9cclxuICBhbHRlcm5hdGU6IFszMDAwLCA1MDAwLCA4MDgwLCA4MDAwXSxcclxuICBcclxuICAvKiogQWxsIHBvcnRzIHRvIGNsZWFuIHVwIGR1cmluZyBkZXZlbG9wbWVudCBzdGFydHVwICovXHJcbiAgY2xlYW51cDogW1xyXG4gICAgUE9SVFMuZnJvbnRlbmQsXHJcbiAgICBQT1JUUy5iYWNrZW5kLFxyXG4gICAgUE9SVFMud2Vic29ja2V0LFxyXG4gICAgUE9SVFMucHJldmlldyxcclxuICAgIDMwMDAsICAvLyBDb21tb24gUmVhY3QgcG9ydFxyXG4gICAgNTAwMCwgIC8vIENvbW1vbiBOb2RlIHBvcnRcclxuICAgIDgwODAsICAvLyBDb21tb24gZGV2IHBvcnRcclxuICAgIDgwMDAsICAvLyBBbHRlcm5hdGl2ZSBkZXYgcG9ydFxyXG4gIF0sXHJcbn0gYXMgY29uc3Q7XHJcblxyXG4vKipcclxuICogRW52aXJvbm1lbnQtc3BlY2lmaWMgcG9ydCBvdmVycmlkZXNcclxuICogQ2FuIGJlIHVzZWQgdG8gY29uZmlndXJlIGRpZmZlcmVudCBwb3J0cyBmb3IgZGlmZmVyZW50IGVudmlyb25tZW50c1xyXG4gKi9cclxuZXhwb3J0IGNvbnN0IEVOVklST05NRU5UX1BPUlRTID0ge1xyXG4gIGRldmVsb3BtZW50OiBERVZfUE9SVFMsXHJcbiAgcHJvZHVjdGlvbjogUE9SVFMsXHJcbiAgdGVzdDoge1xyXG4gICAgLi4uUE9SVFMsXHJcbiAgICBmcm9udGVuZDogNTE3NCxcclxuICAgIGJhY2tlbmQ6IDMwMDMsXHJcbiAgICB3ZWJzb2NrZXQ6IDMwMDQsXHJcbiAgfSxcclxufSBhcyBjb25zdDtcclxuXHJcbi8qKlxyXG4gKiBHZXQgcG9ydCBjb25maWd1cmF0aW9uIGZvciBjdXJyZW50IGVudmlyb25tZW50XHJcbiAqL1xyXG5leHBvcnQgZnVuY3Rpb24gZ2V0UG9ydHNGb3JFbnZpcm9ubWVudChlbnY6IGtleW9mIHR5cGVvZiBFTlZJUk9OTUVOVF9QT1JUUyA9ICdkZXZlbG9wbWVudCcpOiBEZXZlbG9wbWVudFBvcnRzIHwgUG9ydENvbmZpZyB7XHJcbiAgcmV0dXJuIEVOVklST05NRU5UX1BPUlRTW2Vudl0gfHwgRU5WSVJPTk1FTlRfUE9SVFMuZGV2ZWxvcG1lbnQ7XHJcbn1cclxuXHJcbi8qKlxyXG4gKiBHZXQgYWxsIHBvcnRzIHRoYXQgc2hvdWxkIGJlIGNsZWFuZWQgdXAgZHVyaW5nIHN0YXJ0dXBcclxuICovXHJcbmV4cG9ydCBmdW5jdGlvbiBnZXRDbGVhbnVwUG9ydHMoKTogbnVtYmVyW10ge1xyXG4gIGNvbnN0IGRldlBvcnRzID0gZ2V0UG9ydHNGb3JFbnZpcm9ubWVudCgnZGV2ZWxvcG1lbnQnKSBhcyBEZXZlbG9wbWVudFBvcnRzO1xyXG4gIHJldHVybiBkZXZQb3J0cy5jbGVhbnVwIHx8IFtdO1xyXG59XHJcblxyXG4vKipcclxuICogQ2hlY2sgaWYgYSBwb3J0IGlzIGEga25vd24gYXBwbGljYXRpb24gcG9ydFxyXG4gKi9cclxuZXhwb3J0IGZ1bmN0aW9uIGlzS25vd25Qb3J0KHBvcnQ6IG51bWJlcik6IGJvb2xlYW4ge1xyXG4gIGNvbnN0IGRldlBvcnRzID0gZ2V0UG9ydHNGb3JFbnZpcm9ubWVudCgnZGV2ZWxvcG1lbnQnKSBhcyBEZXZlbG9wbWVudFBvcnRzO1xyXG4gIHJldHVybiBbXHJcbiAgICAuLi5PYmplY3QudmFsdWVzKFBPUlRTKSxcclxuICAgIC4uLmRldlBvcnRzLmFsdGVybmF0ZSxcclxuICAgIC4uLmRldlBvcnRzLmNsZWFudXAsXHJcbiAgXS5pbmNsdWRlcyhwb3J0KTtcclxufVxyXG5cclxuLyoqXHJcbiAqIEdldCBzZXJ2aWNlIG5hbWUgZm9yIGEgZ2l2ZW4gcG9ydFxyXG4gKi9cclxuZXhwb3J0IGZ1bmN0aW9uIGdldFNlcnZpY2VOYW1lRm9yUG9ydChwb3J0OiBudW1iZXIpOiBzdHJpbmcge1xyXG4gIHN3aXRjaCAocG9ydCkge1xyXG4gICAgY2FzZSBQT1JUUy5mcm9udGVuZDpcclxuICAgICAgcmV0dXJuICdGcm9udGVuZCAoVml0ZSknO1xyXG4gICAgY2FzZSBQT1JUUy5iYWNrZW5kOlxyXG4gICAgICByZXR1cm4gJ0JhY2tlbmQgKEV4cHJlc3MpJztcclxuICAgIGNhc2UgUE9SVFMud2Vic29ja2V0OlxyXG4gICAgICByZXR1cm4gJ1dlYlNvY2tldCBTZXJ2ZXInO1xyXG4gICAgY2FzZSBQT1JUUy5wcmV2aWV3OlxyXG4gICAgICByZXR1cm4gJ1ByZXZpZXcgKFZpdGUpJztcclxuICAgIGNhc2UgMzAwMDpcclxuICAgICAgcmV0dXJuICdSZWFjdCBEZXYgU2VydmVyIChMZWdhY3kpJztcclxuICAgIGNhc2UgNTAwMDpcclxuICAgICAgcmV0dXJuICdOb2RlLmpzIFNlcnZlcic7XHJcbiAgICBjYXNlIDgwODA6XHJcbiAgICBjYXNlIDgwMDA6XHJcbiAgICAgIHJldHVybiAnRGV2ZWxvcG1lbnQgU2VydmVyJztcclxuICAgIGRlZmF1bHQ6XHJcbiAgICAgIHJldHVybiBgVW5rbm93biBTZXJ2aWNlIChQb3J0ICR7cG9ydH0pYDtcclxuICB9XHJcbn1cclxuXHJcbmV4cG9ydCBkZWZhdWx0IFBPUlRTOyJdLCJtYXBwaW5ncyI6Ijs7QUFBQTs7Ozs7O0FBQUE7QUFBQSxTQUFBQSxlQUFBO0VBQUEsSUFBQUMsSUFBQTtFQUFBLElBQUFDLElBQUE7RUFBQSxJQUFBQyxNQUFBLE9BQUFDLFFBQUE7RUFBQSxJQUFBQyxHQUFBO0VBQUEsSUFBQUMsWUFBQTtJQUFBTCxJQUFBO0lBQUFNLFlBQUE7TUFBQTtRQUFBQyxLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7SUFBQTtJQUFBRSxLQUFBO01BQUE7UUFBQUMsSUFBQTtRQUFBQyxJQUFBO1VBQUFOLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFLLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQUQsSUFBQTtNQUFBO01BQUE7UUFBQUksSUFBQTtRQUFBQyxJQUFBO1VBQUFOLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFLLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQUQsSUFBQTtNQUFBO01BQUE7UUFBQUksSUFBQTtRQUFBQyxJQUFBO1VBQUFOLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFLLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQUQsSUFBQTtNQUFBO01BQUE7UUFBQUksSUFBQTtRQUFBQyxJQUFBO1VBQUFOLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFLLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQUQsSUFBQTtNQUFBO0lBQUE7SUFBQU8sU0FBQTtNQUFBO1FBQUFELEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQU8sSUFBQTtRQUFBQyxTQUFBO1VBQUFWLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFELElBQUE7TUFBQTtNQUFBO1FBQUFNLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQU8sSUFBQTtRQUFBQyxTQUFBO1VBQUFWLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFELElBQUE7TUFBQTtNQUFBO1FBQUFNLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQU8sSUFBQTtRQUFBQyxTQUFBO1VBQUFWLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFELElBQUE7TUFBQTtNQUFBO1FBQUFNLEdBQUE7VUFBQVAsS0FBQTtZQUFBQyxJQUFBO1lBQUFDLE1BQUE7VUFBQTtVQUFBQyxHQUFBO1lBQUFGLElBQUE7WUFBQUMsTUFBQTtVQUFBO1FBQUE7UUFBQU8sSUFBQTtRQUFBQyxTQUFBO1VBQUFWLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1VBQUFGLEtBQUE7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LENBQUNOLE9BQU8sQ0FDcEIsQ0FBQ1MsUUFBUSxDQUFDRixJQUFJLENBQUM7QUFDbEI7QUFFQTs7O0FBR0EsU0FBZ0JqQixxQkFBcUJBLENBQUNpQixJQUFZO0VBQUE7RUFBQXJELGNBQUEsR0FBQW9CLENBQUE7RUFBQXBCLGNBQUEsR0FBQW1CLENBQUE7RUFDaEQsUUFBUWtDLElBQUk7SUFDVixLQUFLckIsT0FBQSxDQUFBSyxLQUFLLENBQUNDLFFBQVE7TUFBQTtNQUFBdEMsY0FBQSxHQUFBcUIsQ0FBQTtNQUFBckIsY0FBQSxHQUFBbUIsQ0FBQTtNQUNqQixPQUFPLGlCQUFpQjtJQUMxQixLQUFLYSxPQUFBLENBQUFLLEtBQUssQ0FBQ0UsT0FBTztNQUFBO01BQUF2QyxjQUFBLEdBQUFxQixDQUFBO01BQUFyQixjQUFBLEdBQUFtQixDQUFBO01BQ2hCLE9BQU8sbUJBQW1CO0lBQzVCLEtBQUthLE9BQUEsQ0FBQUssS0FBSyxDQUFDRyxTQUFTO01BQUE7TUFBQXhDLGNBQUEsR0FBQXFCLENBQUE7TUFBQXJCLGNBQUEsR0FBQW1CLENBQUE7TUFDbEIsT0FBTyxrQkFBa0I7SUFDM0IsS0FBS2EsT0FBQSxDQUFBSyxLQUFLLENBQUNJLE9BQU87TUFBQTtNQUFBekMsY0FBQSxHQUFBcUIsQ0FBQTtNQUFBckIsY0FBQSxHQUFBbUIsQ0FBQTtNQUNoQixPQUFPLGdCQUFnQjtJQUN6QixLQUFLLElBQUk7TUFBQTtNQUFBbkIsY0FBQSxHQUFBcUIsQ0FBQTtNQUFBckIsY0FBQSxHQUFBbUIsQ0FBQTtNQUNQLE9BQU8sMkJBQTJCO0lBQ3BDLEtBQUssSUFBSTtNQUFBO01BQUFuQixjQUFBLEdBQUFxQixDQUFBO01BQUFyQixjQUFBLEdBQUFtQixDQUFBO01BQ1AsT0FBTyxnQkFBZ0I7SUFDekIsS0FBSyxJQUFJO01BQUE7TUFBQW5CLGNBQUEsR0FBQXFCLENBQUE7SUFDVCxLQUFLLElBQUk7TUFBQTtNQUFBckIsY0FBQSxHQUFBcUIsQ0FBQTtNQUFBckIsY0FBQSxHQUFBbUIsQ0FBQTtNQUNQLE9BQU8sb0JBQW9CO0lBQzdCO01BQUE7TUFBQW5CLGNBQUEsR0FBQXFCLENBQUE7TUFBQXJCLGNBQUEsR0FBQW1CLENBQUE7TUFDRSxPQUFPLHlCQUF5QmtDLElBQUksR0FBRztFQUMzQztBQUNGO0FBQUM7QUFBQXJELGNBQUEsR0FBQW1CLENBQUE7QUFFRGEsT0FBQSxDQUFBd0IsT0FBQSxHQUFleEIsT0FBQSxDQUFBSyxLQUFLIiwiaWdub3JlTGlzdCI6W119

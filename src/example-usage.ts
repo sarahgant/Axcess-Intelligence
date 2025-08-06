@@ -3,15 +3,15 @@
  * This file demonstrates how to use the newly implemented systems
  */
 
-import { 
-  initializeConfig, 
-  getConfig, 
-  ConfigUtils, 
+import {
+  initializeConfig,
+  getConfig,
+  ConfigUtils,
   EnvHelper,
-  DevHelpers 
+  DevHelpers
 } from './config';
 
-import { 
+import {
   initializePromptRegistry,
   PromptManager,
   PromptBuilder,
@@ -19,35 +19,37 @@ import {
   PROMPT_IDS
 } from './prompts';
 
+import { logger } from './core/logging/logger';
+
 /**
  * Initialize the application with configuration and prompts
  */
 export async function initializeApplication() {
   try {
-    console.log('🚀 Initializing CCH Axcess Intelligence...');
+    logger.info('🚀 Initializing CCH Axcess Intelligence...');
 
     // 1. Initialize configuration system
     const config = await initializeConfig();
-    console.log('✅ Configuration loaded successfully');
+    logger.info('✅ Configuration loaded successfully');
 
     // 2. Initialize prompt registry
     const promptRegistry = initializePromptRegistry();
-    console.log('✅ Prompt registry initialized');
+    logger.info('✅ Prompt registry initialized');
 
     // 3. Validate setup
     const setupValidation = EnvHelper.validateEnvironmentSetup();
     if (!setupValidation.isValid) {
-      console.warn('⚠️ Configuration issues found:', setupValidation.missingRequired);
+      logger.warn('⚠️ Configuration issues found', { missingRequired: setupValidation.missingRequired });
     }
 
     // 4. Log configuration summary (in development)
     if (ConfigUtils.isDevelopment()) {
-      console.log('🔧 Configuration Summary:', DevHelpers.getConfigSummary());
+      logger.info('🔧 Configuration Summary', DevHelpers.getConfigSummary());
     }
 
     return { config, promptRegistry };
   } catch (error) {
-    console.error('❌ Failed to initialize application:', error);
+    logger.error('❌ Failed to initialize application', { error });
     throw error;
   }
 }
@@ -56,36 +58,33 @@ export async function initializeApplication() {
  * Example: Using configuration utilities
  */
 export function demonstrateConfigUsage() {
-  console.log('\n📋 Configuration Usage Examples:');
+  logger.info('📋 Configuration Usage Examples:');
 
   // Check if providers are configured
   const hasAnthropic = ConfigUtils.isProviderConfigured('anthropic');
   const hasOpenAI = ConfigUtils.isProviderConfigured('openai');
-  console.log(`Anthropic configured: ${hasAnthropic}`);
-  console.log(`OpenAI configured: ${hasOpenAI}`);
+  logger.info('Provider configuration status', { anthropic: hasAnthropic, openai: hasOpenAI });
 
   // Get preferred provider
   const preferredProvider = ConfigUtils.getPreferredProvider();
-  console.log(`Preferred provider: ${preferredProvider}`);
+  logger.info('Preferred provider', { provider: preferredProvider });
 
   // Check feature flags
   const streamingEnabled = ConfigUtils.isFeatureEnabled('enableStreaming');
   const ragEnabled = ConfigUtils.isFeatureEnabled('enableRAGSearch');
-  console.log(`Streaming enabled: ${streamingEnabled}`);
-  console.log(`RAG search enabled: ${ragEnabled}`);
+  logger.info('Feature flags status', { streaming: streamingEnabled, ragSearch: ragEnabled });
 
   // Environment checks
   const isDev = ConfigUtils.isDevelopment();
   const debugMode = ConfigUtils.isDebugMode();
-  console.log(`Development mode: ${isDev}`);
-  console.log(`Debug mode: ${debugMode}`);
+  logger.info('Environment status', { development: isDev, debug: debugMode });
 }
 
 /**
  * Example: Working with prompt templates
  */
 export function demonstratePromptUsage() {
-  console.log('\n📝 Prompt Management Examples:');
+  logger.info('📝 Prompt Management Examples:');
 
   // Create a custom prompt
   const customPrompt = PromptBuilder.create()
@@ -119,7 +118,7 @@ export function demonstratePromptUsage() {
     complianceYear: '2024'
   });
 
-  console.log('✅ System prompt compiled:', systemPrompt.text.substring(0, 100) + '...');
+  logger.info('✅ System prompt compiled', { text: systemPrompt.text.substring(0, 100) + '...' });
 
   // Compile RAG search prompt
   const ragPrompt = PromptManager.compile(PROMPT_IDS.RAG_SEARCH, {
@@ -167,7 +166,7 @@ export function demonstrateAdvancedPromptFeatures() {
   // Test model-specific compilation
   try {
     const anthropicPrompt = PromptManager.compile(
-      PROMPT_IDS.CCH_SYSTEM, 
+      PROMPT_IDS.CCH_SYSTEM,
       {
         userRole: 'Tax Professional',
         sessionType: 'Consultation',
@@ -181,7 +180,7 @@ export function demonstrateAdvancedPromptFeatures() {
     const openaiPrompt = PromptManager.compile(
       PROMPT_IDS.CCH_SYSTEM,
       {
-        userRole: 'Tax Professional', 
+        userRole: 'Tax Professional',
         sessionType: 'Consultation',
         availableResources: 'CCH Database',
         complianceYear: '2024'
@@ -269,7 +268,7 @@ export function demonstrateErrorHandling() {
       .template('Hello {{undeclaredVar}}!')
       .variables(['declaredVar']) // Mismatch
       .build();
-    
+
     registry.register(invalidPrompt);
   } catch (error) {
     console.log('✅ Caught template validation error:', error.constructor.name);
@@ -287,7 +286,7 @@ export async function runAllExamples() {
     demonstrateAdvancedPromptFeatures();
     demonstrateDevHelpers();
     demonstrateErrorHandling();
-    
+
     console.log('\n🎉 All examples completed successfully!');
   } catch (error) {
     console.error('\n❌ Example execution failed:', error);

@@ -1,0 +1,412 @@
+ef061c1cfc0ed7ee0d2506be9a65fe43
+"use strict";
+
+/**
+ * Type definitions for the prompt management system
+ */
+/* istanbul ignore next */
+function cov_j1q8csq19() {
+  var path = "C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\prompts\\types.ts";
+  var hash = "de476017c86c693d3b6372d685af984808cbf48a";
+  var global = new Function("return this")();
+  var gcv = "__coverage__";
+  var coverageData = {
+    path: "C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\prompts\\types.ts",
+    statementMap: {
+      "0": {
+        start: {
+          line: 5,
+          column: 0
+        },
+        end: {
+          line: 5,
+          column: 62
+        }
+      },
+      "1": {
+        start: {
+          line: 6,
+          column: 0
+        },
+        end: {
+          line: 6,
+          column: 124
+        }
+      },
+      "2": {
+        start: {
+          line: 12,
+          column: 8
+        },
+        end: {
+          line: 12,
+          column: 23
+        }
+      },
+      "3": {
+        start: {
+          line: 13,
+          column: 8
+        },
+        end: {
+          line: 13,
+          column: 25
+        }
+      },
+      "4": {
+        start: {
+          line: 14,
+          column: 8
+        },
+        end: {
+          line: 14,
+          column: 37
+        }
+      },
+      "5": {
+        start: {
+          line: 15,
+          column: 8
+        },
+        end: {
+          line: 15,
+          column: 31
+        }
+      },
+      "6": {
+        start: {
+          line: 16,
+          column: 8
+        },
+        end: {
+          line: 16,
+          column: 34
+        }
+      },
+      "7": {
+        start: {
+          line: 19,
+          column: 0
+        },
+        end: {
+          line: 19,
+          column: 34
+        }
+      },
+      "8": {
+        start: {
+          line: 22,
+          column: 8
+        },
+        end: {
+          line: 22,
+          column: 74
+        }
+      },
+      "9": {
+        start: {
+          line: 23,
+          column: 8
+        },
+        end: {
+          line: 23,
+          column: 44
+        }
+      },
+      "10": {
+        start: {
+          line: 26,
+          column: 0
+        },
+        end: {
+          line: 26,
+          column: 54
+        }
+      },
+      "11": {
+        start: {
+          line: 29,
+          column: 8
+        },
+        end: {
+          line: 29,
+          column: 76
+        }
+      },
+      "12": {
+        start: {
+          line: 30,
+          column: 8
+        },
+        end: {
+          line: 30,
+          column: 45
+        }
+      },
+      "13": {
+        start: {
+          line: 33,
+          column: 0
+        },
+        end: {
+          line: 33,
+          column: 56
+        }
+      },
+      "14": {
+        start: {
+          line: 36,
+          column: 8
+        },
+        end: {
+          line: 36,
+          column: 83
+        }
+      },
+      "15": {
+        start: {
+          line: 37,
+          column: 8
+        },
+        end: {
+          line: 37,
+          column: 42
+        }
+      },
+      "16": {
+        start: {
+          line: 40,
+          column: 0
+        },
+        end: {
+          line: 40,
+          column: 50
+        }
+      }
+    },
+    fnMap: {
+      "0": {
+        name: "(anonymous_0)",
+        decl: {
+          start: {
+            line: 11,
+            column: 4
+          },
+          end: {
+            line: 11,
+            column: 5
+          }
+        },
+        loc: {
+          start: {
+            line: 11,
+            column: 52
+          },
+          end: {
+            line: 17,
+            column: 5
+          }
+        },
+        line: 11
+      },
+      "1": {
+        name: "(anonymous_1)",
+        decl: {
+          start: {
+            line: 21,
+            column: 4
+          },
+          end: {
+            line: 21,
+            column: 5
+          }
+        },
+        loc: {
+          start: {
+            line: 21,
+            column: 56
+          },
+          end: {
+            line: 24,
+            column: 5
+          }
+        },
+        line: 21
+      },
+      "2": {
+        name: "(anonymous_2)",
+        decl: {
+          start: {
+            line: 28,
+            column: 4
+          },
+          end: {
+            line: 28,
+            column: 5
+          }
+        },
+        loc: {
+          start: {
+            line: 28,
+            column: 57
+          },
+          end: {
+            line: 31,
+            column: 5
+          }
+        },
+        line: 28
+      },
+      "3": {
+        name: "(anonymous_3)",
+        decl: {
+          start: {
+            line: 35,
+            column: 4
+          },
+          end: {
+            line: 35,
+            column: 5
+          }
+        },
+        loc: {
+          start: {
+            line: 35,
+            column: 28
+          },
+          end: {
+            line: 38,
+            column: 5
+          }
+        },
+        line: 35
+      }
+    },
+    branchMap: {},
+    s: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0,
+      "15": 0,
+      "16": 0
+    },
+    f: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0
+    },
+    b: {},
+    inputSourceMap: {
+      file: "C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\prompts\\types.ts",
+      mappings: ";AAAA;;GAEG;;;AA2QH;;GAEG;AACH,MAAa,WAAY,SAAQ,KAAK;IACpC,YACE,OAAe,EACR,IAAY,EACZ,UAAmB,EACnB,OAAa;QAEpB,KAAK,CAAC,OAAO,CAAC,CAAC;QAJR,SAAI,GAAJ,IAAI,CAAQ;QACZ,eAAU,GAAV,UAAU,CAAS;QACnB,YAAO,GAAP,OAAO,CAAM;QAGpB,IAAI,CAAC,IAAI,GAAG,aAAa,CAAC;IAC5B,CAAC;CACF;AAVD,kCAUC;AAED,MAAa,qBAAsB,SAAQ,WAAW;IACpD,YAAY,OAAe,EAAE,UAAmB,EAAE,iBAAuB;QACvE,KAAK,CAAC,OAAO,EAAE,kBAAkB,EAAE,UAAU,EAAE,iBAAiB,CAAC,CAAC;QAClE,IAAI,CAAC,IAAI,GAAG,uBAAuB,CAAC;IACtC,CAAC;CACF;AALD,sDAKC;AAED,MAAa,sBAAuB,SAAQ,WAAW;IACrD,YAAY,OAAe,EAAE,UAAmB,EAAE,kBAAwB;QACxE,KAAK,CAAC,OAAO,EAAE,mBAAmB,EAAE,UAAU,EAAE,kBAAkB,CAAC,CAAC;QACpE,IAAI,CAAC,IAAI,GAAG,wBAAwB,CAAC;IACvC,CAAC;CACF;AALD,wDAKC;AAED,MAAa,mBAAoB,SAAQ,WAAW;IAClD,YAAY,UAAkB;QAC5B,KAAK,CAAC,8BAA8B,UAAU,EAAE,EAAE,WAAW,EAAE,UAAU,CAAC,CAAC;QAC3E,IAAI,CAAC,IAAI,GAAG,qBAAqB,CAAC;IACpC,CAAC;CACF;AALD,kDAKC",
+      names: [],
+      sources: ["C:\\Users\\sarah\\Repos\\CCH Axcess Intelligence Vibed\\src\\prompts\\types.ts"],
+      sourcesContent: ["/**\r\n * Type definitions for the prompt management system\r\n */\r\n\r\n/**\r\n * Supported AI model providers\r\n */\r\nexport type ModelProvider = 'anthropic' | 'openai';\r\n\r\n/**\r\n * Prompt categories for organization\r\n */\r\nexport type PromptCategory = 'system' | 'user' | 'assistant' | 'tool' | 'rag' | 'document' | 'chat';\r\n\r\n/**\r\n * Prompt template interface\r\n */\r\nexport interface PromptTemplate {\r\n  /** Unique identifier for the prompt */\r\n  id: string;\r\n  \r\n  /** Human-readable name */\r\n  name: string;\r\n  \r\n  /** Category for organization */\r\n  category: PromptCategory;\r\n  \r\n  /** Main prompt template with variable placeholders */\r\n  template: string;\r\n  \r\n  /** List of variable names used in the template */\r\n  variables: string[];\r\n  \r\n  /** Model-specific prompt variants */\r\n  modelSpecific?: {\r\n    anthropic?: string;\r\n    openai?: string;\r\n  };\r\n  \r\n  /** Version for tracking changes */\r\n  version: string;\r\n  \r\n  /** Metadata about the prompt */\r\n  metadata: PromptMetadata;\r\n  \r\n  /** Optional validation rules for variables */\r\n  validation?: PromptValidation;\r\n  \r\n  /** Optional examples for documentation */\r\n  examples?: PromptExample[];\r\n}\r\n\r\n/**\r\n * Prompt metadata interface\r\n */\r\nexport interface PromptMetadata {\r\n  /** Author of the prompt */\r\n  author: string;\r\n  \r\n  /** Last modification date */\r\n  lastModified: Date;\r\n  \r\n  /** Description of the prompt's purpose */\r\n  description: string;\r\n  \r\n  /** Tags for categorization and search */\r\n  tags: string[];\r\n  \r\n  /** Usage notes or instructions */\r\n  usage?: string;\r\n  \r\n  /** Whether this is a system-critical prompt */\r\n  isCritical?: boolean;\r\n  \r\n  /** Estimated token count (for cost estimation) */\r\n  estimatedTokens?: number;\r\n}\r\n\r\n/**\r\n * Variable validation rules\r\n */\r\nexport interface PromptValidation {\r\n  /** Required variables that must be provided */\r\n  required: string[];\r\n  \r\n  /** Optional variables with default values */\r\n  optional?: Record<string, any>;\r\n  \r\n  /** Variable type definitions */\r\n  types?: Record<string, 'string' | 'number' | 'boolean' | 'array' | 'object'>;\r\n  \r\n  /** Custom validation functions */\r\n  validators?: Record<string, (value: any) => boolean | string>;\r\n}\r\n\r\n/**\r\n * Example usage of a prompt\r\n */\r\nexport interface PromptExample {\r\n  /** Example name/title */\r\n  name: string;\r\n  \r\n  /** Description of the example */\r\n  description: string;\r\n  \r\n  /** Variable values for the example */\r\n  variables: Record<string, any>;\r\n  \r\n  /** Expected output or behavior */\r\n  expectedOutput?: string;\r\n  \r\n  /** Model-specific examples */\r\n  modelSpecific?: {\r\n    anthropic?: string;\r\n    openai?: string;\r\n  };\r\n}\r\n\r\n/**\r\n * Compiled prompt result\r\n */\r\nexport interface CompiledPrompt {\r\n  /** Original template ID */\r\n  templateId: string;\r\n  \r\n  /** Compiled prompt text */\r\n  text: string;\r\n  \r\n  /** Provider it was compiled for */\r\n  provider?: ModelProvider;\r\n  \r\n  /** Variables used in compilation */\r\n  variables: Record<string, any>;\r\n  \r\n  /** Compilation metadata */\r\n  metadata: {\r\n    compiledAt: Date;\r\n    templateVersion: string;\r\n    estimatedTokens?: number;\r\n  };\r\n}\r\n\r\n/**\r\n * Prompt registry configuration\r\n */\r\nexport interface PromptRegistryConfig {\r\n  /** Whether to enable strict validation */\r\n  strictValidation: boolean;\r\n  \r\n  /** Whether to cache compiled prompts */\r\n  enableCaching: boolean;\r\n  \r\n  /** Cache TTL in milliseconds */\r\n  cacheTTL: number;\r\n  \r\n  /** Whether to log prompt usage */\r\n  enableLogging: boolean;\r\n  \r\n  /** Default model provider for compilation */\r\n  defaultProvider?: ModelProvider;\r\n}\r\n\r\n/**\r\n * Prompt search criteria\r\n */\r\nexport interface PromptSearchCriteria {\r\n  /** Search by category */\r\n  category?: PromptCategory;\r\n  \r\n  /** Search by tags */\r\n  tags?: string[];\r\n  \r\n  /** Text search in name/description */\r\n  query?: string;\r\n  \r\n  /** Filter by author */\r\n  author?: string;\r\n  \r\n  /** Filter by criticality */\r\n  isCritical?: boolean;\r\n  \r\n  /** Filter by model provider support */\r\n  supportedProvider?: ModelProvider;\r\n}\r\n\r\n/**\r\n * Prompt usage statistics\r\n */\r\nexport interface PromptUsageStats {\r\n  /** Prompt template ID */\r\n  templateId: string;\r\n  \r\n  /** Total usage count */\r\n  usageCount: number;\r\n  \r\n  /** Last used timestamp */\r\n  lastUsed: Date;\r\n  \r\n  /** Average compilation time */\r\n  avgCompilationTime: number;\r\n  \r\n  /** Error count */\r\n  errorCount: number;\r\n  \r\n  /** Most common variable values */\r\n  commonVariables: Record<string, any[]>;\r\n}\r\n\r\n/**\r\n * Prompt compilation options\r\n */\r\nexport interface CompilationOptions {\r\n  /** Target model provider */\r\n  provider?: ModelProvider;\r\n  \r\n  /** Whether to validate variables */\r\n  validate?: boolean;\r\n  \r\n  /** Whether to use cached result if available */\r\n  useCache?: boolean;\r\n  \r\n  /** Additional context for compilation */\r\n  context?: Record<string, any>;\r\n  \r\n  /** Whether to escape special characters */\r\n  escapeHtml?: boolean;\r\n  \r\n  /** Maximum allowed token count */\r\n  maxTokens?: number;\r\n}\r\n\r\n/**\r\n * Prompt template builder for creating prompts programmatically\r\n */\r\nexport interface PromptTemplateBuilder {\r\n  /** Set the prompt ID */\r\n  id(id: string): PromptTemplateBuilder;\r\n  \r\n  /** Set the prompt name */\r\n  name(name: string): PromptTemplateBuilder;\r\n  \r\n  /** Set the category */\r\n  category(category: PromptCategory): PromptTemplateBuilder;\r\n  \r\n  /** Set the template content */\r\n  template(template: string): PromptTemplateBuilder;\r\n  \r\n  /** Add variables */\r\n  variables(...variables: string[]): PromptTemplateBuilder;\r\n  \r\n  /** Set model-specific variants */\r\n  modelSpecific(variants: { anthropic?: string; openai?: string }): PromptTemplateBuilder;\r\n  \r\n  /** Set version */\r\n  version(version: string): PromptTemplateBuilder;\r\n  \r\n  /** Add metadata */\r\n  metadata(metadata: Partial<PromptMetadata>): PromptTemplateBuilder;\r\n  \r\n  /** Add validation rules */\r\n  validation(validation: PromptValidation): PromptTemplateBuilder;\r\n  \r\n  /** Add examples */\r\n  examples(...examples: PromptExample[]): PromptTemplateBuilder;\r\n  \r\n  /** Build the final prompt template */\r\n  build(): PromptTemplate;\r\n}\r\n\r\n/**\r\n * Error types for prompt operations\r\n */\r\nexport class PromptError extends Error {\r\n  constructor(\r\n    message: string,\r\n    public code: string,\r\n    public templateId?: string,\r\n    public details?: any\r\n  ) {\r\n    super(message);\r\n    this.name = 'PromptError';\r\n  }\r\n}\r\n\r\nexport class PromptValidationError extends PromptError {\r\n  constructor(message: string, templateId?: string, validationDetails?: any) {\r\n    super(message, 'VALIDATION_ERROR', templateId, validationDetails);\r\n    this.name = 'PromptValidationError';\r\n  }\r\n}\r\n\r\nexport class PromptCompilationError extends PromptError {\r\n  constructor(message: string, templateId?: string, compilationDetails?: any) {\r\n    super(message, 'COMPILATION_ERROR', templateId, compilationDetails);\r\n    this.name = 'PromptCompilationError';\r\n  }\r\n}\r\n\r\nexport class PromptNotFoundError extends PromptError {\r\n  constructor(templateId: string) {\r\n    super(`Prompt template not found: ${templateId}`, 'NOT_FOUND', templateId);\r\n    this.name = 'PromptNotFoundError';\r\n  }\r\n}"],
+      version: 3
+    },
+    _coverageSchema: "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    hash: "de476017c86c693d3b6372d685af984808cbf48a"
+  };
+  var coverage = global[gcv] || (global[gcv] = {});
+  if (!coverage[path] || coverage[path].hash !== hash) {
+    coverage[path] = coverageData;
+  }
+  var actualCoverage = coverage[path];
+  {
+    // @ts-ignore
+    cov_j1q8csq19 = function () {
+      return actualCoverage;
+    };
+  }
+  return actualCoverage;
+}
+cov_j1q8csq19();
+cov_j1q8csq19().s[0]++;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* istanbul ignore next */
+cov_j1q8csq19().s[1]++;
+exports.PromptNotFoundError = exports.PromptCompilationError = exports.PromptValidationError = exports.PromptError = void 0;
+/**
+ * Error types for prompt operations
+ */
+class PromptError extends Error {
+  constructor(message, code, templateId, details) {
+    /* istanbul ignore next */
+    cov_j1q8csq19().f[0]++;
+    cov_j1q8csq19().s[2]++;
+    super(message);
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[3]++;
+    this.code = code;
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[4]++;
+    this.templateId = templateId;
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[5]++;
+    this.details = details;
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[6]++;
+    this.name = 'PromptError';
+  }
+}
+/* istanbul ignore next */
+cov_j1q8csq19().s[7]++;
+exports.PromptError = PromptError;
+class PromptValidationError extends PromptError {
+  constructor(message, templateId, validationDetails) {
+    /* istanbul ignore next */
+    cov_j1q8csq19().f[1]++;
+    cov_j1q8csq19().s[8]++;
+    super(message, 'VALIDATION_ERROR', templateId, validationDetails);
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[9]++;
+    this.name = 'PromptValidationError';
+  }
+}
+/* istanbul ignore next */
+cov_j1q8csq19().s[10]++;
+exports.PromptValidationError = PromptValidationError;
+class PromptCompilationError extends PromptError {
+  constructor(message, templateId, compilationDetails) {
+    /* istanbul ignore next */
+    cov_j1q8csq19().f[2]++;
+    cov_j1q8csq19().s[11]++;
+    super(message, 'COMPILATION_ERROR', templateId, compilationDetails);
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[12]++;
+    this.name = 'PromptCompilationError';
+  }
+}
+/* istanbul ignore next */
+cov_j1q8csq19().s[13]++;
+exports.PromptCompilationError = PromptCompilationError;
+class PromptNotFoundError extends PromptError {
+  constructor(templateId) {
+    /* istanbul ignore next */
+    cov_j1q8csq19().f[3]++;
+    cov_j1q8csq19().s[14]++;
+    super(`Prompt template not found: ${templateId}`, 'NOT_FOUND', templateId);
+    /* istanbul ignore next */
+    cov_j1q8csq19().s[15]++;
+    this.name = 'PromptNotFoundError';
+  }
+}
+/* istanbul ignore next */
+cov_j1q8csq19().s[16]++;
+exports.PromptNotFoundError = PromptNotFoundError;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJjb3ZfajFxOGNzcTE5IiwicGF0aCIsImhhc2giLCJnbG9iYWwiLCJGdW5jdGlvbiIsImdjdiIsImNvdmVyYWdlRGF0YSIsInN0YXRlbWVudE1hcCIsInN0YXJ0IiwibGluZSIsImNvbHVtbiIsImVuZCIsImZuTWFwIiwibmFtZSIsImRlY2wiLCJsb2MiLCJicmFuY2hNYXAiLCJzIiwiZiIsImIiLCJpbnB1dFNvdXJjZU1hcCIsImZpbGUiLCJtYXBwaW5ncyIsIm5hbWVzIiwic291cmNlcyIsInNvdXJjZXNDb250ZW50IiwidmVyc2lvbiIsIl9jb3ZlcmFnZVNjaGVtYSIsImNvdmVyYWdlIiwiYWN0dWFsQ292ZXJhZ2UiLCJQcm9tcHRFcnJvciIsIkVycm9yIiwiY29uc3RydWN0b3IiLCJtZXNzYWdlIiwiY29kZSIsInRlbXBsYXRlSWQiLCJkZXRhaWxzIiwiZXhwb3J0cyIsIlByb21wdFZhbGlkYXRpb25FcnJvciIsInZhbGlkYXRpb25EZXRhaWxzIiwiUHJvbXB0Q29tcGlsYXRpb25FcnJvciIsImNvbXBpbGF0aW9uRGV0YWlscyIsIlByb21wdE5vdEZvdW5kRXJyb3IiXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXHNhcmFoXFxSZXBvc1xcQ0NIIEF4Y2VzcyBJbnRlbGxpZ2VuY2UgVmliZWRcXHNyY1xccHJvbXB0c1xcdHlwZXMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXHJcbiAqIFR5cGUgZGVmaW5pdGlvbnMgZm9yIHRoZSBwcm9tcHQgbWFuYWdlbWVudCBzeXN0ZW1cclxuICovXHJcblxyXG4vKipcclxuICogU3VwcG9ydGVkIEFJIG1vZGVsIHByb3ZpZGVyc1xyXG4gKi9cclxuZXhwb3J0IHR5cGUgTW9kZWxQcm92aWRlciA9ICdhbnRocm9waWMnIHwgJ29wZW5haSc7XHJcblxyXG4vKipcclxuICogUHJvbXB0IGNhdGVnb3JpZXMgZm9yIG9yZ2FuaXphdGlvblxyXG4gKi9cclxuZXhwb3J0IHR5cGUgUHJvbXB0Q2F0ZWdvcnkgPSAnc3lzdGVtJyB8ICd1c2VyJyB8ICdhc3Npc3RhbnQnIHwgJ3Rvb2wnIHwgJ3JhZycgfCAnZG9jdW1lbnQnIHwgJ2NoYXQnO1xyXG5cclxuLyoqXHJcbiAqIFByb21wdCB0ZW1wbGF0ZSBpbnRlcmZhY2VcclxuICovXHJcbmV4cG9ydCBpbnRlcmZhY2UgUHJvbXB0VGVtcGxhdGUge1xyXG4gIC8qKiBVbmlxdWUgaWRlbnRpZmllciBmb3IgdGhlIHByb21wdCAqL1xyXG4gIGlkOiBzdHJpbmc7XHJcbiAgXHJcbiAgLyoqIEh1bWFuLXJlYWRhYmxlIG5hbWUgKi9cclxuICBuYW1lOiBzdHJpbmc7XHJcbiAgXHJcbiAgLyoqIENhdGVnb3J5IGZvciBvcmdhbml6YXRpb24gKi9cclxuICBjYXRlZ29yeTogUHJvbXB0Q2F0ZWdvcnk7XHJcbiAgXHJcbiAgLyoqIE1haW4gcHJvbXB0IHRlbXBsYXRlIHdpdGggdmFyaWFibGUgcGxhY2Vob2xkZXJzICovXHJcbiAgdGVtcGxhdGU6IHN0cmluZztcclxuICBcclxuICAvKiogTGlzdCBvZiB2YXJpYWJsZSBuYW1lcyB1c2VkIGluIHRoZSB0ZW1wbGF0ZSAqL1xyXG4gIHZhcmlhYmxlczogc3RyaW5nW107XHJcbiAgXHJcbiAgLyoqIE1vZGVsLXNwZWNpZmljIHByb21wdCB2YXJpYW50cyAqL1xyXG4gIG1vZGVsU3BlY2lmaWM/OiB7XHJcbiAgICBhbnRocm9waWM/OiBzdHJpbmc7XHJcbiAgICBvcGVuYWk/OiBzdHJpbmc7XHJcbiAgfTtcclxuICBcclxuICAvKiogVmVyc2lvbiBmb3IgdHJhY2tpbmcgY2hhbmdlcyAqL1xyXG4gIHZlcnNpb246IHN0cmluZztcclxuICBcclxuICAvKiogTWV0YWRhdGEgYWJvdXQgdGhlIHByb21wdCAqL1xyXG4gIG1ldGFkYXRhOiBQcm9tcHRNZXRhZGF0YTtcclxuICBcclxuICAvKiogT3B0aW9uYWwgdmFsaWRhdGlvbiBydWxlcyBmb3IgdmFyaWFibGVzICovXHJcbiAgdmFsaWRhdGlvbj86IFByb21wdFZhbGlkYXRpb247XHJcbiAgXHJcbiAgLyoqIE9wdGlvbmFsIGV4YW1wbGVzIGZvciBkb2N1bWVudGF0aW9uICovXHJcbiAgZXhhbXBsZXM/OiBQcm9tcHRFeGFtcGxlW107XHJcbn1cclxuXHJcbi8qKlxyXG4gKiBQcm9tcHQgbWV0YWRhdGEgaW50ZXJmYWNlXHJcbiAqL1xyXG5leHBvcnQgaW50ZXJmYWNlIFByb21wdE1ldGFkYXRhIHtcclxuICAvKiogQXV0aG9yIG9mIHRoZSBwcm9tcHQgKi9cclxuICBhdXRob3I6IHN0cmluZztcclxuICBcclxuICAvKiogTGFzdCBtb2RpZmljYXRpb24gZGF0ZSAqL1xyXG4gIGxhc3RNb2RpZmllZDogRGF0ZTtcclxuICBcclxuICAvKiogRGVzY3JpcHRpb24gb2YgdGhlIHByb21wdCdzIHB1cnBvc2UgKi9cclxuICBkZXNjcmlwdGlvbjogc3RyaW5nO1xyXG4gIFxyXG4gIC8qKiBUYWdzIGZvciBjYXRlZ29yaXphdGlvbiBhbmQgc2VhcmNoICovXHJcbiAgdGFnczogc3RyaW5nW107XHJcbiAgXHJcbiAgLyoqIFVzYWdlIG5vdGVzIG9yIGluc3RydWN0aW9ucyAqL1xyXG4gIHVzYWdlPzogc3RyaW5nO1xyXG4gIFxyXG4gIC8qKiBXaGV0aGVyIHRoaXMgaXMgYSBzeXN0ZW0tY3JpdGljYWwgcHJvbXB0ICovXHJcbiAgaXNDcml0aWNhbD86IGJvb2xlYW47XHJcbiAgXHJcbiAgLyoqIEVzdGltYXRlZCB0b2tlbiBjb3VudCAoZm9yIGNvc3QgZXN0aW1hdGlvbikgKi9cclxuICBlc3RpbWF0ZWRUb2tlbnM/OiBudW1iZXI7XHJcbn1cclxuXHJcbi8qKlxyXG4gKiBWYXJpYWJsZSB2YWxpZGF0aW9uIHJ1bGVzXHJcbiAqL1xyXG5leHBvcnQgaW50ZXJmYWNlIFByb21wdFZhbGlkYXRpb24ge1xyXG4gIC8qKiBSZXF1aXJlZCB2YXJpYWJsZXMgdGhhdCBtdXN0IGJlIHByb3ZpZGVkICovXHJcbiAgcmVxdWlyZWQ6IHN0cmluZ1tdO1xyXG4gIFxyXG4gIC8qKiBPcHRpb25hbCB2YXJpYWJsZXMgd2l0aCBkZWZhdWx0IHZhbHVlcyAqL1xyXG4gIG9wdGlvbmFsPzogUmVjb3JkPHN0cmluZywgYW55PjtcclxuICBcclxuICAvKiogVmFyaWFibGUgdHlwZSBkZWZpbml0aW9ucyAqL1xyXG4gIHR5cGVzPzogUmVjb3JkPHN0cmluZywgJ3N0cmluZycgfCAnbnVtYmVyJyB8ICdib29sZWFuJyB8ICdhcnJheScgfCAnb2JqZWN0Jz47XHJcbiAgXHJcbiAgLyoqIEN1c3RvbSB2YWxpZGF0aW9uIGZ1bmN0aW9ucyAqL1xyXG4gIHZhbGlkYXRvcnM/OiBSZWNvcmQ8c3RyaW5nLCAodmFsdWU6IGFueSkgPT4gYm9vbGVhbiB8IHN0cmluZz47XHJcbn1cclxuXHJcbi8qKlxyXG4gKiBFeGFtcGxlIHVzYWdlIG9mIGEgcHJvbXB0XHJcbiAqL1xyXG5leHBvcnQgaW50ZXJmYWNlIFByb21wdEV4YW1wbGUge1xyXG4gIC8qKiBFeGFtcGxlIG5hbWUvdGl0bGUgKi9cclxuICBuYW1lOiBzdHJpbmc7XHJcbiAgXHJcbiAgLyoqIERlc2NyaXB0aW9uIG9mIHRoZSBleGFtcGxlICovXHJcbiAgZGVzY3JpcHRpb246IHN0cmluZztcclxuICBcclxuICAvKiogVmFyaWFibGUgdmFsdWVzIGZvciB0aGUgZXhhbXBsZSAqL1xyXG4gIHZhcmlhYmxlczogUmVjb3JkPHN0cmluZywgYW55PjtcclxuICBcclxuICAvKiogRXhwZWN0ZWQgb3V0cHV0IG9yIGJlaGF2aW9yICovXHJcbiAgZXhwZWN0ZWRPdXRwdXQ/OiBzdHJpbmc7XHJcbiAgXHJcbiAgLyoqIE1vZGVsLXNwZWNpZmljIGV4YW1wbGVzICovXHJcbiAgbW9kZWxTcGVjaWZpYz86IHtcclxuICAgIGFudGhyb3BpYz86IHN0cmluZztcclxuICAgIG9wZW5haT86IHN0cmluZztcclxuICB9O1xyXG59XHJcblxyXG4vKipcclxuICogQ29tcGlsZWQgcHJvbXB0IHJlc3VsdFxyXG4gKi9cclxuZXhwb3J0IGludGVyZmFjZSBDb21waWxlZFByb21wdCB7XHJcbiAgLyoqIE9yaWdpbmFsIHRlbXBsYXRlIElEICovXHJcbiAgdGVtcGxhdGVJZDogc3RyaW5nO1xyXG4gIFxyXG4gIC8qKiBDb21waWxlZCBwcm9tcHQgdGV4dCAqL1xyXG4gIHRleHQ6IHN0cmluZztcclxuICBcclxuICAvKiogUHJvdmlkZXIgaXQgd2FzIGNvbXBpbGVkIGZvciAqL1xyXG4gIHByb3ZpZGVyPzogTW9kZWxQcm92aWRlcjtcclxuICBcclxuICAvKiogVmFyaWFibGVzIHVzZWQgaW4gY29tcGlsYXRpb24gKi9cclxuICB2YXJpYWJsZXM6IFJlY29yZDxzdHJpbmcsIGFueT47XHJcbiAgXHJcbiAgLyoqIENvbXBpbGF0aW9uIG1ldGFkYXRhICovXHJcbiAgbWV0YWRhdGE6IHtcclxuICAgIGNvbXBpbGVkQXQ6IERhdGU7XHJcbiAgICB0ZW1wbGF0ZVZlcnNpb246IHN0cmluZztcclxuICAgIGVzdGltYXRlZFRva2Vucz86IG51bWJlcjtcclxuICB9O1xyXG59XHJcblxyXG4vKipcclxuICogUHJvbXB0IHJlZ2lzdHJ5IGNvbmZpZ3VyYXRpb25cclxuICovXHJcbmV4cG9ydCBpbnRlcmZhY2UgUHJvbXB0UmVnaXN0cnlDb25maWcge1xyXG4gIC8qKiBXaGV0aGVyIHRvIGVuYWJsZSBzdHJpY3QgdmFsaWRhdGlvbiAqL1xyXG4gIHN0cmljdFZhbGlkYXRpb246IGJvb2xlYW47XHJcbiAgXHJcbiAgLyoqIFdoZXRoZXIgdG8gY2FjaGUgY29tcGlsZWQgcHJvbXB0cyAqL1xyXG4gIGVuYWJsZUNhY2hpbmc6IGJvb2xlYW47XHJcbiAgXHJcbiAgLyoqIENhY2hlIFRUTCBpbiBtaWxsaXNlY29uZHMgKi9cclxuICBjYWNoZVRUTDogbnVtYmVyO1xyXG4gIFxyXG4gIC8qKiBXaGV0aGVyIHRvIGxvZyBwcm9tcHQgdXNhZ2UgKi9cclxuICBlbmFibGVMb2dnaW5nOiBib29sZWFuO1xyXG4gIFxyXG4gIC8qKiBEZWZhdWx0IG1vZGVsIHByb3ZpZGVyIGZvciBjb21waWxhdGlvbiAqL1xyXG4gIGRlZmF1bHRQcm92aWRlcj86IE1vZGVsUHJvdmlkZXI7XHJcbn1cclxuXHJcbi8qKlxyXG4gKiBQcm9tcHQgc2VhcmNoIGNyaXRlcmlhXHJcbiAqL1xyXG5leHBvcnQgaW50ZXJmYWNlIFByb21wdFNlYXJjaENyaXRlcmlhIHtcclxuICAvKiogU2VhcmNoIGJ5IGNhdGVnb3J5ICovXHJcbiAgY2F0ZWdvcnk/OiBQcm9tcHRDYXRlZ29yeTtcclxuICBcclxuICAvKiogU2VhcmNoIGJ5IHRhZ3MgKi9cclxuICB0YWdzPzogc3RyaW5nW107XHJcbiAgXHJcbiAgLyoqIFRleHQgc2VhcmNoIGluIG5hbWUvZGVzY3JpcHRpb24gKi9cclxuICBxdWVyeT86IHN0cmluZztcclxuICBcclxuICAvKiogRmlsdGVyIGJ5IGF1dGhvciAqL1xyXG4gIGF1dGhvcj86IHN0cmluZztcclxuICBcclxuICAvKiogRmlsdGVyIGJ5IGNyaXRpY2FsaXR5ICovXHJcbiAgaXNDcml0aWNhbD86IGJvb2xlYW47XHJcbiAgXHJcbiAgLyoqIEZpbHRlciBieSBtb2RlbCBwcm92aWRlciBzdXBwb3J0ICovXHJcbiAgc3VwcG9ydGVkUHJvdmlkZXI/OiBNb2RlbFByb3ZpZGVyO1xyXG59XHJcblxyXG4vKipcclxuICogUHJvbXB0IHVzYWdlIHN0YXRpc3RpY3NcclxuICovXHJcbmV4cG9ydCBpbnRlcmZhY2UgUHJvbXB0VXNhZ2VTdGF0cyB7XHJcbiAgLyoqIFByb21wdCB0ZW1wbGF0ZSBJRCAqL1xyXG4gIHRlbXBsYXRlSWQ6IHN0cmluZztcclxuICBcclxuICAvKiogVG90YWwgdXNhZ2UgY291bnQgKi9cclxuICB1c2FnZUNvdW50OiBudW1iZXI7XHJcbiAgXHJcbiAgLyoqIExhc3QgdXNlZCB0aW1lc3RhbXAgKi9cclxuICBsYXN0VXNlZDogRGF0ZTtcclxuICBcclxuICAvKiogQXZlcmFnZSBjb21waWxhdGlvbiB0aW1lICovXHJcbiAgYXZnQ29tcGlsYXRpb25UaW1lOiBudW1iZXI7XHJcbiAgXHJcbiAgLyoqIEVycm9yIGNvdW50ICovXHJcbiAgZXJyb3JDb3VudDogbnVtYmVyO1xyXG4gIFxyXG4gIC8qKiBNb3N0IGNvbW1vbiB2YXJpYWJsZSB2YWx1ZXMgKi9cclxuICBjb21tb25WYXJpYWJsZXM6IFJlY29yZDxzdHJpbmcsIGFueVtdPjtcclxufVxyXG5cclxuLyoqXHJcbiAqIFByb21wdCBjb21waWxhdGlvbiBvcHRpb25zXHJcbiAqL1xyXG5leHBvcnQgaW50ZXJmYWNlIENvbXBpbGF0aW9uT3B0aW9ucyB7XHJcbiAgLyoqIFRhcmdldCBtb2RlbCBwcm92aWRlciAqL1xyXG4gIHByb3ZpZGVyPzogTW9kZWxQcm92aWRlcjtcclxuICBcclxuICAvKiogV2hldGhlciB0byB2YWxpZGF0ZSB2YXJpYWJsZXMgKi9cclxuICB2YWxpZGF0ZT86IGJvb2xlYW47XHJcbiAgXHJcbiAgLyoqIFdoZXRoZXIgdG8gdXNlIGNhY2hlZCByZXN1bHQgaWYgYXZhaWxhYmxlICovXHJcbiAgdXNlQ2FjaGU/OiBib29sZWFuO1xyXG4gIFxyXG4gIC8qKiBBZGRpdGlvbmFsIGNvbnRleHQgZm9yIGNvbXBpbGF0aW9uICovXHJcbiAgY29udGV4dD86IFJlY29yZDxzdHJpbmcsIGFueT47XHJcbiAgXHJcbiAgLyoqIFdoZXRoZXIgdG8gZXNjYXBlIHNwZWNpYWwgY2hhcmFjdGVycyAqL1xyXG4gIGVzY2FwZUh0bWw/OiBib29sZWFuO1xyXG4gIFxyXG4gIC8qKiBNYXhpbXVtIGFsbG93ZWQgdG9rZW4gY291bnQgKi9cclxuICBtYXhUb2tlbnM/OiBudW1iZXI7XHJcbn1cclxuXHJcbi8qKlxyXG4gKiBQcm9tcHQgdGVtcGxhdGUgYnVpbGRlciBmb3IgY3JlYXRpbmcgcHJvbXB0cyBwcm9ncmFtbWF0aWNhbGx5XHJcbiAqL1xyXG5leHBvcnQgaW50ZXJmYWNlIFByb21wdFRlbXBsYXRlQnVpbGRlciB7XHJcbiAgLyoqIFNldCB0aGUgcHJvbXB0IElEICovXHJcbiAgaWQoaWQ6IHN0cmluZyk6IFByb21wdFRlbXBsYXRlQnVpbGRlcjtcclxuICBcclxuICAvKiogU2V0IHRoZSBwcm9tcHQgbmFtZSAqL1xyXG4gIG5hbWUobmFtZTogc3RyaW5nKTogUHJvbXB0VGVtcGxhdGVCdWlsZGVyO1xyXG4gIFxyXG4gIC8qKiBTZXQgdGhlIGNhdGVnb3J5ICovXHJcbiAgY2F0ZWdvcnkoY2F0ZWdvcnk6IFByb21wdENhdGVnb3J5KTogUHJvbXB0VGVtcGxhdGVCdWlsZGVyO1xyXG4gIFxyXG4gIC8qKiBTZXQgdGhlIHRlbXBsYXRlIGNvbnRlbnQgKi9cclxuICB0ZW1wbGF0ZSh0ZW1wbGF0ZTogc3RyaW5nKTogUHJvbXB0VGVtcGxhdGVCdWlsZGVyO1xyXG4gIFxyXG4gIC8qKiBBZGQgdmFyaWFibGVzICovXHJcbiAgdmFyaWFibGVzKC4uLnZhcmlhYmxlczogc3RyaW5nW10pOiBQcm9tcHRUZW1wbGF0ZUJ1aWxkZXI7XHJcbiAgXHJcbiAgLyoqIFNldCBtb2RlbC1zcGVjaWZpYyB2YXJpYW50cyAqL1xyXG4gIG1vZGVsU3BlY2lmaWModmFyaWFudHM6IHsgYW50aHJvcGljPzogc3RyaW5nOyBvcGVuYWk/OiBzdHJpbmcgfSk6IFByb21wdFRlbXBsYXRlQnVpbGRlcjtcclxuICBcclxuICAvKiogU2V0IHZlcnNpb24gKi9cclxuICB2ZXJzaW9uKHZlcnNpb246IHN0cmluZyk6IFByb21wdFRlbXBsYXRlQnVpbGRlcjtcclxuICBcclxuICAvKiogQWRkIG1ldGFkYXRhICovXHJcbiAgbWV0YWRhdGEobWV0YWRhdGE6IFBhcnRpYWw8UHJvbXB0TWV0YWRhdGE+KTogUHJvbXB0VGVtcGxhdGVCdWlsZGVyO1xyXG4gIFxyXG4gIC8qKiBBZGQgdmFsaWRhdGlvbiBydWxlcyAqL1xyXG4gIHZhbGlkYXRpb24odmFsaWRhdGlvbjogUHJvbXB0VmFsaWRhdGlvbik6IFByb21wdFRlbXBsYXRlQnVpbGRlcjtcclxuICBcclxuICAvKiogQWRkIGV4YW1wbGVzICovXHJcbiAgZXhhbXBsZXMoLi4uZXhhbXBsZXM6IFByb21wdEV4YW1wbGVbXSk6IFByb21wdFRlbXBsYXRlQnVpbGRlcjtcclxuICBcclxuICAvKiogQnVpbGQgdGhlIGZpbmFsIHByb21wdCB0ZW1wbGF0ZSAqL1xyXG4gIGJ1aWxkKCk6IFByb21wdFRlbXBsYXRlO1xyXG59XHJcblxyXG4vKipcclxuICogRXJyb3IgdHlwZXMgZm9yIHByb21wdCBvcGVyYXRpb25zXHJcbiAqL1xyXG5leHBvcnQgY2xhc3MgUHJvbXB0RXJyb3IgZXh0ZW5kcyBFcnJvciB7XHJcbiAgY29uc3RydWN0b3IoXHJcbiAgICBtZXNzYWdlOiBzdHJpbmcsXHJcbiAgICBwdWJsaWMgY29kZTogc3RyaW5nLFxyXG4gICAgcHVibGljIHRlbXBsYXRlSWQ/OiBzdHJpbmcsXHJcbiAgICBwdWJsaWMgZGV0YWlscz86IGFueVxyXG4gICkge1xyXG4gICAgc3VwZXIobWVzc2FnZSk7XHJcbiAgICB0aGlzLm5hbWUgPSAnUHJvbXB0RXJyb3InO1xyXG4gIH1cclxufVxyXG5cclxuZXhwb3J0IGNsYXNzIFByb21wdFZhbGlkYXRpb25FcnJvciBleHRlbmRzIFByb21wdEVycm9yIHtcclxuICBjb25zdHJ1Y3RvcihtZXNzYWdlOiBzdHJpbmcsIHRlbXBsYXRlSWQ/OiBzdHJpbmcsIHZhbGlkYXRpb25EZXRhaWxzPzogYW55KSB7XHJcbiAgICBzdXBlcihtZXNzYWdlLCAnVkFMSURBVElPTl9FUlJPUicsIHRlbXBsYXRlSWQsIHZhbGlkYXRpb25EZXRhaWxzKTtcclxuICAgIHRoaXMubmFtZSA9ICdQcm9tcHRWYWxpZGF0aW9uRXJyb3InO1xyXG4gIH1cclxufVxyXG5cclxuZXhwb3J0IGNsYXNzIFByb21wdENvbXBpbGF0aW9uRXJyb3IgZXh0ZW5kcyBQcm9tcHRFcnJvciB7XHJcbiAgY29uc3RydWN0b3IobWVzc2FnZTogc3RyaW5nLCB0ZW1wbGF0ZUlkPzogc3RyaW5nLCBjb21waWxhdGlvbkRldGFpbHM/OiBhbnkpIHtcclxuICAgIHN1cGVyKG1lc3NhZ2UsICdDT01QSUxBVElPTl9FUlJPUicsIHRlbXBsYXRlSWQsIGNvbXBpbGF0aW9uRGV0YWlscyk7XHJcbiAgICB0aGlzLm5hbWUgPSAnUHJvbXB0Q29tcGlsYXRpb25FcnJvcic7XHJcbiAgfVxyXG59XHJcblxyXG5leHBvcnQgY2xhc3MgUHJvbXB0Tm90Rm91bmRFcnJvciBleHRlbmRzIFByb21wdEVycm9yIHtcclxuICBjb25zdHJ1Y3Rvcih0ZW1wbGF0ZUlkOiBzdHJpbmcpIHtcclxuICAgIHN1cGVyKGBQcm9tcHQgdGVtcGxhdGUgbm90IGZvdW5kOiAke3RlbXBsYXRlSWR9YCwgJ05PVF9GT1VORCcsIHRlbXBsYXRlSWQpO1xyXG4gICAgdGhpcy5uYW1lID0gJ1Byb21wdE5vdEZvdW5kRXJyb3InO1xyXG4gIH1cclxufSJdLCJtYXBwaW5ncyI6Ijs7QUFBQTs7O0FBQUE7QUFBQSxTQUFBQSxjQUFBO0VBQUEsSUFBQUMsSUFBQTtFQUFBLElBQUFDLElBQUE7RUFBQSxJQUFBQyxNQUFBLE9BQUFDLFFBQUE7RUFBQSxJQUFBQyxHQUFBO0VBQUEsSUFBQUMsWUFBQTtJQUFBTCxJQUFBO0lBQUFNLFlBQUE7TUFBQTtRQUFBQyxLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO01BQUE7UUFBQUYsS0FBQTtVQUFBQyxJQUFBO1VBQUFDLE1BQUE7UUFBQTtRQUFBQyxHQUFBO1VBQUFGLElBQUE7VUFBQUMsTUFBQTtRQUFBO01BQUE7TUFBQTtRQUFBRixLQUFBO1VBQUFDLElBQUE7VUFBQUMsTUFBQTtRQUFBO1FBQUFDLEdBQUE7VUFBQUYsSUFBQTtVQUFBQyxNQUFBO1FBQUE7TUFBQTtNQUFBO1FBQUFGLEtBQUE7VUFBQUMsSUFBQTtVQUFBQyxNQUFBO1FBQUE7UUFBQUMsR0FBQTtVQUFBRixJQUFBO1VBQUFDLE1BQUE7UUFBQTtNQUFBO0lBQUE7SUFBQUUsS0FBQTtNQUFBO1FBQUFDLElBQUE7UUFBQUMsSUFBQTtVQUFBTixLQUFBO1lBQUFDLElBQUE7WUFBQUMsTUFBQTtVQUFBO1VBQUFDLEdBQUE7WUFBQUYsSUFBQTtZQUFBQyxNQUFBO1VBQUE7UUFBQTtRQUFBSyxHQUFBO1VBQUFQLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFELElBQUE7TUFBQTtNQUFBO1FBQUFJLElBQUE7UUFBQUMsSUFBQTtVQUFBTixLQUFBO1lBQUFDLElBQUE7WUFBQUMsTUFBQTtVQUFBO1VBQUFDLEdBQUE7WUFBQUYsSUFBQTtZQUFBQyxNQUFBO1VBQUE7UUFBQTtRQUFBSyxHQUFBO1VBQUFQLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFELElBQUE7TUFBQTtNQUFBO1FBQUFJLElBQUE7UUFBQUMsSUFBQTtVQUFBTixLQUFBO1lBQUFDLElBQUE7WUFBQUMsTUFBQTtVQUFBO1VBQUFDLEdBQUE7WUFBQUYsSUFBQTtZQUFBQyxNQUFBO1VBQUE7UUFBQTtRQUFBSyxHQUFBO1VBQUFQLEtBQUE7WUFBQUMsSUFBQTtZQUFBQyxNQUFBO1VBQUE7VUFBQUMsR0FBQTtZQUFBRixJQUFBO1lBQUFDLE1BQUE7VUFBQTtRQUFBO1FBQUFELElBQUE7TUFBQTtNQUFBO1FBQUFJLElBQUE7UUFBQUMsSUFBQTtVQUFBTixLQUFBO1lBQUFDLElBQUE7WUFBQUMsTUFBQTtVQUFBO1VBQUFDLEdBQUE7WUFBQUYsSUFBQTtZQUFBQyxNQUFBO1VBQUE7UUFBQTtRQUFBSyxHQUFBO1VBQUFQLEtBQUE7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

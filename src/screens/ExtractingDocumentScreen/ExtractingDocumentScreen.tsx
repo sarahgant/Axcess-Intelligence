@@ -1,9 +1,10 @@
 import React from "react";
+import { ScreenErrorBoundary } from "../../components/ScreenErrorBoundary";
 import { Separator } from "../../components/ui/separator";
 import { ContextualInfoSection } from "./sections/ContextualInfoSection/ContextualInfoSection";
 import { DocumentListSection } from "./sections/DocumentListSection";
 
-export const ExtractingDocumentScreen = (): JSX.Element => {
+const ExtractingDocumentScreenContent = (): JSX.Element => {
   return (
     <main
       className="flex min-w-[1024px] min-h-screen relative bg-white"
@@ -15,5 +16,13 @@ export const ExtractingDocumentScreen = (): JSX.Element => {
         <DocumentListSection />
       </section>
     </main>
+  );
+};
+
+export const ExtractingDocumentScreen = (): JSX.Element => {
+  return (
+    <ScreenErrorBoundary screenName="ExtractingDocumentScreen">
+      <ExtractingDocumentScreenContent />
+    </ScreenErrorBoundary>
   );
 };

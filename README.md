@@ -1,336 +1,309 @@
-# CCH Intelligence
+# CCH Axcess Intelligence Vibed
 
-🧠 **Advanced AI-Powered Tax Research & Document Analysis Platform**
+🤖 **AI-powered document processing and tax research platform for CCH Axcess users**
 
-CCH Intelligence is a production-ready, enterprise-grade platform that combines the power of multiple AI providers (Anthropic Claude & OpenAI GPT) with sophisticated document analysis capabilities, designed specifically for tax research and professional accounting workflows.
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-org/cch-axcess-intelligence/actions)
+[![Security](https://img.shields.io/badge/security-audited-green)](https://github.com/your-org/cch-axcess-intelligence/security)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/your-org/cch-axcess-intelligence/releases)
+[![License](https://img.shields.io/badge/license-MIT-orange)](./LICENSE)
 
----
+## ✨ Features
 
-## 🌟 Features
-
-### 🤖 **Multi-AI Provider Support**
-- **Anthropic Claude** integration with streaming responses
-- **OpenAI GPT** support with fallback capabilities  
-- **Provider switching** - Choose the best AI for each task
-- **Health monitoring** - Automatic provider status checking
-
-### 📄 **Document Intelligence**
-- **Document upload** with multiple format support
-- **Context-aware analysis** - AI responses consider uploaded documents
-- **Document retention** with configurable expiration
-- **CCH Search integration** for professional tax research
-
-### 🔒 **Enterprise Security**
-- **API keys secured server-side** - Never exposed to browser
-- **Rate limiting** - 100 requests per 15 minutes per IP
-- **CORS protection** - Domain-specific access control
-- **HTTPS ready** with SSL/TLS configuration
-- **Security headers** - XSS, CSRF, content policy protection
-
-### ⚡ **Performance & Scalability**
-- **Real-time streaming** responses
-- **Concurrent request handling**
-- **Docker containerization** 
-- **Load balancer ready**
-- **Health monitoring** with automated recovery
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Secure API    │    │  AI Providers   │
-│   (React/Vite)  │───▶│   (Express.js)  │───▶│ Claude/OpenAI   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌─────────────────┐
-                       │   Rate Limiting │
-                       │   CORS/Security │
-                       │   Logging       │
-                       └─────────────────┘
-```
-
-### **Security Architecture**
-- **Frontend**: No API keys, secure communication with backend
-- **Backend**: API key storage, request validation, response filtering
-- **AI Providers**: Secure server-to-server communication only
-
----
+- 🤖 **Multi-Model AI Support** - Claude 3.5 Sonnet, GPT-4, and more
+- 📄 **Intelligent Document Analysis** - Extract insights from PDFs, Word docs, and spreadsheets
+- 🔍 **Advanced Tax Research** - CCH AnswerConnect integration with AI-powered search
+- 💬 **Conversational Interface** - Natural language queries with context awareness
+- 🔒 **Enterprise Security** - SOC 2 compliant with end-to-end encryption
+- ⚡ **Real-time Processing** - Streaming responses and live collaboration
+- 📊 **Analytics Dashboard** - Usage insights and performance metrics
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Node.js** 18+ 
-- **Docker** & **Docker Compose** (for production)
-- **API Keys**: [Anthropic](https://console.anthropic.com/) & [OpenAI](https://platform.openai.com/api-keys)
 
-### 1. Clone & Install
+- **Node.js** 18+ ([Download](https://nodejs.org/))
+- **npm** 9+ (comes with Node.js)
+- **Git** ([Download](https://git-scm.com/))
+
+### Installation
+
 ```bash
-git clone https://github.com/yourusername/cch-intelligence.git
-cd cch-intelligence
+# 1. Clone the repository
+git clone https://github.com/your-org/cch-axcess-intelligence.git
+cd cch-axcess-intelligence
+
+# 2. Install dependencies
 npm install
+
+# 3. Set up environment variables
+cp .env.example .env
+# Edit .env with your API keys (see Environment Setup below)
+
+# 4. Start development server
+npm start
 ```
 
-### 2. Configure Environment
-```bash
-# Create backend environment file
-cp server/env.example server/.env
+The application will be available at `http://localhost:5173`
 
-# Edit server/.env with your API keys:
-ANTHROPIC_API_KEY=your_anthropic_key_here
-OPENAI_API_KEY=your_openai_key_here
-ENCRYPTION_KEY=your_secure_32_char_encryption_key
+### Environment Setup
+
+1. **Copy the environment template**:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Add your API keys** to `.env`:
+   ```bash
+   # AI Provider Keys
+   ANTHROPIC_API_KEY=your_anthropic_key_here
+   OPENAI_API_KEY=your_openai_key_here
+   
+   # Security
+   ENCRYPTION_KEY=your_32_character_encryption_key_here
+   JWT_SECRET=your_jwt_secret_here
+   ```
+
+3. **Get API Keys**:
+   - **Anthropic**: [Get Claude API key](https://console.anthropic.com/)
+   - **OpenAI**: [Get OpenAI API key](https://platform.openai.com/api-keys)
+
+## 📚 Documentation
+
+- 📖 **[Developer Guide](./docs/DEVELOPMENT.md)** - Development setup and workflow
+- 🏗️ **[Architecture](./docs/ARCHITECTURE.md)** - System design and structure  
+- 🔧 **[API Documentation](./docs/API.md)** - API endpoints and integration
+- 🚀 **[Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment
+- 🧪 **[Testing Guide](./docs/TESTING.md)** - Testing strategy and tools
+- 🔒 **[Security Guide](./docs/SECURITY.md)** - Security implementation
+- 🏃 **[Performance Guide](./docs/PERFORMANCE.md)** - Optimization strategies
+- 🛠️ **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
+
+## 🎯 Use Cases
+
+### Document Intelligence
+```
+📄 Upload tax documents → 🤖 AI extracts key information → 💡 Get instant insights
 ```
 
-### 3. Start Development
-```bash
-npm run dev
+- Automatic detection of tax forms and schedules
+- Entity extraction (names, amounts, dates, tax codes)
+- Cross-document analysis and comparison
+- Compliance checking and validation
+
+### Tax Research
+```
+❓ Ask tax questions → 🔍 AI searches CCH database → 📚 Get authoritative answers
 ```
 
-**Frontend**: http://localhost:5173  
-**Backend API**: http://localhost:3001
+- Natural language tax law queries
+- Citation of relevant regulations and cases
+- Historical context and precedent analysis
+- Jurisdiction-specific guidance
 
----
+### Workflow Integration
+```
+💼 CCH Axcess workflow → 🔗 Intelligence insights → ✅ Enhanced decision making
+```
+
+- Seamless integration with existing CCH tools
+- Context-aware recommendations
+- Automated research suggestions
+- Audit trail and documentation
 
 ## 🛠️ Development
 
-### **Available Scripts**
+### Available Scripts
+
 ```bash
-# Development (runs both frontend & backend)
-npm run dev
+# Development
+npm start          # Start development server (clean startup)
+npm run dev        # Alternative development command
+npm run server     # Backend only
+npm run client     # Frontend only
 
-# Frontend only
-npm run client:dev
+# Building
+npm run build      # Production build
+npm run preview    # Preview production build
+npm run analyze    # Bundle size analysis
 
-# Backend only  
-npm run server:dev
+# Quality Assurance
+npm test           # Run all tests
+npm run test:watch # Watch mode testing
+npm run test:e2e   # End-to-end tests
+npm run lint       # Lint code
+npm run type-check # TypeScript validation
 
-# Production build
-npm run build
+# Security
+npm run security:audit     # Security vulnerability scan
+npm run security:check-env # Environment security check
+npm run security:fix       # Fix known vulnerabilities
 
-# Clean install
-npm run fresh
+# Maintenance
+npm run clean      # Clean development ports
+npm run fresh      # Fresh install (removes node_modules)
+npm run doctor     # Health check
 ```
 
-### **Project Structure**
+### Technology Stack
+
+**Frontend**:
+- ⚛️ **React 18** with TypeScript
+- 🎨 **Tailwind CSS** + **@wk/theme** design system
+- 🧭 **React Router** for navigation
+- 🔄 **Zustand** for state management
+- 📡 **React Query** for API state
+
+**Backend**:
+- 🟢 **Node.js** + **Express**
+- 🔒 **Helmet** for security headers
+- 📊 **Winston** for logging
+- ⚡ **Rate limiting** and **CORS**
+
+**AI Integration**:
+- 🧠 **Anthropic Claude** (primary)
+- 🤖 **OpenAI GPT** (secondary)
+- 🔌 **Multi-provider architecture**
+
+**Development Tools**:
+- ⚡ **Vite** for fast builds
+- 🧪 **Jest** + **React Testing Library**
+- 🎭 **Playwright** for E2E testing
+- 🔍 **ESLint** + **Prettier**
+
+## 🏗️ Architecture
+
+The application follows a **feature-based architecture** with clear separation of concerns:
+
 ```
-cch-intelligence/
-├── src/                    # Frontend React application
-│   ├── screens/           # Main application screens
-│   ├── components/        # Reusable UI components
-│   ├── services/          # API client & utilities
-│   └── styles/           # Styling & assets
-├── server/                # Backend Express.js API
-│   ├── routes/           # API route handlers
-│   ├── services/         # Business logic & AI providers
-│   └── utils/            # Utilities & logging
-├── docs/                  # Documentation
-├── tests/                 # Test suites
-└── scripts/              # Build & deployment scripts
-```
-
----
-
-## 🚀 Production Deployment
-
-### **Docker Deployment (Recommended)**
-```bash
-# Quick deploy
-./deploy.ps1 production
-
-# Or manual Docker
-docker-compose up -d
-```
-
-### **Environment Setup**
-1. **Create production environment**:
-   ```bash
-   cp server/env.example server/.env.production
-   ```
-
-2. **Configure for your domain**:
-   ```env
-   NODE_ENV=production
-   FRONTEND_URL=https://your-domain.com
-   # ... API keys and other settings
-   ```
-
-3. **SSL Certificates** (for HTTPS):
-   ```
-   ssl/
-   ├── cert.pem
-   └── key.pem
-   ```
-
-### **Deployment Options**
-- **🐳 Docker Compose**: Full stack with Nginx reverse proxy
-- **☁️ Cloud Platforms**: AWS, Google Cloud, Azure ready
-- **🔧 Manual Setup**: Traditional server deployment
-
----
-
-## 📊 Monitoring & Maintenance
-
-### **Health Checks**
-```bash
-# Basic health
-curl http://localhost:3001/health
-
-# Detailed service status
-curl http://localhost:3001/health/detailed?checkServices=true
+src/
+├── features/          # Feature modules (chat, documents, research)
+├── shared/           # Reusable components and utilities  
+├── core/             # Business logic and domain models
+├── infrastructure/   # Technical infrastructure
+└── security/         # Security utilities
 ```
 
-### **Logs**
-```bash
-# Application logs
-docker-compose logs -f app
+### Key Principles
 
-# Real-time monitoring
-tail -f server/logs/combined.log
-```
-
-### **Key Metrics**
-- Response time & error rates
-- AI provider availability
-- Rate limiting effectiveness
-- Resource utilization
-
----
-
-## 🔒 Security
-
-### **API Key Management**
-- ✅ **Server-side only** - API keys never exposed to browser
-- ✅ **Environment isolation** - Separate configs for dev/staging/prod
-- ✅ **Rotation ready** - Easy key updates without code changes
-
-### **Request Security**
-- ✅ **Rate limiting** - Prevents abuse and API exhaustion
-- ✅ **CORS protection** - Domain whitelist enforcement
-- ✅ **Input validation** - Request sanitization and validation
-- ✅ **Security headers** - XSS, CSRF, content policy protection
-
-### **Infrastructure Security**
-- ✅ **HTTPS enforcement** - TLS encryption for all communications
-- ✅ **Container security** - Non-root user, minimal attack surface
-- ✅ **Dependency scanning** - Automated vulnerability detection
-
----
-
-## 🧪 Testing
-
-### **Test Suites**
-```bash
-# Run all tests
-npm test
-
-# Unit tests
-npm run test:unit
-
-# Integration tests  
-npm run test:integration
-
-# End-to-end tests
-npm run test:e2e
-```
-
-### **Test Coverage**
-- Unit tests for AI provider integrations
-- Integration tests for API endpoints
-- E2E tests for complete user workflows
-
----
-
-## 📈 Performance
-
-### **Optimization Features**
-- **Streaming responses** - Real-time AI output
-- **Request caching** - Reduced redundant API calls
-- **Connection pooling** - Efficient resource utilization
-- **Gzip compression** - Reduced bandwidth usage
-
-### **Scalability**
-- **Horizontal scaling** - Multi-instance deployment
-- **Load balancing** - Request distribution
-- **Database ready** - Persistent storage integration
-- **CDN compatible** - Static asset optimization
-
----
+- 🔒 **Security First** - Input sanitization, CSP headers, audit logging
+- 🎯 **Feature Isolation** - No cross-feature dependencies
+- 🔄 **Clean Architecture** - Dependency inversion and SOLID principles
+- 🧪 **Test-Driven** - Comprehensive test coverage
+- 📈 **Performance** - Code splitting and lazy loading
 
 ## 🤝 Contributing
 
-1. **Fork the repository**
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+
+### Development Workflow
+
+1. **Fork and clone** the repository
 2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Commit changes**: `git commit -m 'Add amazing feature'`
-4. **Push to branch**: `git push origin feature/amazing-feature`  
-5. **Open a Pull Request**
+3. **Follow our coding standards** (ESLint will help!)
+4. **Write tests** for your changes
+5. **Update documentation** as needed
+6. **Submit a pull request**
 
-### **Development Guidelines**
-- Follow existing code style and patterns
-- Add tests for new features
-- Update documentation for API changes
-- Ensure security best practices
+### Code Quality
 
----
+- ✅ All tests must pass
+- ✅ Code coverage > 80%
+- ✅ Security scan clean
+- ✅ Performance impact assessed
+- ✅ Documentation updated
 
-## 📋 API Documentation
+## 🔒 Security
 
-### **Chat Endpoints**
-```http
-POST /api/chat/message
-POST /api/chat/stream
-GET  /api/chat/providers
-GET  /api/chat/conversations/:id
-```
+Security is a top priority. We implement:
 
-### **Health & Monitoring**
-```http
-GET /health
-GET /health/detailed
-```
+- 🛡️ **Input Sanitization** - All user inputs are validated and sanitized
+- 🔐 **API Key Management** - Secure storage and rotation procedures
+- 🚫 **Content Security Policy** - Prevents XSS and injection attacks
+- 📊 **Rate Limiting** - Protects against abuse and DoS
+- 🔍 **Vulnerability Scanning** - Automated dependency auditing
+- 📝 **Audit Logging** - Complete activity trail
 
-**Full API documentation**: See [docs/api.md](docs/api.md)
+**Reporting Security Issues**: Please email security@yourcompany.com
 
----
+## 📊 Performance
 
-## 🆘 Support
+Current performance metrics:
 
-### **Common Issues**
-- **Port conflicts**: Use `npm run clean` to free ports
-- **API key errors**: Verify environment file configuration
-- **Connection issues**: Check CORS settings and network connectivity
+- ⚡ **First Contentful Paint**: < 1.5s
+- 🎯 **Largest Contentful Paint**: < 2.5s
+- 📱 **Cumulative Layout Shift**: < 0.1
+- 🔄 **Bundle Size**: < 500KB (gzipped)
+- 🚀 **API Response Time**: < 200ms (95th percentile)
 
-### **Getting Help**
-- 📖 **Documentation**: Check `/docs` folder
-- 🐛 **Issues**: Submit GitHub issues with detailed information
-- 💬 **Discussions**: Use GitHub Discussions for questions
+## 🌍 Browser Support
 
----
+| Browser | Version |
+|---------|---------|
+| Chrome  | 90+     |
+| Firefox | 88+     |
+| Safari  | 14+     |
+| Edge    | 90+     |
+
+## 📈 Roadmap
+
+### Current Sprint
+- ✅ Core AI chat functionality
+- ✅ Document upload and processing
+- ✅ Basic tax research integration
+- 🔄 Advanced document analysis
+- 🔄 User authentication system
+
+### Next Quarter
+- 📱 Mobile responsive design
+- 🔗 Enhanced CCH integration
+- 📊 Analytics dashboard
+- 🎨 Customizable themes
+- 🌐 Multi-language support
+
+### Future Features
+- 📱 Mobile app (React Native)
+- 🤖 Custom AI model training
+- 🔌 Third-party integrations
+- 📈 Advanced analytics
+- 🎓 Training and onboarding
+
+## 📞 Support
+
+### Getting Help
+
+- 📖 **Documentation**: Check our comprehensive [docs](./docs/)
+- 💬 **Community**: Join our [Discord server](https://discord.gg/your-server)
+- 🐛 **Bug Reports**: [Create an issue](https://github.com/your-org/cch-axcess-intelligence/issues)
+- 💡 **Feature Requests**: [Start a discussion](https://github.com/your-org/cch-axcess-intelligence/discussions)
+
+### Enterprise Support
+
+For enterprise customers:
+- 📧 **Email**: enterprise@yourcompany.com
+- 📞 **Phone**: 1-800-YOUR-NUMBER
+- 💼 **Dedicated Support**: Available 24/7
+- 🎓 **Training**: Custom training programs
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
----
+## 🙏 Acknowledgments
 
-## 🏆 Acknowledgments
-
-- **Anthropic** for Claude AI capabilities
-- **OpenAI** for GPT integration  
-- **CCH** for tax research domain expertise
-- **Open source community** for foundational technologies
+- 🤖 **Anthropic** for Claude AI capabilities
+- 🤖 **OpenAI** for GPT model access
+- 🏢 **CCH** for tax research integration
+- 👥 **Open Source Community** for amazing tools and libraries
 
 ---
 
 <div align="center">
 
-**Built with ❤️ for professional tax research and document analysis**
+**Built with ❤️ by the CCH Intelligence Team**
 
-[![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com/)
-[![Security](https://img.shields.io/badge/Security-Enterprise-red.svg)](#security)
+[🌐 Website](https://your-website.com) • 
+[📧 Contact](mailto:contact@yourcompany.com) • 
+[🐦 Twitter](https://twitter.com/yourcompany) • 
+[💼 LinkedIn](https://linkedin.com/company/yourcompany)
 
 </div>

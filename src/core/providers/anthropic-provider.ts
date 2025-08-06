@@ -43,12 +43,25 @@ interface AnthropicResponse {
 }
 
 /**
+ * Anthropic content block interface
+ */
+interface AnthropicContentBlock {
+  type: string;
+  text?: string;
+  source?: {
+    type: string;
+    media_type: string;
+    data: string;
+  };
+}
+
+/**
  * Anthropic streaming response format
  */
 interface AnthropicStreamEvent {
   type: 'message_start' | 'content_block_start' | 'content_block_delta' | 'content_block_stop' | 'message_delta' | 'message_stop';
   message?: Partial<AnthropicResponse>;
-  content_block?: any;
+  content_block?: AnthropicContentBlock;
   delta?: {
     type: string;
     text?: string;
@@ -60,9 +73,22 @@ interface AnthropicStreamEvent {
   };
 }
 
+/**
+ * Anthropic request body interface
+ */
+interface AnthropicRequestBody {
+  model: string;
+  max_tokens: number;
+  messages: AnthropicMessage[];
+  system?: string;
+  temperature?: number;
+  stream?: boolean;
+  metadata?: Record<string, unknown>;
+}
+
 export class AnthropicProvider extends BaseAIProvider {
   private readonly ANTHROPIC_VERSION = '2023-06-01';
-  
+
   constructor(config: {
     apiKey: string;
     baseUrl?: string;
@@ -86,7 +112,7 @@ export class AnthropicProvider extends BaseAIProvider {
   ): Promise<AIResponse> {
     return this.withRetry(async () => {
       const body = this.buildRequestBody(messages, options, false);
-      
+
       const response = await fetch(`${this.baseUrl}/v1/messages`, {
         method: 'POST',
         headers: {
@@ -117,9 +143,9 @@ export class AnthropicProvider extends BaseAIProvider {
   ): Promise<void> {
     return this.withRetry(async () => {
       const body = this.buildRequestBody(messages, options, true);
-      
+
       handler.onStart?.();
-      
+
       const response = await fetch(`${this.baseUrl}/v1/messages`, {
         method: 'POST',
         headers: {
@@ -142,22 +168,22 @@ export class AnthropicProvider extends BaseAIProvider {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let fullResponse = '';
-      
+
       try {
         while (true) {
           const { done, value } = await reader.read();
-          
+
           if (done) break;
-          
+
           const chunk = decoder.decode(value, { stream: true });
           const lines = chunk.split('\n');
-          
+
           for (const line of lines) {
             if (line.startsWith('data: ')) {
               try {
                 const data = JSON.parse(line.slice(6));
                 const event = data as AnthropicStreamEvent;
-                
+
                 if (event.type === 'content_block_delta' && event.delta?.text) {
                   const token = event.delta.text;
                   fullResponse += token;
@@ -173,7 +199,7 @@ export class AnthropicProvider extends BaseAIProvider {
             }
           }
         }
-        
+
         handler.onComplete(fullResponse);
       } catch (error) {
         handler.onError(this.handleError(error, 'streaming'));
@@ -209,17 +235,17 @@ export class AnthropicProvider extends BaseAIProvider {
    */
   async checkHealth(): Promise<ProviderHealth> {
     const startTime = Date.now();
-    
+
     try {
       // Send a minimal test message
       const testMessages: AIMessage[] = [
         { role: 'user', content: 'Hello' }
       ];
-      
+
       await this.sendMessage(testMessages, { maxTokens: 10 });
-      
+
       const responseTime = Date.now() - startTime;
-      
+
       return {
         isHealthy: true,
         lastChecked: new Date(),
@@ -243,7 +269,7 @@ export class AnthropicProvider extends BaseAIProvider {
       if (!ProviderUtils.validateApiKey(this.apiKey, 'anthropic')) {
         return false;
       }
-      
+
       const health = await this.checkHealth();
       return health.isHealthy;
     } catch {
@@ -302,32 +328,28 @@ export class AnthropicProvider extends BaseAIProvider {
     messages: AIMessage[],
     options: AIRequestOptions,
     stream: boolean
-  ): any {
+  ): AnthropicRequestBody {
     const formattedMessages = this.formatMessages(messages);
-    
-    // Extract system message if present
-    const systemMessage = messages.find(msg => msg.role === 'system');
-    let systemPrompt = options.systemPrompt || systemMessage?.content;
-    
-    // Add document context if provided
-    if (options.contextDocuments && options.contextDocuments.length > 0) {
-      const documentContext = ProviderUtils.formatDocumentContext(options.contextDocuments);
-      systemPrompt = systemPrompt ? `${systemPrompt}\n${documentContext}` : documentContext;
-    }
 
-    const body: any = {
+    const body: AnthropicRequestBody = {
       model: options.model || this.defaultModel,
+      max_tokens: options.maxTokens || 4096,
       messages: formattedMessages,
-      max_tokens: options.maxTokens || 4000,
+      temperature: options.temperature || 0.7,
       stream
     };
 
-    if (systemPrompt) {
-      body.system = systemPrompt;
+    // Add system prompt if provided
+    if (options.systemPrompt) {
+      body.system = options.systemPrompt;
     }
 
-    if (options.temperature !== undefined) {
-      body.temperature = Math.max(0, Math.min(1, options.temperature));
+    // Add metadata if available
+    if (options.contextDocuments && options.contextDocuments.length > 0) {
+      body.metadata = {
+        contextDocuments: options.contextDocuments.length,
+        hasSystemPrompt: !!options.systemPrompt
+      };
     }
 
     return body;

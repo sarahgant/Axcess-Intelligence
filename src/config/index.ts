@@ -3,6 +3,8 @@
  * Provides centralized configuration management for the application
  */
 
+import { logger } from '../core/logging/logger';
+
 // Core configuration exports
 export { ConfigLoader } from './loader';
 export { EnvHelper } from './env-helper';
@@ -48,15 +50,21 @@ export {
 export async function initializeConfig(): Promise<AppConfig> {
   try {
     const config = await ConfigLoader.load();
-    
+
     // Log configuration summary in development
     if (config.environment === 'development' && config.features.enableDebugMode) {
-      console.log('🔧 Configuration loaded:', ConfigLoader.getConfigSummary());
+      logger.info('Configuration loaded', {
+        component: 'Config',
+        summary: ConfigLoader.getConfigSummary()
+      });
     }
-    
+
     return config;
   } catch (error) {
-    console.error('❌ Failed to initialize configuration:', error);
+    logger.error('Failed to initialize configuration', {
+      component: 'Config',
+      error: error instanceof Error ? error.message : String(error)
+    });
     throw error;
   }
 }
@@ -79,7 +87,7 @@ export function isConfigReady(): boolean {
  * Reload configuration (useful for development or admin interfaces)
  */
 export async function reloadConfig(): Promise<AppConfig> {
-  console.log('🔄 Reloading configuration...');
+  logger.info('Reloading configuration', { component: 'Config' });
   return ConfigLoader.reload();
 }
 
@@ -117,11 +125,11 @@ export const ConfigUtils = {
   getPreferredProvider: (): 'anthropic' | 'openai' | null => {
     try {
       const config = getConfig();
-      
+
       // Prefer Anthropic if both are configured
       if (config.providers.anthropic.apiKey) return 'anthropic';
       if (config.providers.openai.apiKey) return 'openai';
-      
+
       return null;
     } catch {
       return null;

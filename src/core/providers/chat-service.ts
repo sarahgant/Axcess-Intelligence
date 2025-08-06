@@ -11,6 +11,7 @@ import {
   AIRequestOptions
 } from './base-provider';
 import { ProviderFactory, ProviderUtils } from './provider-factory';
+import { logger } from '../logging/logger';
 import { getConfig } from '../../config';
 
 /**
@@ -114,16 +115,19 @@ export class ChatService {
    */
   async initialize(): Promise<void> {
     try {
-      console.log('💬 Initializing chat service...');
+      logger.info('Initializing chat service', { component: 'ChatService' });
       
       // Initialize providers if not already done
       if (!ProviderUtils.hasAvailableProviders()) {
         await ProviderUtils.initializeProviders();
       }
       
-      console.log('✅ Chat service initialized');
+      logger.info('Chat service initialized', { component: 'ChatService' });
     } catch (error) {
-      console.error('❌ Failed to initialize chat service:', error);
+      logger.error('Failed to initialize chat service', { 
+        component: 'ChatService',
+        error: error instanceof Error ? error.message : String(error)
+      });
       throw error;
     }
   }

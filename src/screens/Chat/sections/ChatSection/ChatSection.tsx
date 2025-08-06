@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { ChatContainer, Message } from "../../../../components/ui/chat-container";
+import { logger } from "../../../../core/logging/logger";
 
 interface ChatSectionProps {
   className?: string;
@@ -178,13 +179,22 @@ export const ChatSection: React.FC<ChatSectionProps> = ({ className }) => {
     );
     
     // Here you would typically send feedback to your analytics/improvement system
-    console.log(`Message ${messageId} feedback: ${feedback}`);
+    logger.info('Message feedback submitted', { 
+      component: 'ChatSection',
+      messageId,
+      feedback,
+      action: 'message_feedback'
+    });
   }, []);
 
   // Handle message copy
   const handleMessageCopy = useCallback((messageId: string) => {
     // Analytics tracking for copy events
-    console.log(`Message ${messageId} copied`);
+    logger.info('Message copied', { 
+      component: 'ChatSection',
+      messageId,
+      action: 'message_copy'
+    });
   }, []);
 
   return (

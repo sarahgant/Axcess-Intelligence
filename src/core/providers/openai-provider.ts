@@ -63,9 +63,21 @@ interface OpenAIStreamChunk {
   }>;
 }
 
+/**
+ * OpenAI request body interface
+ */
+interface OpenAIRequestBody {
+  model: string;
+  messages: OpenAIMessage[];
+  max_tokens: number;
+  stream: boolean;
+  temperature?: number;
+  metadata?: Record<string, unknown>;
+}
+
 export class OpenAIProvider extends BaseAIProvider {
   private readonly organization?: string;
-  
+
   constructor(config: {
     apiKey: string;
     baseUrl?: string;
@@ -91,12 +103,12 @@ export class OpenAIProvider extends BaseAIProvider {
   ): Promise<AIResponse> {
     return this.withRetry(async () => {
       const body = this.buildRequestBody(messages, options, false);
-      
+
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`,
       };
-      
+
       if (this.organization) {
         headers['OpenAI-Organization'] = this.organization;
       }
@@ -129,18 +141,18 @@ export class OpenAIProvider extends BaseAIProvider {
   ): Promise<void> {
     return this.withRetry(async () => {
       const body = this.buildRequestBody(messages, options, true);
-      
+
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`,
       };
-      
+
       if (this.organization) {
         headers['OpenAI-Organization'] = this.organization;
       }
-      
+
       handler.onStart?.();
-      
+
       const response = await fetch(`${this.baseUrl}/v1/chat/completions`, {
         method: 'POST',
         headers,
@@ -161,29 +173,29 @@ export class OpenAIProvider extends BaseAIProvider {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let fullResponse = '';
-      
+
       try {
         while (true) {
           const { done, value } = await reader.read();
-          
+
           if (done) break;
-          
+
           const chunk = decoder.decode(value, { stream: true });
           const lines = chunk.split('\n');
-          
+
           for (const line of lines) {
             if (line.startsWith('data: ')) {
               const data = line.slice(6).trim();
-              
+
               if (data === '[DONE]') {
                 handler.onComplete(fullResponse);
                 return;
               }
-              
+
               try {
                 const parsed = JSON.parse(data) as OpenAIStreamChunk;
                 const choice = parsed.choices[0];
-                
+
                 if (choice?.delta?.content) {
                   const token = choice.delta.content;
                   fullResponse += token;
@@ -199,7 +211,7 @@ export class OpenAIProvider extends BaseAIProvider {
             }
           }
         }
-        
+
         handler.onComplete(fullResponse);
       } catch (error) {
         handler.onError(this.handleError(error, 'streaming'));
@@ -236,17 +248,17 @@ export class OpenAIProvider extends BaseAIProvider {
    */
   async checkHealth(): Promise<ProviderHealth> {
     const startTime = Date.now();
-    
+
     try {
       // Send a minimal test message
       const testMessages: AIMessage[] = [
         { role: 'user', content: 'Hello' }
       ];
-      
+
       await this.sendMessage(testMessages, { maxTokens: 10 });
-      
+
       const responseTime = Date.now() - startTime;
-      
+
       return {
         isHealthy: true,
         lastChecked: new Date(),
@@ -270,7 +282,7 @@ export class OpenAIProvider extends BaseAIProvider {
       if (!ProviderUtils.validateApiKey(this.apiKey, 'openai')) {
         return false;
       }
-      
+
       const health = await this.checkHealth();
       return health.isHealthy;
     } catch {
@@ -326,13 +338,13 @@ export class OpenAIProvider extends BaseAIProvider {
     messages: AIMessage[],
     options: AIRequestOptions,
     stream: boolean
-  ): any {
+  ): OpenAIRequestBody {
     let formattedMessages = this.formatMessages(messages);
-    
+
     // Add document context if provided
     if (options.contextDocuments && options.contextDocuments.length > 0) {
       const documentContext = ProviderUtils.formatDocumentContext(options.contextDocuments);
-      
+
       // Add as system message or append to existing system message
       const systemMessageIndex = formattedMessages.findIndex(msg => msg.role === 'system');
       if (systemMessageIndex >= 0) {
@@ -344,12 +356,12 @@ export class OpenAIProvider extends BaseAIProvider {
         });
       }
     }
-    
+
     // Add system prompt if provided and no system message exists
     if (options.systemPrompt) {
       const systemMessageIndex = formattedMessages.findIndex(msg => msg.role === 'system');
       if (systemMessageIndex >= 0) {
-        formattedMessages[systemMessageIndex].content = 
+        formattedMessages[systemMessageIndex].content =
           `${options.systemPrompt}\n${formattedMessages[systemMessageIndex].content}`;
       } else {
         formattedMessages.unshift({
@@ -359,7 +371,7 @@ export class OpenAIProvider extends BaseAIProvider {
       }
     }
 
-    const body: any = {
+    const body: OpenAIRequestBody = {
       model: options.model || this.defaultModel,
       messages: formattedMessages,
       max_tokens: options.maxTokens || 4000,
@@ -368,6 +380,14 @@ export class OpenAIProvider extends BaseAIProvider {
 
     if (options.temperature !== undefined) {
       body.temperature = Math.max(0, Math.min(2, options.temperature));
+    }
+
+    // Add metadata if available
+    if (options.contextDocuments && options.contextDocuments.length > 0) {
+      body.metadata = {
+        contextDocuments: options.contextDocuments.length,
+        hasSystemPrompt: !!options.systemPrompt
+      };
     }
 
     return body;

@@ -13,13 +13,20 @@ class OpenAIProvider {
         this.client = new OpenAI({
             apiKey: config.apiKey
         });
-        this.defaultModel = config.defaultModel || 'gpt-4';
+        // Map custom model names to actual API model IDs
+        const modelMapping = {
+            'gpt-4.1': 'gpt-4-turbo',
+            'gpt-4-turbo': 'gpt-4-turbo',
+            'gpt-4': 'gpt-4'
+        };
+
+        this.defaultModel = modelMapping[config.defaultModel] || config.defaultModel || 'gpt-4-turbo';
 
         this.capabilities = {
             streaming: true,
             documentContext: true,
             retries: true,
-            models: ['gpt-4', 'gpt-4-turbo-preview', 'gpt-3.5-turbo']
+            models: ['gpt-4-turbo', 'gpt-4', 'gpt-4-turbo-preview', 'gpt-3.5-turbo']
         };
 
         logger.info(`🤖 OpenAI provider initialized with model: ${this.defaultModel}`);

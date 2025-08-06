@@ -1,30 +1,98 @@
 /**
- * AI Providers - Public API
- * AI service providers and their configurations
+ * AI Providers module - Main exports
+ * Centralized access to all AI provider functionality
  */
 
-// Provider Interfaces
-export { AIProvider } from './interfaces/AIProvider';
-export { ChatProvider } from './interfaces/ChatProvider';
-export { DocumentProcessor } from './interfaces/DocumentProcessor';
+import { logger } from '../logging/logger';
 
-// Provider Implementations
-export { AnthropicProvider } from './anthropic/AnthropicProvider';
-export { OpenAIProvider } from './openai/OpenAIProvider';
+// Base provider interface and types
+export {
+  BaseAIProvider,
+  type AIMessage,
+  type AIResponse,
+  type StreamingHandler,
+  type AIRequestOptions,
+  type ProviderCapabilities,
+  type ProviderHealth,
+  type ProviderRegistry,
+  ProviderUtils as BaseProviderUtils
+} from './base-provider';
 
-// Provider Factory
-export { ProviderFactory } from './factory/ProviderFactory';
-export { createProvider } from './factory/createProvider';
+// Provider implementations
+export { AnthropicProvider } from './anthropic-provider';
+export { OpenAIProvider } from './openai-provider';
 
-// Provider Configuration
-export { providerConfig } from './config/providerConfig';
-export { modelConfig } from './config/modelConfig';
+// Provider factory and management
+export {
+  ProviderFactory,
+  ProviderUtils,
+  type ProviderFactoryConfig,
+  type ProviderInitResult
+} from './provider-factory';
 
-// Types
-export type {
-  ProviderType,
-  ProviderConfig,
-  ModelConfig,
-  ProviderCapabilities,
-  ProviderStatus
-} from './types';
+// Chat service
+export {
+  ChatService,
+  ChatUtils,
+  type ChatMessage,
+  type ChatConversation,
+  type ChatStreamingCallbacks,
+  type ChatServiceConfig
+} from './chat-service';
+
+/**
+ * Quick initialization function for the entire provider system
+ */
+export async function initializeAIProviders() {
+  try {
+    logger.info('Initializing AI provider system', { component: 'AIProviders' });
+
+    // Initialize providers
+    const factory = await ProviderUtils.initializeProviders();
+
+    // Initialize chat service
+    const chatService = await ChatUtils.initializeChatService();
+
+    logger.info('AI provider system ready', { 
+      component: 'AIProviders',
+      providers: factory.getAvailableProviders().length,
+      capabilities: Object.keys(factory.getProviderCapabilities())
+    });
+
+    return {
+      factory,
+      chatService,
+      providers: factory.getAvailableProviders(),
+      capabilities: factory.getProviderCapabilities()
+    };
+  } catch (error) {
+    logger.error('Failed to initialize AI provider system', { 
+      component: 'AIProviders',
+      error: error instanceof Error ? error.message : String(error)
+    });
+    throw error;
+  }
+}
+
+/**
+ * Get the current status of the AI provider system
+ */
+export function getProviderSystemStatus() {
+  try {
+    const factory = ProviderFactory.getInstance();
+    const chatService = ChatService.getInstance();
+
+    return {
+      isInitialized: true,
+      availableProviders: factory.getAvailableProviders(),
+      defaultProvider: factory.getDefaultProvider()?.getCapabilities().name,
+      capabilities: factory.getProviderCapabilities(),
+      hasActiveStreams: false // TODO: Implement active stream tracking
+    };
+  } catch (error) {
+    return {
+      isInitialized: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
+}

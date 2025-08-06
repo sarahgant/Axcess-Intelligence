@@ -3,6 +3,43 @@
  */
 
 /**
+ * Validation function type for prompt variables
+ */
+type ValidationFunction = (value: unknown) => boolean | string;
+
+/**
+ * Validation result type
+ */
+interface ValidationResult {
+  isValid: boolean;
+  error?: string;
+  value: unknown;
+}
+
+/**
+ * Validation details interface
+ */
+interface ValidationDetails {
+  field: string;
+  value: unknown;
+  expectedType: string;
+  validationRule?: string;
+  error: string;
+}
+
+/**
+ * Compilation details interface
+ */
+interface CompilationDetails {
+  templateId: string;
+  variables: Record<string, unknown>;
+  errors: string[];
+  warnings: string[];
+  compilationTime: number;
+  estimatedTokens: number;
+}
+
+/**
  * Supported AI model providers
  */
 export type ModelProvider = 'anthropic' | 'openai';
@@ -90,7 +127,7 @@ export interface PromptValidation {
   types?: Record<string, 'string' | 'number' | 'boolean' | 'array' | 'object'>;
   
   /** Custom validation functions */
-  validators?: Record<string, (value: any) => boolean | string>;
+  validators?: Record<string, ValidationFunction>;
 }
 
 /**
@@ -104,7 +141,7 @@ export interface PromptExample {
   description: string;
   
   /** Variable values for the example */
-  variables: Record<string, any>;
+  variables: Record<string, unknown>;
   
   /** Expected output or behavior */
   expectedOutput?: string;
@@ -130,7 +167,7 @@ export interface CompiledPrompt {
   provider?: ModelProvider;
   
   /** Variables used in compilation */
-  variables: Record<string, any>;
+  variables: Record<string, unknown>;
   
   /** Compilation metadata */
   metadata: {
@@ -203,7 +240,7 @@ export interface PromptUsageStats {
   errorCount: number;
   
   /** Most common variable values */
-  commonVariables: Record<string, any[]>;
+  commonVariables: Record<string, unknown[]>;
 }
 
 /**
@@ -220,7 +257,7 @@ export interface CompilationOptions {
   useCache?: boolean;
   
   /** Additional context for compilation */
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   
   /** Whether to escape special characters */
   escapeHtml?: boolean;
@@ -275,7 +312,7 @@ export class PromptError extends Error {
     message: string,
     public code: string,
     public templateId?: string,
-    public details?: any
+    public details?: ValidationDetails | CompilationDetails | Record<string, unknown>
   ) {
     super(message);
     this.name = 'PromptError';
@@ -283,14 +320,14 @@ export class PromptError extends Error {
 }
 
 export class PromptValidationError extends PromptError {
-  constructor(message: string, templateId?: string, validationDetails?: any) {
+  constructor(message: string, templateId?: string, validationDetails?: ValidationDetails) {
     super(message, 'VALIDATION_ERROR', templateId, validationDetails);
     this.name = 'PromptValidationError';
   }
 }
 
 export class PromptCompilationError extends PromptError {
-  constructor(message: string, templateId?: string, compilationDetails?: any) {
+  constructor(message: string, templateId?: string, compilationDetails?: CompilationDetails) {
     super(message, 'COMPILATION_ERROR', templateId, compilationDetails);
     this.name = 'PromptCompilationError';
   }

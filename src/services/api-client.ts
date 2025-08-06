@@ -1,6 +1,16 @@
+import { RetryWithBackoff, CircuitBreaker } from '../core/utils';
+import { logger } from '../core/logging/logger';
+import { env } from '../config/environment';
+
 /**
- * Production API Client - Connects frontend to secure backend
+ * Usage statistics interface for API responses
  */
+interface UsageStats {
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+  [key: string]: number; // Allow for additional usage metrics
+}
 
 interface ChatMessage {
     message: string;
@@ -41,168 +51,296 @@ interface StreamingCallbacks {
         conversationId: string;
         provider: string;
         model: string;
-        usage?: any
+        usage?: UsageStats
     }) => void;
     onError: (error: Error) => void;
 }
 
+/**
+ * API client with retry logic and circuit breaker
+ */
 class APIClient {
     private baseURL: string;
+    private retry: RetryWithBackoff;
+    private circuitBreaker: CircuitBreaker;
+    private cache: Map<string, { data: unknown; timestamp: number; ttl: number }> = new Map();
 
     constructor() {
-        // Use environment variable for API URL, fallback to localhost for development
-        this.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        // Use environment configuration
+        this.baseURL = env.api.baseUrl();
+        
+        // Initialize retry and circuit breaker with environment configuration
+        this.retry = new RetryWithBackoff({
+            maxAttempts: env.retry.maxAttempts(),
+            initialDelay: env.retry.initialDelay(),
+            maxDelay: env.retry.maxDelay(),
+            retryableErrors: ['NETWORK_ERROR', 'TIMEOUT', '503', '429', '502', '504']
+        });
+        
+        this.circuitBreaker = new CircuitBreaker({
+            failureThreshold: env.circuitBreaker.failureThreshold(),
+            resetTimeout: env.circuitBreaker.resetTimeout(),
+            successThreshold: env.circuitBreaker.successThreshold()
+        });
     }
 
-    async sendMessage(data: ChatMessage): Promise<ChatResponse> {
+    /**
+     * Generic request method with retry and circuit breaker
+     */
+    async request<T>(url: string, options: RequestInit, context?: string): Promise<T> {
+        const fullUrl = url.startsWith('http') ? url : `${this.baseURL}${url}`;
+        
+        return this.circuitBreaker.execute(
+            () => this.retry.execute(
+                () => this.performRequest<T>(fullUrl, options),
+                context || `API Request: ${fullUrl}`
+            ),
+            () => this.getCachedResponse<T>(fullUrl) as T // Fallback to cache
+        );
+    }
+
+    /**
+     * Perform the actual HTTP request
+     */
+    private async performRequest<T>(url: string, options: RequestInit): Promise<T> {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), env.api.timeout());
+
         try {
-            const response = await fetch(`${this.baseURL}/api/chat/message`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal
             });
 
+            clearTimeout(timeoutId);
+
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || `HTTP ${response.status}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorData.error || ''}`);
             }
 
             return await response.json();
         } catch (error) {
-            console.error('API Client Error:', error);
-            throw error;
+            clearTimeout(timeoutId);
+            
+            if (error instanceof Error) {
+                if (error.name === 'AbortError') {
+                    throw new Error('Request timeout');
+                }
+                throw error;
+            }
+            
+            throw new Error('Unknown request error');
         }
     }
 
-    async sendStreamingMessage(data: ChatMessage, callbacks: StreamingCallbacks): Promise<void> {
+    /**
+     * Get cached response if available
+     */
+    private getCachedResponse<T>(url: string): T | null {
+        const cached = this.cache.get(url);
+        if (cached && Date.now() - cached.timestamp < cached.ttl) {
+            logger.info('Using cached response', { url });
+            return cached.data as T;
+        }
+        
+        if (cached) {
+            this.cache.delete(url); // Remove expired cache
+        }
+        
+        return null;
+    }
+
+    /**
+     * Cache a response
+     */
+    private cacheResponse<T>(url: string, data: T, ttl: number = env.performance.cacheTTL() * 1000): void { // Use environment TTL
+        this.cache.set(url, {
+            data,
+            timestamp: Date.now(),
+            ttl
+        });
+    }
+
+    /**
+     * Send a chat message with retry and circuit breaker
+     */
+    async sendMessage(data: ChatMessage): Promise<ChatResponse> {
+        const context = `Chat Message: ${data.provider || 'default'}`;
+        
         try {
-            const response = await fetch(`${this.baseURL}/api/chat/stream`, {
+            const response = await this.request<ChatResponse>('/api/chat/message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
+            }, context);
+
+            // Cache successful responses using environment TTL
+            this.cacheResponse(`/api/chat/message:${JSON.stringify(data)}`, response, env.performance.cacheTTL() * 1000);
+
+            return response;
+        } catch (error) {
+            logger.error('Failed to send chat message', {
+                error: error instanceof Error ? error.message : String(error),
+                provider: data.provider,
+                conversationId: data.conversationId
             });
+            throw error;
+        }
+    }
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || `HTTP ${response.status}`);
-            }
+    /**
+     * Send a streaming message with retry and circuit breaker
+     */
+    async sendStreamingMessage(data: ChatMessage, callbacks: StreamingCallbacks): Promise<void> {
+        const context = `Streaming Chat: ${data.provider || 'default'}`;
+        
+        return this.circuitBreaker.execute(
+            () => this.retry.execute(
+                async () => {
+                    const response = await fetch(`${this.baseURL}/api/chat/stream`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                        signal: AbortSignal.timeout(30000) // 30 second timeout for streaming
+                    });
 
-            const reader = response.body?.getReader();
-            if (!reader) {
-                throw new Error('No response body reader available');
-            }
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || `HTTP ${response.status}`);
+                    }
 
-            const decoder = new TextDecoder();
-            let buffer = '';
+                    const reader = response.body?.getReader();
+                    if (!reader) {
+                        throw new Error('No response body reader available');
+                    }
 
-            while (true) {
-                const { done, value } = await reader.read();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
 
-                if (done) break;
+                    while (true) {
+                        const { done, value } = await reader.read();
 
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || ''; // Keep incomplete line in buffer
+                        if (done) break;
 
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        const data = line.slice(6).trim();
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop() || ''; // Keep incomplete line in buffer
 
-                        if (data === '[DONE]') {
-                            return;
-                        }
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const data = line.slice(6).trim();
 
-                        try {
-                            const parsed = JSON.parse(data);
+                                if (data === '[DONE]') {
+                                    return;
+                                }
 
-                            switch (parsed.type) {
-                                case 'start':
-                                    callbacks.onStart?.(parsed);
-                                    break;
-                                case 'token':
-                                    callbacks.onToken(parsed.token);
-                                    break;
-                                case 'complete':
-                                    callbacks.onComplete(parsed);
-                                    break;
-                                case 'error':
-                                    callbacks.onError(new Error(parsed.error));
-                                    break;
+                                try {
+                                    const parsed = JSON.parse(data);
+
+                                    switch (parsed.type) {
+                                        case 'start':
+                                            callbacks.onStart?.(parsed);
+                                            break;
+                                        case 'token':
+                                            callbacks.onToken(parsed.token);
+                                            break;
+                                        case 'complete':
+                                            callbacks.onComplete(parsed);
+                                            break;
+                                        case 'error':
+                                            callbacks.onError(new Error(parsed.error));
+                                            break;
+                                    }
+                                } catch (parseError) {
+                                    logger.warn('Failed to parse SSE data', { 
+                                        data,
+                                        error: parseError instanceof Error ? parseError.message : String(parseError)
+                                    });
+                                }
                             }
-                        } catch (parseError) {
-                            console.warn('Failed to parse SSE data:', data);
                         }
                     }
-                }
-            }
-        } catch (error) {
-            console.error('Streaming API Error:', error);
-            callbacks.onError(error instanceof Error ? error : new Error('Unknown streaming error'));
-        }
+                },
+                context
+            ),
+            () => {
+                // Fallback: return a simple error response
+                callbacks.onError(new Error('Streaming service unavailable'));
+            },
+            context
+        );
     }
 
+    /**
+     * Get available providers with retry and circuit breaker
+     */
     async getAvailableProviders() {
-        try {
-            const response = await fetch(`${this.baseURL}/api/chat/providers`);
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching providers:', error);
-            throw error;
-        }
+        return this.request<{ providers: string[] }>('/api/health/providers', {
+            method: 'GET',
+        }, 'Get Available Providers');
     }
 
+    /**
+     * Get conversation with retry and circuit breaker
+     */
     async getConversation(conversationId: string) {
-        try {
-            const response = await fetch(`${this.baseURL}/api/chat/conversations/${conversationId}`);
-
-            if (!response.ok) {
-                if (response.status === 404) {
-                    return null;
-                }
-                throw new Error(`HTTP ${response.status}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching conversation:', error);
-            throw error;
-        }
+        return this.request<{ messages: unknown[] }>(`/api/conversations/${conversationId}`, {
+            method: 'GET',
+        }, `Get Conversation: ${conversationId}`);
     }
 
+    /**
+     * Check health with retry and circuit breaker
+     */
     async checkHealth() {
-        try {
-            const response = await fetch(`${this.baseURL}/health`);
-            return response.ok;
-        } catch (error) {
-            return false;
-        }
+        return this.request<{ status: string }>('/api/health', {
+            method: 'GET',
+        }, 'Health Check');
     }
 
+    /**
+     * Check detailed health with retry and circuit breaker
+     */
     async checkDetailedHealth() {
-        try {
-            const response = await fetch(`${this.baseURL}/health/detailed?checkServices=true`);
+        return this.request<{ status: string; details: unknown }>('/api/health/detailed', {
+            method: 'GET',
+        }, 'Detailed Health Check');
+    }
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
-            }
+    /**
+     * Get circuit breaker metrics
+     */
+    getCircuitBreakerMetrics() {
+        return this.circuitBreaker.getMetrics();
+    }
 
-            return await response.json();
-        } catch (error) {
-            console.error('Error checking detailed health:', error);
-            throw error;
-        }
+    /**
+     * Get retry configuration
+     */
+    getRetryConfig() {
+        return this.retry.getConfig();
+    }
+
+    /**
+     * Reset circuit breaker
+     */
+    resetCircuitBreaker() {
+        this.circuitBreaker.reset();
+    }
+
+    /**
+     * Clear cache
+     */
+    clearCache() {
+        this.cache.clear();
+        logger.info('API client cache cleared');
     }
 }
 
-// Export singleton instance
-export const apiClient = new APIClient();
-export type { ChatMessage, ChatResponse, StreamingCallbacks };
+export default APIClient;
+export type { StreamingCallbacks };

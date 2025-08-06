@@ -81,6 +81,62 @@ export interface ProviderHealth {
 }
 
 /**
+ * Error context interface for better error handling
+ */
+interface ErrorContext {
+  provider: string;
+  operation: string;
+  timestamp: Date;
+  requestId?: string;
+  userAgent?: string;
+  additionalInfo?: Record<string, unknown>;
+}
+
+/**
+ * Provider response interface for type safety
+ */
+interface ProviderResponse {
+  id: string;
+  content: string;
+  model: string;
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+  finishReason?: 'stop' | 'length' | 'content_filter' | 'tool_calls';
+  timestamp: Date;
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * Provider request interface for type safety
+ */
+interface ProviderRequest {
+  messages: Array<{
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+    id?: string;
+    timestamp?: Date;
+  }>;
+  model: string;
+  temperature?: number;
+  maxTokens?: number;
+  stream?: boolean;
+  systemPrompt?: string;
+  contextDocuments?: Array<{
+    name: string;
+    content: string;
+    type: string;
+  }>;
+  metadata?: Record<string, unknown>;
+}
+
+import { RetryWithBackoff, CircuitBreaker } from '../utils';
+import { logger } from '../logging/logger';
+import { env } from '../../config/environment';
+
+/**
  * Base abstract class that all AI providers must implement
  */
 export abstract class BaseAIProvider {
@@ -89,6 +145,8 @@ export abstract class BaseAIProvider {
   protected defaultModel: string;
   protected timeout: number;
   protected maxRetries: number;
+  protected retry: RetryWithBackoff;
+  protected circuitBreaker: CircuitBreaker;
 
   constructor(config: {
     apiKey: string;
@@ -100,8 +158,22 @@ export abstract class BaseAIProvider {
     this.apiKey = config.apiKey;
     this.baseUrl = config.baseUrl;
     this.defaultModel = config.defaultModel;
-    this.timeout = config.timeout || 30000;
-    this.maxRetries = config.maxRetries || 3;
+        this.timeout = config.timeout || env.api.timeout();
+    this.maxRetries = config.maxRetries || env.retry.maxAttempts();
+ 
+    // Initialize retry and circuit breaker with environment configuration
+    this.retry = new RetryWithBackoff({
+      maxAttempts: this.maxRetries,
+      initialDelay: env.retry.initialDelay(),
+      maxDelay: env.retry.maxDelay(),
+      retryableErrors: ['NETWORK_ERROR', 'TIMEOUT', '503', '429', '502', '504', 'ECONNABORTED']
+    });
+    
+    this.circuitBreaker = new CircuitBreaker({
+      failureThreshold: env.circuitBreaker.failureThreshold(),
+      resetTimeout: env.circuitBreaker.resetTimeout(),
+      successThreshold: env.circuitBreaker.successThreshold()
+    });
   }
 
   /**
@@ -142,68 +214,117 @@ export abstract class BaseAIProvider {
   abstract dispose(): Promise<void>;
 
   /**
-   * Common error handling utility
-   */
-  protected handleError(error: any, context: string): Error {
-    console.error(`[${this.getCapabilities().name}] Error in ${context}:`, error);
-    
-    if (error.response?.status === 401) {
-      return new Error(`Authentication failed for ${this.getCapabilities().displayName}. Please check your API key.`);
-    }
-    
-    if (error.response?.status === 429) {
-      return new Error(`Rate limit exceeded for ${this.getCapabilities().displayName}. Please try again later.`);
-    }
-    
-    if (error.response?.status >= 500) {
-      return new Error(`Server error from ${this.getCapabilities().displayName}. Please try again later.`);
-    }
-    
-    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-      return new Error(`Request timeout for ${this.getCapabilities().displayName}. Please try again.`);
-    }
-    
-    return new Error(`${this.getCapabilities().displayName} error: ${error.message || 'Unknown error'}`);
-  }
-
-  /**
-   * Retry logic for failed requests
+   * Retry logic for failed requests with circuit breaker
    */
   protected async withRetry<T>(
     operation: () => Promise<T>,
     context: string
   ): Promise<T> {
-    let lastError: Error;
-    
-    for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
-      try {
-        return await operation();
-      } catch (error) {
-        lastError = this.handleError(error, context);
-        
-        if (attempt === this.maxRetries) {
-          throw lastError;
-        }
-        
-        // Exponential backoff: 1s, 2s, 4s
-        const delay = Math.pow(2, attempt - 1) * 1000;
-        console.warn(`[${this.getCapabilities().name}] Attempt ${attempt} failed, retrying in ${delay}ms...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
+    return this.circuitBreaker.execute(
+      () => this.retry.execute(
+        operation,
+        `${this.getCapabilities().name}: ${context}`
+      ),
+      () => this.getFallbackResponse<T>(context) // Fallback response
+    );
+  }
+
+  /**
+   * Get fallback response when circuit breaker is open
+   */
+  protected getFallbackResponse<T>(context: string): T {
+    logger.warn('Using fallback response due to circuit breaker', {
+      provider: this.getCapabilities().name,
+      context
+    });
+
+    // Return a default response or throw an error
+    throw new Error(`${this.getCapabilities().displayName} is temporarily unavailable. Please try again later.`);
+  }
+
+  /**
+   * Common error handling utility
+   */
+  protected handleError(error: Error | unknown, context: string): Error {
+    const errorContext: ErrorContext = {
+      provider: this.getCapabilities().name,
+      operation: context,
+      timestamp: new Date(),
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined
+    };
+
+    logger.error(`[${this.getCapabilities().name}] Error in ${context}`, {
+      error: error instanceof Error ? error.message : String(error),
+      errorContext
+    });
+
+    // Handle different error types
+    if (error && typeof error === 'object' && 'response' in error) {
+      const responseError = error as { response?: { status?: number } };
+
+      if (responseError.response?.status === 401) {
+        return new Error(`Authentication failed for ${this.getCapabilities().displayName}. Please check your API key.`);
+      }
+
+      if (responseError.response?.status === 429) {
+        return new Error(`Rate limit exceeded for ${this.getCapabilities().displayName}. Please try again later.`);
+      }
+
+      if (responseError.response?.status && responseError.response.status >= 500) {
+        return new Error(`Server error from ${this.getCapabilities().displayName}. Please try again later.`);
       }
     }
-    
-    throw lastError!;
+
+    if (error && typeof error === 'object' && 'code' in error) {
+      const codeError = error as { code?: string; message?: string };
+
+      if (codeError.code === 'ECONNABORTED' || codeError.message?.includes('timeout')) {
+        return new Error(`Request timeout for ${this.getCapabilities().displayName}. Please try again.`);
+      }
+    }
+
+    // Handle generic errors
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return new Error(`${this.getCapabilities().displayName} error: ${errorMessage}`);
   }
 
   /**
    * Format messages for the specific provider
    */
-  protected abstract formatMessages(messages: AIMessage[]): any[];
+  protected abstract formatMessages(messages: AIMessage[]): ProviderRequest['messages'];
 
   /**
    * Parse response from the specific provider
    */
-  protected abstract parseResponse(response: any): AIResponse;
+  protected abstract parseResponse(response: ProviderResponse | unknown): AIResponse;
+
+  /**
+   * Get circuit breaker metrics
+   */
+  getCircuitBreakerMetrics() {
+    return this.circuitBreaker.getMetrics();
+  }
+
+  /**
+   * Get retry configuration
+   */
+  getRetryConfig() {
+    return this.retry.getConfig();
+  }
+
+  /**
+   * Reset circuit breaker
+   */
+  resetCircuitBreaker() {
+    this.circuitBreaker.reset();
+  }
+
+  /**
+   * Check if provider is healthy
+   */
+  isHealthy(): boolean {
+    return this.circuitBreaker.isHealthy();
+  }
 }
 
 /**
@@ -236,16 +357,16 @@ export const ProviderUtils = {
     if (!key || key.length < 10) {
       return false;
     }
-    
+
     // Provider-specific basic validation
     if (provider === 'anthropic' && !key.startsWith('sk-ant-')) {
       return false;
     }
-    
+
     if (provider === 'openai' && !key.startsWith('sk-')) {
       return false;
     }
-    
+
     return true;
   },
 
@@ -279,7 +400,7 @@ export const ProviderUtils = {
       context += `Content: ${doc.content}\n`;
     });
     context += '--- END DOCUMENT CONTEXT ---\n\n';
-    
+
     return context;
   }
 };
