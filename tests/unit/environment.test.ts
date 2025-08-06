@@ -122,7 +122,7 @@ describe('Environment Configuration', () => {
   });
 
   describe('Environment Helpers', () => {
-    let config: any;
+    let config: ReturnType<typeof loadEnvironment>;
 
     beforeEach(() => {
       config = loadEnvironment();

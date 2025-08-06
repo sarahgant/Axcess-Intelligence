@@ -37,7 +37,7 @@ interface EnvironmentVariables {
   MAX_CONCURRENT_REQUESTS?: number;
   NODE_ENV?: string;
   LOG_LEVEL?: string;
-  [key: string]: any; // For other environment variables
+  [key: string]: string | number | boolean | undefined; // For other environment variables
 }
 
 /**
