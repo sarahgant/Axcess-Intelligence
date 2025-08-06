@@ -206,7 +206,7 @@ class APIClient {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(data),
-                        signal: AbortSignal.timeout(30000) // 30 second timeout for streaming
+                        signal: AbortSignal.timeout(env.api.timeout()) // Use environment timeout for streaming
                     });
 
                     if (!response.ok) {

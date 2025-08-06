@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
+import { messageSchema, sanitizeInput } from "../../core/validation/schemas";
 
 export interface ChatInputProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -59,10 +60,24 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
     const handleSend = () => {
       const trimmedValue = value.trim();
       if (trimmedValue && onSend && !isStreaming) {
-        onSend(trimmedValue);
-        setValue("");
-        // Reset height after clearing
-        setTimeout(adjustHeight, 0);
+        try {
+          // Validate and sanitize input
+          const sanitizedValue = sanitizeInput(trimmedValue);
+          const validatedMessage = messageSchema.parse({
+            content: sanitizedValue,
+            role: 'user'
+          });
+          
+          onSend(validatedMessage.content);
+          setValue("");
+          // Reset height after clearing
+          setTimeout(adjustHeight, 0);
+        } catch (error) {
+          // Handle validation error - could show user notification
+          console.error('Input validation failed:', error);
+          // For now, just don't send the message
+          return;
+        }
       }
     };
 

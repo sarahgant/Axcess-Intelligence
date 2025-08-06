@@ -3,6 +3,8 @@
  * Following exact specifications for the Home.tsx chat interface
  */
 
+import { fileUploadSchema } from '../core/validation/schemas';
+
 export interface Document {
   id: string;
   name: string;
@@ -99,26 +101,37 @@ export const formatFileSize = (bytes: number): string => {
 };
 
 export const validateFile = (file: File, existingDocs: Document[]): DocumentValidationError | null => {
-  // Check file size
-  const fileType = getFileType(file.name);
-  const config = FILE_TYPE_CONFIG[fileType];
-  
-  if (file.size > config.maxSize) {
+  try {
+    // Use Zod schema for validation
+    fileUploadSchema.parse({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      content: file
+    });
+    
+    // Check document limit
+    if (existingDocs.length >= MAX_DOCUMENTS) {
+      return {
+        type: 'limit',
+        message: `Maximum ${MAX_DOCUMENTS} documents allowed`,
+        file: file.name
+      };
+    }
+    
+    return null;
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        type: 'type',
+        message: error.message,
+        file: file.name
+      };
+    }
     return {
-      type: 'size',
-      message: `File size must be less than ${formatFileSize(config.maxSize)}`,
+      type: 'corrupt',
+      message: 'Invalid file format',
       file: file.name
     };
   }
-  
-  // Check document limit
-  if (existingDocs.length >= MAX_DOCUMENTS) {
-    return {
-      type: 'limit',
-      message: `Maximum ${MAX_DOCUMENTS} documents allowed`,
-      file: file.name
-    };
-  }
-  
-  return null;
 };
