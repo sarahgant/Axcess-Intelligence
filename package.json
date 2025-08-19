@@ -12,6 +12,7 @@
     "backend": "cd server && npm run dev",
     "clean": "kill-port 5173 3001 3002 4173 3000 5000 8080 8000",
     "start:production": "npm run client:build && node server/server.js",
+    "vercel-build": "npm run client:build",
     "build": "npm run client:build && npm run server:install",
     "client:dev": "vite",
     "client:build": "vite build",
