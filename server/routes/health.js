@@ -53,4 +53,28 @@ router.get('/detailed', async (req, res) => {
     res.json(health);
 });
 
+// Get available providers
+router.get('/providers', (req, res) => {
+    const providers = [];
+
+    // Check which providers are configured
+    if (process.env.ANTHROPIC_API_KEY) {
+        providers.push('anthropic');
+    }
+
+    if (process.env.OPENAI_API_KEY) {
+        providers.push('openai');
+    }
+
+    // If no providers are configured, return both as available
+    // (they might be configured on the frontend)
+    if (providers.length === 0) {
+        providers.push('anthropic', 'openai');
+    }
+
+    res.json({
+        providers: providers
+    });
+});
+
 module.exports = router;

@@ -8,41 +8,48 @@
 import { initializeConfig } from '../src/config/index.js';
 import { initializeAIProviders, ChatUtils } from '../src/core/providers/index.js';
 
+// Simple logger for scripts
+const logger = {
+  info: (message, data = '') => console.log(`[INFO] ${message}`, data),
+  success: (message, data = '') => console.log(`[SUCCESS] ${message}`, data),
+  error: (message, data = '') => console.log(`[ERROR] ${message}`, data)
+};
+
 async function testAIProviders() {
-  console.log('🧪 Testing AI Provider System\n');
+  logger.info('🧪 Testing AI Provider System\n');
 
   try {
     // Initialize configuration
-    console.log('1. Initializing configuration...');
+    logger.info('1. Initializing configuration...');
     await initializeConfig();
-    console.log('✅ Configuration loaded\n');
+    logger.success('✅ Configuration loaded\n');
 
     // Initialize AI providers
-    console.log('2. Initializing AI providers...');
+    logger.info('2. Initializing AI providers...');
     const providerSystem = await initializeAIProviders();
-    console.log(`✅ Initialized ${providerSystem.providers.length} providers: ${providerSystem.providers.join(', ')}\n`);
+    logger.success(`✅ Initialized ${providerSystem.providers.length} providers: ${providerSystem.providers.join(', ')}\n`);
 
     // Test each provider
     for (const providerName of providerSystem.providers) {
-      console.log(`3. Testing ${providerName}...`);
-      
+      logger.info(`3. Testing ${providerName}...`);
+
       try {
         const response = await ChatUtils.quickMessage(
           "Hello, what AI model are you? Please respond with just your model name.",
           providerName,
           { maxTokens: 50 }
         );
-        
-        console.log(`✅ ${providerName} response: ${response.trim()}\n`);
+
+        logger.success(`✅ ${providerName} response: ${response.trim()}\n`);
       } catch (error) {
-        console.error(`❌ ${providerName} failed: ${error.message}\n`);
+        logger.error(`❌ ${providerName} failed: ${error.message}\n`);
       }
     }
 
-    console.log('🎉 AI Provider test completed!');
-    
+    logger.success('🎉 AI Provider test completed!');
+
   } catch (error) {
-    console.error('❌ Test failed:', error.message);
+    logger.error('❌ Test failed:', error.message);
     process.exit(1);
   }
 }

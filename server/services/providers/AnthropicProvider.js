@@ -15,7 +15,7 @@ class AnthropicProvider {
         });
         // Map custom model names to actual API model IDs
         const modelMapping = {
-            'claude-sonnet-4-20250514': 'claude-3-5-sonnet-20241022',
+            'claude-sonnet-4-20250514': 'claude-sonnet-4-20250514',
             'claude-3.5-sonnet': 'claude-3-5-sonnet-20241022',
             'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
             'claude-3-sonnet-20240229': 'claude-3-sonnet-20240229'

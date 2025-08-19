@@ -1,147 +1,159 @@
 # Environment Setup Guide
 
-## Quick Start
+## 🚨 Current Issue: Environment Validation Errors
 
-1. **Copy the environment template:**
-   ```bash
-   cp .env.example .env
-   ```
+You're encountering environment validation errors because your `.env` file is missing required variables or contains invalid values. The error shows that numeric environment variables are being parsed as `NaN` (Not a Number).
 
-2. **Get your AI provider API keys:**
-   - **Anthropic Claude**: Visit [console.anthropic.com](https://console.anthropic.com/) 
-   - **OpenAI GPT**: Visit [platform.openai.com](https://platform.openai.com/)
+## 🔧 Quick Fix
 
-3. **Edit your `.env` file** with your actual API keys:
-   ```bash
-   # Required: At least one provider
-   ANTHROPIC_API_KEY=sk-ant-api03-your-actual-key-here
-   OPENAI_API_KEY=sk-your-actual-openai-key-here
-   
-   # Required: 32-character encryption key
-   VITE_ENCRYPTION_KEY=your-32-character-encryption-key-12345
-   ```
-
-4. **Start the application:**
-   ```bash
-   npm run dev
-   ```
-
-## Environment Template
-
-Create a `.env` file in your project root with the following content:
-
+### Option 1: Automatic Setup (Recommended)
 ```bash
-# CCH Axcess Intelligence Vibed - Environment Configuration
-
-# =================================
-# AI Provider Configuration
-# =================================
-
-# Anthropic Claude API Configuration
-ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
-ANTHROPIC_DEFAULT_MODEL=claude-3-sonnet-20240229
-
-# OpenAI GPT API Configuration  
-OPENAI_API_KEY=sk-your-openai-key-here
-OPENAI_DEFAULT_MODEL=gpt-4-turbo-preview
-
-# =================================
-# Application Configuration
-# =================================
-
-# Environment
-VITE_APP_ENVIRONMENT=development
-
-# Security Configuration (32 characters required)
-VITE_ENCRYPTION_KEY=your-32-character-encryption-key-12345
-
-# Feature Flags
-VITE_ENABLE_STREAMING=true
-VITE_ENABLE_DOCUMENT_ANALYSIS=true
-VITE_ENABLE_RAG_SEARCH=true
-VITE_ENABLE_CHAT_HISTORY=true
-VITE_ENABLE_DEBUG_MODE=true
-
-# Performance Settings
-VITE_MAX_DOCUMENTS_PER_SESSION=10
-VITE_DOCUMENT_RETENTION_HOURS=3
-
-# Logging Level (debug, info, warn, error)
-VITE_LOG_LEVEL=debug
+npm run setup:env
 ```
 
-## API Key Setup Instructions
+This will:
+- Create a proper `.env` file with all required variables
+- Use sensible defaults for all numeric values
+- Back up your existing `.env` file if it exists
 
-### Anthropic Claude
+### Option 2: Manual Setup
+1. Copy the example file:
+   ```bash
+   cp env.example .env
+   ```
 
-1. Go to [console.anthropic.com](https://console.anthropic.com/)
-2. Sign up or log in to your account
-3. Navigate to API Keys section
+2. Edit the `.env` file and add your API keys:
+   ```bash
+   # Required: Add at least one API key
+   VITE_ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
+   VITE_OPENAI_API_KEY=sk-your-openai-key-here
+   ```
+
+## 📋 Required Environment Variables
+
+### Essential Variables (Must be set)
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `VITE_ANTHROPIC_API_KEY` | string | - | Anthropic API key |
+| `VITE_OPENAI_API_KEY` | string | - | OpenAI API key |
+
+### Optional Variables (Have defaults)
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `VITE_API_BASE_URL` | string | `http://localhost:3001` | Backend API URL |
+| `VITE_API_TIMEOUT` | number | `5000` | API timeout in ms |
+| `VITE_AI_PROVIDER` | string | `anthropic` | Preferred AI provider |
+| `VITE_CORS_ORIGIN` | string | `http://localhost:5173` | CORS origin |
+| `VITE_RATE_LIMIT_REQUESTS` | number | `100` | Rate limit requests |
+| `VITE_RATE_LIMIT_WINDOW` | number | `60000` | Rate limit window (ms) |
+| `VITE_ENABLE_LOGGING` | boolean | `true` | Enable logging |
+| `VITE_ENABLE_MONITORING` | boolean | `false` | Enable monitoring |
+| `VITE_ENABLE_CACHE` | boolean | `true` | Enable caching |
+| `VITE_MAX_FILE_SIZE` | number | `20971520` | Max file size (20MB) |
+| `VITE_MAX_CONCURRENT_REQUESTS` | number | `5` | Max concurrent requests |
+| `VITE_CACHE_TTL` | number | `3600` | Cache TTL (seconds) |
+| `VITE_DEBUG` | boolean | `false` | Debug mode |
+| `VITE_RETRY_MAX_ATTEMPTS` | number | `3` | Max retry attempts |
+| `VITE_RETRY_INITIAL_DELAY` | number | `1000` | Initial retry delay (ms) |
+| `VITE_RETRY_MAX_DELAY` | number | `10000` | Max retry delay (ms) |
+| `VITE_CIRCUIT_BREAKER_FAILURE_THRESHOLD` | number | `5` | Circuit breaker failure threshold |
+| `VITE_CIRCUIT_BREAKER_RESET_TIMEOUT` | number | `60000` | Circuit breaker reset timeout (ms) |
+| `VITE_CIRCUIT_BREAKER_SUCCESS_THRESHOLD` | number | `2` | Circuit breaker success threshold |
+
+## 🔑 Getting API Keys
+
+### Anthropic API Key
+1. Go to [Anthropic Console](https://console.anthropic.com/)
+2. Sign up or log in
+3. Navigate to API Keys
 4. Create a new API key
 5. Copy the key (starts with `sk-ant-api03-`)
-6. Add it to your `.env` file as `ANTHROPIC_API_KEY`
 
-### OpenAI GPT
-
-1. Go to [platform.openai.com](https://platform.openai.com/)
-2. Sign up or log in to your account  
-3. Navigate to API Keys section
+### OpenAI API Key
+1. Go to [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Sign up or log in
+3. Navigate to API Keys
 4. Create a new API key
 5. Copy the key (starts with `sk-`)
-6. Add it to your `.env` file as `OPENAI_API_KEY`
 
-## Configuration Options
+## 🛠️ Troubleshooting
 
-### Required Settings
+### Error: "Expected number, received nan"
+This happens when:
+- Environment variable is missing
+- Environment variable is empty
+- Environment variable contains non-numeric text
 
-- **At least one AI provider API key** (Anthropic or OpenAI)
-- **VITE_ENCRYPTION_KEY**: Must be exactly 32 characters long
+**Solution**: Use the automatic setup script or ensure all numeric variables have valid values.
 
-### Optional Settings
+### Error: "Invalid environment configuration"
+This happens when:
+- Required variables are missing
+- Variables have invalid formats
+- Validation fails
 
-- **Provider Models**: Choose specific models for each provider
-- **Feature Flags**: Enable/disable specific features
-- **Performance Settings**: Adjust caching, limits, and timeouts
-- **Security Settings**: Configure CORS, rate limiting, etc.
+**Solution**: Check the `.env` file format and ensure all required variables are set.
 
-## Troubleshooting
+### Error: "API key not found"
+This happens when:
+- No API keys are provided
+- API keys are invalid
 
-### Common Issues
+**Solution**: Add valid API keys to your `.env` file.
 
-1. **"No AI provider available"**
-   - Check that you have a valid API key for at least one provider
-   - Verify the API key format is correct
-   - Check your internet connection
+## 📝 Example .env File
 
-2. **"Encryption key must be at least 32 characters"**
-   - Generate a 32+ character encryption key
-   - Use: `openssl rand -base64 32` or an online generator
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:3001
+VITE_API_TIMEOUT=5000
 
-3. **"AI system is still initializing"**
-   - Wait a few seconds for the system to start up
-   - Check browser console for detailed error messages
-   - Verify API keys are valid
+# AI Providers (Add your keys here)
+VITE_ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
+VITE_OPENAI_API_KEY=sk-your-openai-key-here
+VITE_AI_PROVIDER=anthropic
 
-### Testing Your Setup
+# Security Configuration
+VITE_CORS_ORIGIN=http://localhost:5173
+VITE_RATE_LIMIT_REQUESTS=100
+VITE_RATE_LIMIT_WINDOW=60000
 
-1. Start the application: `npm run dev`
-2. Open your browser to `http://localhost:3000`
-3. Look for the AI status indicator in the disclaimer area
-4. Try sending a test message: "Hello, what AI model are you?"
-5. Switch between providers using the AI provider dropdown
+# Feature Flags
+VITE_ENABLE_LOGGING=true
+VITE_ENABLE_MONITORING=false
+VITE_ENABLE_CACHE=true
 
-## Security Notes
+# Performance Configuration
+VITE_MAX_FILE_SIZE=20971520
+VITE_MAX_CONCURRENT_REQUESTS=5
+VITE_CACHE_TTL=3600
 
-- **Never commit your `.env` file** to version control
-- **Keep your API keys secure** and don't share them
-- **Rotate API keys periodically** for security
-- **Use environment-specific configurations** for different deployments
+# Development Configuration
+VITE_DEBUG=false
 
-## Support
+# Retry Configuration
+VITE_RETRY_MAX_ATTEMPTS=3
+VITE_RETRY_INITIAL_DELAY=1000
+VITE_RETRY_MAX_DELAY=10000
 
-If you encounter issues:
+# Circuit Breaker Configuration
+VITE_CIRCUIT_BREAKER_FAILURE_THRESHOLD=5
+VITE_CIRCUIT_BREAKER_RESET_TIMEOUT=60000
+VITE_CIRCUIT_BREAKER_SUCCESS_THRESHOLD=2
+```
 
-1. Check the browser console for error messages
-2. Verify your `.env` file configuration
-3. Test your API keys directly with the provider APIs
-4. Review the application logs in the development console
+## 🚀 Next Steps
+
+1. Run the setup script: `npm run setup:env`
+2. Add your API keys to the `.env` file
+3. Restart your development server: `npm run dev`
+4. The application should now start without environment errors
+
+## 🔍 Validation
+
+After setup, you can verify your environment configuration by checking the console logs. You should see:
+```
+[INFO] Environment configuration loaded successfully
+```
+
+If you see any warnings about invalid values, they will be logged with the specific variable name and the default value being used.

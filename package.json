@@ -4,12 +4,14 @@
   "type": "module",
   "name": "cch-axcess-intelligence-vibed",
   "description": "CCH Axcess Intelligence Vibed - AI-powered document processing and tax research platform",
+  "_architecture_reminder": "🚨 ENV FILES EXIST - NEVER CREATE/MODIFY THEM! See docs/ARCHITECTURE_CONSTRAINTS.md",
   "scripts": {
+    "dev": "npm run clean && concurrently --kill-others-on-fail \"npm run frontend\" \"npm run backend\"",
     "start": "npm run clean && concurrently --kill-others-on-fail \"npm run frontend\" \"npm run backend\"",
     "frontend": "vite",
     "backend": "cd server && npm run dev",
     "clean": "kill-port 5173 3001 3002 4173 3000 5000 8080 8000",
-    "start:production": "concurrently \"npm run server:start\" \"npm run client:build && npm run client:preview\"",
+    "start:production": "npm run client:build && node server/server.js",
     "build": "npm run client:build && npm run server:install",
     "client:dev": "vite",
     "client:build": "vite build",
@@ -35,7 +37,9 @@
     "security:check-env": "node scripts/check-env-security.cjs",
     "lint:security": "eslint src/ --config .eslintrc.security.js",
     "test:security": "npm run test -- --testPathPattern=security",
-    "analyze:bundle": "npm run build && npx vite-bundle-analyzer dist/assets/*.js"
+    "analyze:bundle": "npm run build && npx vite-bundle-analyzer dist/assets/*.js",
+    "setup:env": "node scripts/setup-env.js",
+    "setup:production": "node setup-production-env.cjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.1",

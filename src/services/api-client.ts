@@ -6,10 +6,10 @@ import { env } from '../config/environment';
  * Usage statistics interface for API responses
  */
 interface UsageStats {
-  prompt_tokens: number;
-  completion_tokens: number;
-  total_tokens: number;
-  [key: string]: number; // Allow for additional usage metrics
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+    [key: string]: number; // Allow for additional usage metrics
 }
 
 interface ChatMessage {
@@ -68,7 +68,7 @@ class APIClient {
     constructor() {
         // Use environment configuration
         this.baseURL = env.api.baseUrl();
-        
+
         // Initialize retry and circuit breaker with environment configuration
         this.retry = new RetryWithBackoff({
             maxAttempts: env.retry.maxAttempts(),
@@ -76,7 +76,7 @@ class APIClient {
             maxDelay: env.retry.maxDelay(),
             retryableErrors: ['NETWORK_ERROR', 'TIMEOUT', '503', '429', '502', '504']
         });
-        
+
         this.circuitBreaker = new CircuitBreaker({
             failureThreshold: env.circuitBreaker.failureThreshold(),
             resetTimeout: env.circuitBreaker.resetTimeout(),
@@ -89,7 +89,7 @@ class APIClient {
      */
     async request<T>(url: string, options: RequestInit, context?: string): Promise<T> {
         const fullUrl = url.startsWith('http') ? url : `${this.baseURL}${url}`;
-        
+
         return this.circuitBreaker.execute(
             () => this.retry.execute(
                 () => this.performRequest<T>(fullUrl, options),
@@ -122,14 +122,14 @@ class APIClient {
             return await response.json();
         } catch (error) {
             clearTimeout(timeoutId);
-            
+
             if (error instanceof Error) {
                 if (error.name === 'AbortError') {
                     throw new Error('Request timeout');
                 }
                 throw error;
             }
-            
+
             throw new Error('Unknown request error');
         }
     }
@@ -143,11 +143,11 @@ class APIClient {
             logger.info('Using cached response', { url });
             return cached.data as T;
         }
-        
+
         if (cached) {
             this.cache.delete(url); // Remove expired cache
         }
-        
+
         return null;
     }
 
@@ -167,9 +167,9 @@ class APIClient {
      */
     async sendMessage(data: ChatMessage): Promise<ChatResponse> {
         const context = `Chat Message: ${data.provider || 'default'}`;
-        
+
         try {
-            const response = await this.request<ChatResponse>('/api/chat/message', {
+            const response = await this.request<ChatResponse>('/chat/message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -196,91 +196,113 @@ class APIClient {
      */
     async sendStreamingMessage(data: ChatMessage, callbacks: StreamingCallbacks): Promise<void> {
         const context = `Streaming Chat: ${data.provider || 'default'}`;
-        
-        return this.circuitBreaker.execute(
-            () => this.retry.execute(
-                async () => {
-                    const response = await fetch(`${this.baseURL}/api/chat/stream`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data),
-                        signal: AbortSignal.timeout(env.api.timeout()) // Use environment timeout for streaming
-                    });
 
-                    if (!response.ok) {
-                        const error = await response.json();
-                        throw new Error(error.error || `HTTP ${response.status}`);
-                    }
+        console.log('🔍 APIClient.sendStreamingMessage called with:', {
+            baseURL: this.baseURL,
+            data: { message: data.message, provider: data.provider },
+            context
+        });
 
-                    const reader = response.body?.getReader();
-                    if (!reader) {
-                        throw new Error('No response body reader available');
-                    }
+        try {
+            console.log('📡 Making direct fetch request to:', `${this.baseURL}/chat/stream`);
 
-                    const decoder = new TextDecoder();
-                    let buffer = '';
+            // Use a longer timeout for streaming responses (30 seconds instead of 5)
+            const response = await fetch(`${this.baseURL}/chat/stream`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                signal: AbortSignal.timeout(30000) // 30 second timeout for streaming
+            });
 
-                    while (true) {
-                        const { done, value } = await reader.read();
+            console.log('📥 Response received:', {
+                status: response.status,
+                ok: response.ok,
+                headers: Object.fromEntries(response.headers.entries())
+            });
 
-                        if (done) break;
+            if (!response.ok) {
+                const error = await response.json();
+                console.error('❌ Response not ok:', error);
+                throw new Error(error.error || `HTTP ${response.status}`);
+            }
 
-                        buffer += decoder.decode(value, { stream: true });
-                        const lines = buffer.split('\n');
-                        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+            const reader = response.body?.getReader();
+            if (!reader) {
+                console.error('❌ No response body reader available');
+                throw new Error('No response body reader available');
+            }
 
-                        for (const line of lines) {
-                            if (line.startsWith('data: ')) {
-                                const data = line.slice(6).trim();
+            console.log('📖 Starting to read streaming response...');
+            const decoder = new TextDecoder();
+            let buffer = '';
 
-                                if (data === '[DONE]') {
-                                    return;
-                                }
+            while (true) {
+                const { done, value } = await reader.read();
 
-                                try {
-                                    const parsed = JSON.parse(data);
+                if (done) {
+                    console.log('✅ Stream reading complete');
+                    break;
+                }
 
-                                    switch (parsed.type) {
-                                        case 'start':
-                                            callbacks.onStart?.(parsed);
-                                            break;
-                                        case 'token':
-                                            callbacks.onToken(parsed.token);
-                                            break;
-                                        case 'complete':
-                                            callbacks.onComplete(parsed);
-                                            break;
-                                        case 'error':
-                                            callbacks.onError(new Error(parsed.error));
-                                            break;
-                                    }
-                                } catch (parseError) {
-                                    logger.warn('Failed to parse SSE data', { 
-                                        data,
-                                        error: parseError instanceof Error ? parseError.message : String(parseError)
-                                    });
-                                }
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.slice(6).trim();
+                        console.log('📨 Received SSE data:', data);
+
+                        if (data === '[DONE]') {
+                            console.log('🏁 Stream complete signal received');
+                            return;
+                        }
+
+                        try {
+                            const parsed = JSON.parse(data);
+                            console.log('🔍 Parsed SSE data:', parsed);
+
+                            switch (parsed.type) {
+                                case 'start':
+                                    console.log('🚀 Calling onStart callback');
+                                    callbacks.onStart?.(parsed);
+                                    break;
+                                case 'token':
+                                    console.log('📝 Calling onToken callback with:', parsed.token);
+                                    callbacks.onToken(parsed.token);
+                                    break;
+                                case 'complete':
+                                    console.log('✅ Calling onComplete callback');
+                                    callbacks.onComplete(parsed);
+                                    break;
+                                case 'error':
+                                    console.error('❌ Calling onError callback');
+                                    callbacks.onError(new Error(parsed.error));
+                                    break;
                             }
+                        } catch (parseError) {
+                            console.error('❌ Failed to parse SSE data:', parseError);
+                            logger.warn('Failed to parse SSE data', {
+                                data,
+                                error: parseError instanceof Error ? parseError.message : String(parseError)
+                            });
                         }
                     }
-                },
-                context
-            ),
-            () => {
-                // Fallback: return a simple error response
-                callbacks.onError(new Error('Streaming service unavailable'));
-            },
-            context
-        );
+                }
+            }
+        } catch (error) {
+            console.error('❌ Error in sendStreamingMessage:', error);
+            callbacks.onError(error instanceof Error ? error : new Error(String(error)));
+        }
     }
 
     /**
      * Get available providers with retry and circuit breaker
      */
     async getAvailableProviders() {
-        return this.request<{ providers: string[] }>('/api/health/providers', {
+        return this.request<{ providers: string[] }>('/health/providers', {
             method: 'GET',
         }, 'Get Available Providers');
     }
@@ -289,7 +311,7 @@ class APIClient {
      * Get conversation with retry and circuit breaker
      */
     async getConversation(conversationId: string) {
-        return this.request<{ messages: unknown[] }>(`/api/conversations/${conversationId}`, {
+        return this.request<{ messages: unknown[] }>(`/conversations/${conversationId}`, {
             method: 'GET',
         }, `Get Conversation: ${conversationId}`);
     }
@@ -298,7 +320,7 @@ class APIClient {
      * Check health with retry and circuit breaker
      */
     async checkHealth() {
-        return this.request<{ status: string }>('/api/health', {
+        return this.request<{ status: string }>('/health', {
             method: 'GET',
         }, 'Health Check');
     }
@@ -307,7 +329,7 @@ class APIClient {
      * Check detailed health with retry and circuit breaker
      */
     async checkDetailedHealth() {
-        return this.request<{ status: string; details: unknown }>('/api/health/detailed', {
+        return this.request<{ status: string; details: unknown }>('/health/detailed', {
             method: 'GET',
         }, 'Detailed Health Check');
     }

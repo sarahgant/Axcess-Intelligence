@@ -1,5 +1,8 @@
 # CCH Axcess Intelligence Vibed
 
+> 🚨 **CRITICAL ARCHITECTURE REMINDER**: Environment files already exist and are properly configured. 
+> **NEVER** create or modify .env files. See [docs/ARCHITECTURE_CONSTRAINTS.md](docs/ARCHITECTURE_CONSTRAINTS.md) for details.
+
 🤖 **AI-powered document processing and tax research platform for CCH Axcess users**
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-org/cch-axcess-intelligence/actions)

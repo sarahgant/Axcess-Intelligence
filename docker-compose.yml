@@ -1,49 +1,167 @@
-# CCH Axcess Intelligence - Production Docker Compose
+# CCH Axcess Intelligence - Docker Compose Configuration
+# Production-ready deployment with monitoring and backups
+
 version: '3.8'
 
 services:
-  # Main application (backend + frontend)
+  # Main Application
   app:
     build: .
+    container_name: cch-intelligence-app
+    restart: unless-stopped
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
-      - LOG_LEVEL=info
+      - HOST=0.0.0.0
+      - DATABASE_PATH=/app/data/intelligence.db
+      - LOG_FILE_PATH=/app/logs/application.log
+    volumes:
+      - app_data:/app/data
+      - app_logs:/app/logs
+      - app_backups:/app/backups
     env_file:
-      - server/.env.production
-    restart: unless-stopped
+      - server/.env
+    networks:
+      - app_network
     healthcheck:
-      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
-    volumes:
-      - ./logs:/app/logs
-    networks:
-      - app-network
+    depends_on:
+      - backup
 
-  # Nginx reverse proxy (optional - for production)
+  # Nginx Reverse Proxy (Optional)
   nginx:
     image: nginx:alpine
+    container_name: cch-intelligence-nginx
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - app_network
     depends_on:
       - app
+    profiles:
+      - with-nginx
+
+  # Database Backup Service
+  backup:
+    image: alpine:latest
+    container_name: cch-intelligence-backup
     restart: unless-stopped
+    volumes:
+      - app_data:/data:ro
+      - app_backups:/backups
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * * # Daily at 2 AM
+      - BACKUP_RETENTION_DAYS=30
+    command: |
+      sh -c "
+        apk add --no-cache dcron sqlite
+        echo '$${BACKUP_SCHEDULE} /backup.sh' | crontab -
+        cat > /backup.sh << 'EOF'
+        #!/bin/sh
+        TIMESTAMP=$$(date +%Y%m%d_%H%M%S)
+        sqlite3 /data/intelligence.db '.backup /backups/intelligence_backup_$${TIMESTAMP}.db'
+        find /backups -name 'intelligence_backup_*.db' -mtime +$${BACKUP_RETENTION_DAYS} -delete
+        echo \"Backup completed: intelligence_backup_$${TIMESTAMP}.db\"
+        EOF
+        chmod +x /backup.sh
+        crond -f
+      "
     networks:
-      - app-network
+      - app_network
+
+  # Log Aggregation (Optional)
+  logrotate:
+    image: alpine:latest
+    container_name: cch-intelligence-logrotate
+    restart: unless-stopped
+    volumes:
+      - app_logs:/logs
+    command: |
+      sh -c "
+        apk add --no-cache logrotate
+        cat > /etc/logrotate.d/app << 'EOF'
+        /logs/*.log {
+          daily
+          rotate 30
+          compress
+          delaycompress
+          missingok
+          notifempty
+          create 644 root root
+        }
+        EOF
+        while true; do
+          logrotate /etc/logrotate.d/app
+          sleep 86400
+        done
+      "
+    profiles:
+      - with-logging
+
+  # Monitoring (Optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: cch-intelligence-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - app_network
+    profiles:
+      - with-monitoring
+
+  # Grafana Dashboard (Optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: cch-intelligence-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - app_network
+    profiles:
+      - with-monitoring
 
 networks:
-  app-network:
+  app_network:
     driver: bridge
 
 volumes:
-  logs:
+  app_data:
+    driver: local
+  app_logs:
+    driver: local
+  app_backups:
+    driver: local
+  nginx_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
     driver: local

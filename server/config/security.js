@@ -3,7 +3,17 @@
  * Centralized security configuration for production readiness
  */
 
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+
+// Try to find the .env file in the server directory
+const envPath = path.join(__dirname, '..', '.env');
+if (fs.existsSync(envPath)) {
+    require('dotenv').config({ path: envPath });
+} else {
+    // Fallback to relative path
+    require('dotenv').config({ path: './server/.env' });
+}
 
 /**
  * Security Configuration Object
@@ -14,7 +24,7 @@ const securityConfig = {
     environment: process.env.NODE_ENV || 'development',
     isProduction: process.env.NODE_ENV === 'production',
     isDevelopment: process.env.NODE_ENV === 'development',
-    
+
     // Server Security
     server: {
         port: process.env.PORT || 3001,
@@ -25,13 +35,13 @@ const securityConfig = {
         keepAliveTimeout: parseInt(process.env.KEEP_ALIVE_TIMEOUT) || 65000,
         headersTimeout: parseInt(process.env.HEADERS_TIMEOUT) || 66000
     },
-    
+
     // CORS Configuration
     cors: {
         enabled: process.env.CORS_ENABLED !== 'false',
-        origins: process.env.CORS_ORIGINS 
-            ? process.env.CORS_ORIGINS.split(',') 
-            : (process.env.NODE_ENV === 'production' 
+        origins: process.env.CORS_ORIGINS
+            ? process.env.CORS_ORIGINS.split(',')
+            : (process.env.NODE_ENV === 'production'
                 ? [process.env.FRONTEND_URL || 'https://your-domain.com']
                 : ['http://localhost:3000', 'http://localhost:5173']),
         credentials: process.env.CORS_CREDENTIALS !== 'false',
@@ -46,7 +56,7 @@ const securityConfig = {
         exposedHeaders: ['X-Request-ID', 'X-Rate-Limit-Remaining'],
         maxAge: parseInt(process.env.CORS_MAX_AGE) || 86400
     },
-    
+
     // Rate Limiting
     rateLimit: {
         enabled: process.env.RATE_LIMIT_ENABLED !== 'false',
@@ -75,7 +85,7 @@ const securityConfig = {
             skipFailedRequests: false
         }
     },
-    
+
     // Authentication & Authorization
     auth: {
         enabled: process.env.AUTH_ENABLED !== 'false',
@@ -89,20 +99,20 @@ const securityConfig = {
         apiKeyPrefix: process.env.API_KEY_PREFIX || 'cch_',
         apiKeyLength: parseInt(process.env.API_KEY_LENGTH) || 32
     },
-    
+
     // Encryption
     encryption: {
         algorithm: process.env.ENCRYPTION_ALGORITHM || 'aes-256-gcm',
         keyLength: parseInt(process.env.ENCRYPTION_KEY_LENGTH) || 32,
         ivLength: parseInt(process.env.ENCRYPTION_IV_LENGTH) || 16
     },
-    
+
     // File Upload Security
     fileUpload: {
         enabled: process.env.FILE_UPLOAD_ENABLED !== 'false',
         maxFileSize: parseInt(process.env.MAX_FILE_SIZE) || 20 * 1024 * 1024, // 20MB
         maxFiles: parseInt(process.env.MAX_FILES) || 10,
-        allowedTypes: process.env.ALLOWED_FILE_TYPES 
+        allowedTypes: process.env.ALLOWED_FILE_TYPES
             ? process.env.ALLOWED_FILE_TYPES.split(',')
             : ['pdf', 'docx', 'xlsx', 'pptx', 'txt', 'jpg', 'jpeg', 'png', 'gif'],
         scanFiles: process.env.SCAN_FILES !== 'false',
@@ -111,7 +121,7 @@ const securityConfig = {
         uploadPath: process.env.UPLOAD_PATH || './uploads',
         tempPath: process.env.TEMP_PATH || './temp'
     },
-    
+
     // Content Security Policy
     csp: {
         enabled: process.env.CSP_ENABLED !== 'false',
@@ -121,7 +131,7 @@ const securityConfig = {
         strictDynamic: process.env.CSP_STRICT_DYNAMIC === 'true',
         upgradeInsecureRequests: process.env.CSP_UPGRADE_INSECURE === 'true'
     },
-    
+
     // Logging & Monitoring
     logging: {
         enabled: process.env.LOGGING_ENABLED !== 'false',
@@ -133,7 +143,7 @@ const securityConfig = {
         maxLogFiles: parseInt(process.env.MAX_LOG_FILES) || 5,
         logFormat: process.env.LOG_FORMAT || 'json'
     },
-    
+
     // Database Security
     database: {
         usePreparedStatements: process.env.DB_USE_PREPARED_STATEMENTS !== 'false',
@@ -143,7 +153,7 @@ const securityConfig = {
         maxConnections: parseInt(process.env.DB_MAX_CONNECTIONS) || 10,
         idleTimeout: parseInt(process.env.DB_IDLE_TIMEOUT) || 60000
     },
-    
+
     // API Security
     api: {
         versioning: process.env.API_VERSIONING !== 'false',
@@ -154,7 +164,7 @@ const securityConfig = {
         requestIdHeader: process.env.REQUEST_ID_HEADER || 'X-Request-ID',
         maxRequestIdLength: parseInt(process.env.MAX_REQUEST_ID_LENGTH) || 36
     },
-    
+
     // Input Validation
     validation: {
         enabled: process.env.VALIDATION_ENABLED !== 'false',
@@ -166,7 +176,7 @@ const securityConfig = {
         maxArrayLength: parseInt(process.env.MAX_ARRAY_LENGTH) || 1000,
         maxObjectDepth: parseInt(process.env.MAX_OBJECT_DEPTH) || 10
     },
-    
+
     // Headers Security
     headers: {
         hsts: {
@@ -181,7 +191,7 @@ const securityConfig = {
         referrerPolicy: process.env.REFERRER_POLICY || 'strict-origin-when-cross-origin',
         permissionsPolicy: process.env.PERMISSIONS_POLICY_ENABLED !== 'false'
     },
-    
+
     // Session Security
     session: {
         enabled: process.env.SESSION_ENABLED !== 'false',
@@ -197,7 +207,7 @@ const securityConfig = {
         saveUninitialized: process.env.SESSION_SAVE_UNINITIALIZED === 'false',
         rolling: process.env.SESSION_ROLLING === 'true'
     },
-    
+
     // Threat Detection
     threatDetection: {
         enabled: process.env.THREAT_DETECTION_ENABLED !== 'false',
@@ -209,7 +219,7 @@ const securityConfig = {
         blockSuspicious: process.env.BLOCK_SUSPICIOUS === 'true',
         logThreats: process.env.LOG_THREATS !== 'false'
     },
-    
+
     // Backup & Recovery
     backup: {
         enabled: process.env.BACKUP_ENABLED !== 'false',
@@ -243,7 +253,7 @@ const environmentOverrides = {
             }
         }
     },
-    
+
     production: {
         cors: {
             origins: [process.env.FRONTEND_URL || 'https://your-domain.com']
@@ -289,7 +299,7 @@ const applyEnvironmentOverrides = (config, environment) => {
 const validateSecurityConfig = (config) => {
     const errors = [];
     const warnings = [];
-    
+
     // Check required environment variables
     if (config.isProduction) {
         if (!process.env.JWT_SECRET) {
@@ -302,7 +312,7 @@ const validateSecurityConfig = (config) => {
             warnings.push('FRONTEND_URL not set in production');
         }
     }
-    
+
     // Validate rate limits
     if (config.rateLimit.general.max < 10) {
         errors.push('General rate limit too restrictive (min 10)');
@@ -310,17 +320,17 @@ const validateSecurityConfig = (config) => {
     if (config.rateLimit.auth.max < 3) {
         errors.push('Auth rate limit too restrictive (min 3)');
     }
-    
+
     // Validate file upload settings
     if (config.fileUpload.maxFileSize > 100 * 1024 * 1024) {
         warnings.push('File upload size limit very high (100MB+)');
     }
-    
+
     // Validate password settings
     if (config.auth.passwordMinLength < 8) {
         errors.push('Password minimum length too short (min 8)');
     }
-    
+
     return { errors, warnings };
 };
 
@@ -330,13 +340,13 @@ const validateSecurityConfig = (config) => {
 const getSecurityConfig = () => {
     const config = { ...securityConfig };
     const environment = config.environment;
-    
+
     // Apply environment overrides
     const finalConfig = applyEnvironmentOverrides(config, environment);
-    
+
     // Validate configuration
     const validation = validateSecurityConfig(finalConfig);
-    
+
     return {
         ...finalConfig,
         validation

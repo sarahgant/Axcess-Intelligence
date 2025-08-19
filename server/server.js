@@ -6,7 +6,17 @@
 const express = require('express');
 const cors = require('cors');
 const winston = require('winston');
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+
+// Try to find the .env file in the server directory
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+    require('dotenv').config({ path: envPath });
+} else {
+    // Fallback to relative path
+    require('dotenv').config({ path: './server/.env' });
+}
 
 // Import routes
 const chatRoutes = require('./routes/chat');
@@ -58,11 +68,30 @@ app.use((req, res, next) => {
 });
 
 // Health check
-app.use('/health', healthRoutes);
+app.use('/api/health', healthRoutes);
 
 // API routes
 app.use('/api/chat', chatRoutes);
 app.use('/api/conversations', conversationsRoutes);
+
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+    const buildPath = path.join(__dirname, '..', 'dist');
+    app.use(express.static(buildPath));
+
+    // Handle React routing, return all requests to React app
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(buildPath, 'index.html'));
+    });
+}
+
+// 404 handler for API routes only (before React catch-all)
+app.use('/api/*', (req, res) => {
+    res.status(404).json({
+        error: 'API endpoint not found',
+        path: req.originalUrl
+    });
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -78,14 +107,6 @@ app.use((err, req, res, next) => {
         error: process.env.NODE_ENV === 'production'
             ? 'Internal server error'
             : err.message
-    });
-});
-
-// 404 handler
-app.use('*', (req, res) => {
-    res.status(404).json({
-        error: 'Endpoint not found',
-        path: req.originalUrl
     });
 });
 

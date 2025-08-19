@@ -14,7 +14,7 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
   ({ className, onSend, onStop, isStreaming = false, maxLines = 10, ...props }, ref) => {
     const [value, setValue] = React.useState("");
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-    
+
     // Merge refs
     React.useImperativeHandle(ref, () => textareaRef.current!);
 
@@ -25,12 +25,12 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
 
       // Reset height to calculate scrollHeight
       textarea.style.height = "auto";
-      
+
       // Calculate line height and max height
       const lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
       const maxHeight = lineHeight * maxLines;
       const newHeight = Math.min(textarea.scrollHeight, maxHeight);
-      
+
       textarea.style.height = `${newHeight}px`;
     }, [maxLines]);
 
@@ -67,7 +67,7 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
             content: sanitizedValue,
             role: 'user'
           });
-          
+
           onSend(validatedMessage.content);
           setValue("");
           // Reset height after clearing
@@ -120,7 +120,7 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, ChatInputProps>(
             Press Enter to send your message, or Shift+Enter to add a new line. Maximum 10 lines allowed.
           </div>
         </div>
-        
+
         <div className="flex gap-2">
           {isStreaming ? (
             <button

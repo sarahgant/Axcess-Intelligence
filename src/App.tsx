@@ -31,7 +31,11 @@ const router = createBrowserRouter([
     path: "/chat",
     element: <Chat />,
   },
-]);
+], {
+  future: {
+    v7_startTransition: true,
+  },
+});
 
 export const App = () => {
   return (

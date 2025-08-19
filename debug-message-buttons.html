@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Message Buttons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .message-container {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 0 4px;
+            justify-content: flex-start;
+        }
+
+        .action-button {
+            padding: 4px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .action-button img {
+            width: 12px;
+            height: 12px;
+            opacity: 0.6;
+        }
+
+        .action-button:hover img {
+            opacity: 1;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Message Button Debug Test</h1>
+    <p>This page tests the message button functionality outside of the React app.</p>
+
+    <div class="message-container">
+        <div>
+            <strong>AI Response:</strong>
+            <p>This is a sample AI response message. You can test the buttons below.</p>
+        </div>
+
+        <div class="message-actions">
+            <button class="action-button" title="Copy message" onclick="testCopy()">
+                📋
+            </button>
+            <button class="action-button" title="Regenerate response" onclick="testRegenerate()">
+                🔄
+            </button>
+            <button class="action-button" title="Good response" onclick="testThumbsUp()">
+                👍
+            </button>
+            <button class="action-button" title="Poor response" onclick="testThumbsDown()">
+                👎
+            </button>
+        </div>
+
+        <div id="status" class="status info">
+            Ready to test buttons...
+        </div>
+    </div>
+
+    <div class="message-container">
+        <h3>Debugging Information</h3>
+        <ul>
+            <li><strong>Clipboard API Available:</strong> <span id="clipboardSupport"></span></li>
+            <li><strong>Secure Context:</strong> <span id="secureContext"></span></li>
+            <li><strong>User Agent:</strong> <span id="userAgent"></span></li>
+        </ul>
+    </div>
+
+    <script>
+        // Initialize debug info
+        document.getElementById('clipboardSupport').textContent = navigator.clipboard ? 'Yes' : 'No';
+        document.getElementById('secureContext').textContent = window.isSecureContext ? 'Yes' : 'No';
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        async function testCopy() {
+            const messageText = "This is a sample AI response message. You can test the buttons below.";
+
+            try {
+                // Try modern clipboard API first
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(messageText);
+                    updateStatus('✅ Copied using modern clipboard API!', 'success');
+                } else {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = messageText;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    const success = document.execCommand('copy');
+                    textArea.remove();
+
+                    if (success) {
+                        updateStatus('✅ Copied using fallback method!', 'success');
+                    } else {
+                        updateStatus('❌ Fallback copy failed', 'error');
+                    }
+                }
+
+                // Visual feedback
+                const button = event.target;
+                const originalBg = button.style.backgroundColor;
+                button.style.backgroundColor = '#dcfce7';
+                setTimeout(() => {
+                    button.style.backgroundColor = originalBg;
+                }, 1000);
+
+            } catch (error) {
+                updateStatus('❌ Copy failed: ' + error.message, 'error');
+            }
+        }
+
+        function testRegenerate() {
+            updateStatus('🔄 Regenerating response...', 'info');
+
+            const button = event.target;
+            button.style.backgroundColor = '#e0f2fe';
+
+            // Simulate API call
+            setTimeout(() => {
+                button.style.backgroundColor = '#dcfce7';
+                updateStatus('✅ Response regenerated successfully!', 'success');
+
+                setTimeout(() => {
+                    button.style.backgroundColor = '';
+                }, 1000);
+            }, 2000);
+        }
+
+        function testThumbsUp() {
+            updateStatus('👍 Positive feedback submitted!', 'success');
+
+            const button = event.target;
+            button.style.backgroundColor = '#dcfce7';
+            button.style.transform = 'scale(1.1)';
+
+            setTimeout(() => {
+                button.style.backgroundColor = '';
+                button.style.transform = '';
+            }, 1000);
+        }
+
+        function testThumbsDown() {
+            updateStatus('👎 Negative feedback submitted!', 'error');
+
+            const button = event.target;
+            button.style.backgroundColor = '#fef2f2';
+            button.style.transform = 'scale(1.1)';
+
+            setTimeout(() => {
+                button.style.backgroundColor = '';
+                button.style.transform = '';
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

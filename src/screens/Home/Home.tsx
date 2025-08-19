@@ -1,7 +1,7 @@
 
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
+
 import { Separator } from "../../components/ui/separator";
 import { WKIcons } from "../../components/ui/wk-icon";
 import { ScreenErrorBoundary } from "../../components/ScreenErrorBoundary";
@@ -13,11 +13,11 @@ import {
   useDocuments,
   type CCHDocument
 } from "../../components/document-upload";
-import APIClient, { type StreamingCallbacks } from "../../services/api-client";
+import { useConversations, useAIProvider } from "./hooks";
 import { logger } from "../../core/logging/logger";
-
-// Create API client instance
-const apiClient = new APIClient();
+import { MarkdownRenderer } from "../../components/MarkdownRenderer";
+import { MessageDebugger } from "../../components/MessageDebugger";
+import { AdminDashboard } from "../../components/AdminDashboard";
 
 // Enhanced type definitions for conversation management
 interface Message {
@@ -51,6 +51,8 @@ interface ConversationSection {
 }
 
 const HomeContent = (): JSX.Element => {
+  const loggerInstance = logger.component('Home');
+
   // Document management
   const {
     documents,
@@ -58,6 +60,31 @@ const HomeContent = (): JSX.Element => {
     removeDocument,
     hasDocuments
   } = useDocuments();
+
+  // Use custom hooks for conversation and AI provider management
+  const {
+    conversations,
+    currentConversationId,
+    editingMessageId,
+    createConversation,
+    deleteConversation,
+    toggleFavorite,
+    addMessage,
+    updateMessage,
+    deleteMessage,
+    submitFeedback,
+    setEditingMessageId
+  } = useConversations();
+
+  const {
+    selectedProvider,
+    setSelectedProvider,
+    availableProviders,
+    isBackendConnected,
+    isInitializingAI,
+    sendMessage,
+    handleProviderChange
+  } = useAIProvider();
 
   // Modal states for document upload
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -67,31 +94,24 @@ const HomeContent = (): JSX.Element => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [currentMessageId, setCurrentMessageId] = useState<string>('');
 
-  // Conversation management state
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  // Admin dashboard state
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
 
   // Chat state management
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showToolsDropdown, setShowToolsDropdown] = useState(false);
 
-  // AI Provider state
-  const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
-  const [availableProviders, setAvailableProviders] = useState<any[]>([]);
-  const [isBackendConnected, setIsBackendConnected] = useState(false);
-  const [showProviderDropdown, setShowProviderDropdown] = useState(false);
-  const [isInitializingAI, setIsInitializingAI] = useState(true);
+  // Active tools state (array to support multiple tools)
+  const [activeTools, setActiveTools] = useState<string[]>([]);
 
   // Get current conversation and messages
   const currentConversation = conversations.find(c => c.id === currentConversationId);
   const messages = currentConversation?.messages || [];
 
   // Refs for functionality
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const toolsDropdownRef = useRef<HTMLDivElement>(null);
-  const providerDropdownRef = useRef<HTMLDivElement>(null);
 
   // Handle click outside for tools dropdown
   useEffect(() => {
@@ -104,25 +124,53 @@ const HomeContent = (): JSX.Element => {
       }
     };
 
-    if (showToolsDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [showToolsDropdown]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  // Handle ESC key for tools dropdown
+  // Admin dashboard keyboard shortcut (Ctrl+Alt+A)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && showToolsDropdown) {
-        setShowToolsDropdown(false);
+      if (event.ctrlKey && event.altKey && event.key === 'a') {
+        event.preventDefault();
+        setShowAdminDashboard(true);
+        loggerInstance.info('Admin dashboard opened via keyboard shortcut');
       }
     };
 
-    if (showToolsDropdown) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [loggerInstance]);
+
+  // Reset textarea height when input is cleared
+  useEffect(() => {
+    if (!inputText && inputRef.current) {
+      inputRef.current.style.height = '40px';
     }
-  }, [showToolsDropdown]);
+  }, [inputText]);
+
+
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey) {
+        switch (event.key) {
+          case 'k':
+            event.preventDefault();
+            createConversation();
+            break;
+          case 'l':
+            event.preventDefault();
+            inputRef.current?.focus();
+            break;
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [createConversation]);
 
   // Initialize backend connection and AI providers
   useEffect(() => {
@@ -130,45 +178,22 @@ const HomeContent = (): JSX.Element => {
 
     const initializeBackend = async () => {
       try {
-        logger.info('Connecting to secure backend', { component: 'Home' });
-        setIsInitializingAI(true);
-
-        // Check backend health
-        const isHealthy = await apiClient.checkHealth();
-        if (!isHealthy) {
-          throw new Error('Backend server is not responding');
-        }
-
-        // Get available providers from backend
-        const providers = await apiClient.getAvailableProviders();
+        loggerInstance.info('Connecting to secure backend', { component: 'Home' });
+        // Backend initialization is now handled by useAIProvider hook
 
         if (!mounted) return;
 
-        setIsBackendConnected(true);
-        setAvailableProviders(providers);
-
-        // Set default provider to first available
-        const availableProvider = providers.find(p => p.isAvailable);
-        if (availableProvider) {
-          setSelectedProvider(availableProvider.id);
-        }
-
-        logger.info('Backend connected successfully', {
+        loggerInstance.info('Backend connected successfully', {
           component: 'Home',
-          providers: providers.map(p => p.id),
-          defaultProvider: availableProvider?.id
+          providers: availableProviders.map(p => p.id),
+          defaultProvider: selectedProvider
         });
       } catch (error) {
-        logger.error('Failed to connect to backend', {
+        loggerInstance.error('Failed to connect to backend', {
           component: 'Home',
           error: error instanceof Error ? error.message : String(error)
         });
-        setIsBackendConnected(false);
-        // In production, could show user notification about backend issues
-      } finally {
-        if (mounted) {
-          setIsInitializingAI(false);
-        }
+        // Error handling is now managed by useAIProvider hook
       }
     };
 
@@ -177,183 +202,181 @@ const HomeContent = (): JSX.Element => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [availableProviders, selectedProvider, loggerInstance]);
 
-  // Conversation management functions
-  const createNewConversation = useCallback((firstMessage: string): string => {
-    const newConversation: Conversation = {
-      id: Date.now().toString(),
-      title: firstMessage.length > 50 ? firstMessage.substring(0, 47) + '...' : firstMessage,
-      messages: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isFavorited: false
-    };
-
-    setConversations(prev => [newConversation, ...prev]);
-    setCurrentConversationId(newConversation.id);
+  // Create new conversation
+  const handleNewConversation = useCallback(async () => {
+    const newConversation = await createConversation();
     return newConversation.id;
-  }, []);
-
-  const addMessageToConversation = useCallback((conversationId: string, message: Message) => {
-    setConversations(prev => prev.map(conv =>
-      conv.id === conversationId
-        ? {
-          ...conv,
-          messages: [...conv.messages, message],
-          updatedAt: new Date()
-        }
-        : conv
-    ));
-  }, []);
+  }, [createConversation]);
 
   // Enhanced message sending with validation
   const handleSend = async () => {
-    // Pre-send validation
+    console.log('🎬 handleSend called with inputText:', inputText);
     const trimmedText = inputText.trim();
-    if (!trimmedText || isLoading || !isBackendConnected) return;
-
-    // Check for duplicate message
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage && lastMessage.sender === 'user' && lastMessage.text === trimmedText) {
-      return; // Prevent duplicate
+    console.log('📝 trimmedText:', trimmedText, 'isLoading:', isLoading);
+    if (!trimmedText || isLoading) {
+      console.log('❌ Early return - no text or loading');
+      return;
     }
 
-    // Create or get conversation
-    let conversationId = currentConversationId;
-    if (!conversationId || messages.length === 0) {
-      conversationId = createNewConversation(trimmedText);
+    // Validate input
+    if (trimmedText.length > 10000) {
+      loggerInstance.warn('Message too long', { length: trimmedText.length });
+      return;
     }
 
-    // Add user message with attached documents
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: trimmedText,
-      sender: 'user',
-      timestamp: new Date(),
-      attachedDocuments: documents.length > 0 ? documents.map(doc => ({
-        id: doc.id,
-        name: doc.name,
-        type: doc.type
-      })) : undefined
-    };
+    // Check for malicious content
+    const maliciousPatterns = [
+      /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+      /javascript:/gi,
+      /on\w+\s*=/gi
+    ];
 
-    addMessageToConversation(conversationId, userMessage);
-    setInputText('');
-    setIsLoading(true);
-
-    // Focus returns to input
-    inputRef.current?.focus();
+    if (maliciousPatterns.some(pattern => pattern.test(trimmedText))) {
+      loggerInstance.warn('Malicious content detected', { content: trimmedText.substring(0, 100) });
+      return;
+    }
 
     try {
+      setIsLoading(true);
+
+      // Create conversation if none exists BEFORE clearing input
+      let conversationId = currentConversationId;
+      if (!conversationId) {
+        conversationId = await handleNewConversation();
+        console.log('🆕 Created new conversation:', conversationId);
+
+        // Small delay to ensure state updates have propagated
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+
+      // Add user message with explicit conversation ID
+      const userMessage: Omit<Message, 'id' | 'timestamp'> = {
+        text: trimmedText,
+        sender: 'user',
+        attachedDocuments: documents.length > 0 ? documents.map(doc => ({
+          id: doc.id,
+          name: doc.name,
+          type: doc.type
+        })) : undefined
+      };
+
+      const userMessageId = await addMessage(userMessage, conversationId);
+      if (!userMessageId) {
+        loggerInstance.error('Failed to add user message', { conversationId });
+        setIsLoading(false);
+        return;
+      }
+
+      // Clear input AFTER successfully adding the message
+      setInputText('');
+      // Reset textarea height
+      if (inputRef.current) {
+        inputRef.current.style.height = '40px';
+      }
+
       // Prepare document context for backend
       const documentContext = documents.length > 0 ? documents.map(doc => ({
         id: doc.id,
         name: doc.name,
         type: doc.type,
-        content: doc.content || `Document: ${doc.name}`
+        content: (doc as any).content || `Document: ${doc.name}`
       })) : undefined;
 
       // Create AI message with streaming placeholder
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: '',
+      const aiMessage: Omit<Message, 'id' | 'timestamp'> = {
+        text: '...',
         sender: 'ai',
-        timestamp: new Date(),
         isStreaming: true
       };
-      addMessageToConversation(conversationId, aiMessage);
+
+      // Capture the message ID returned by addMessage with explicit conversation ID
+      const aiMessageId = await addMessage(aiMessage, conversationId);
+
+      if (!aiMessageId) {
+        loggerInstance.error('Failed to create AI message');
+        setIsLoading(false);
+        return;
+      }
+
+      // Track accumulated text locally to avoid state race conditions
+      let accumulatedText = '';
 
       // Send to backend API with streaming
-      await apiClient.sendStreamingMessage(
+      console.log('📡 About to call sendMessage with:', { trimmedText, selectedProvider, aiMessageId });
+      await sendMessage(
+        trimmedText,
         {
-          message: trimmedText,
-          conversationId,
-          provider: selectedProvider || 'anthropic',
-          systemPrompt: 'You are CCH Axcess Intelligence, an AI assistant specialized in tax research, document analysis, and professional accounting support. Provide accurate, helpful responses while being concise and professional.',
-          documents: documentContext,
-          options: {
-            temperature: 0.7,
-            maxTokens: 4000
-          }
-        },
-        {
-          onStart: (data) => {
-            logger.info('Started streaming response', {
+          onStart: (data: any) => {
+            loggerInstance.info('Started streaming response', {
               component: 'Home',
-              provider: data.provider,
-              conversationId
+              provider: data.provider || selectedProvider,
+              conversationId,
+              messageId: aiMessageId
             });
+            // Reset accumulated text
+            accumulatedText = '';
           },
-          onToken: (token: string) => {
-            setConversations(prev => prev.map(conv =>
-              conv.id === conversationId
-                ? {
-                  ...conv,
-                  messages: conv.messages.map(msg =>
-                    msg.id === aiMessage.id
-                      ? { ...msg, text: msg.text + token }
-                      : msg
-                  )
-                }
-                : conv
-            ));
+          onToken: async (token: string) => {
+            // Update the streaming message with new token
+            console.log('📝 Updating message with token:', { messageId: aiMessageId, token, conversationId });
+            // Accumulate text locally to avoid race conditions
+            accumulatedText += token;
+            console.log('📝 Accumulated text:', { accumulatedText: accumulatedText.substring(0, 100) + '...' });
+            try {
+              await updateMessage(aiMessageId, { text: accumulatedText });
+            } catch (error) {
+              console.error('Failed to update message during streaming:', error);
+            }
           },
-          onComplete: (data) => {
-            setConversations(prev => prev.map(conv =>
-              conv.id === conversationId
-                ? {
-                  ...conv,
-                  messages: conv.messages.map(msg =>
-                    msg.id === aiMessage.id
-                      ? { ...msg, isStreaming: false }
-                      : msg
-                  ),
-                  updatedAt: new Date()
-                }
-                : conv
-            ));
-            logger.info('Response complete', {
+          onComplete: async (data: any) => {
+            // Mark streaming as complete
+            console.log('✅ Marking message as complete:', { messageId: aiMessageId, finalContent: data.content });
+            // If we have complete content in the response, use that instead of accumulated text
+            try {
+              if (data.content && data.content.trim()) {
+                await updateMessage(aiMessageId, { text: data.content, isStreaming: false });
+              } else {
+                await updateMessage(aiMessageId, { isStreaming: false });
+              }
+            } catch (error) {
+              console.error('Failed to finalize message:', error);
+            }
+            loggerInstance.info('Response complete', {
               component: 'Home',
-              provider: data.provider,
-              conversationId
+              provider: data.provider || selectedProvider,
+              conversationId,
+              messageId: aiMessageId,
+              contentLength: data.content?.length || accumulatedText.length
             });
+            // Ensure loading state is cleared
+            setIsLoading(false);
           },
           onError: (error: Error) => {
-            logger.error('Streaming error', {
+            loggerInstance.error('Streaming error', {
               component: 'Home',
               error: error.message,
-              conversationId
+              conversationId,
+              messageId: aiMessageId
             });
-            setConversations(prev => prev.map(conv =>
-              conv.id === conversationId
-                ? {
-                  ...conv,
-                  messages: conv.messages.map(msg =>
-                    msg.id === aiMessage.id
-                      ? { ...msg, text: 'Sorry, I encountered an error processing your request. Please try again.', isStreaming: false }
-                      : msg
-                  )
-                }
-                : conv
-            ));
+            updateMessage(aiMessageId, {
+              text: 'Sorry, I encountered an error processing your request. Please try again.',
+              isStreaming: false
+            });
+            // Ensure loading state is cleared on error
+            setIsLoading(false);
           }
-        }
+        },
+        documentContext
       );
 
     } catch (error) {
-      logger.error('Failed to send message', {
+      loggerInstance.error('Failed to send message', {
         component: 'Home',
         error: error instanceof Error ? error.message : String(error),
-        conversationId
+        conversationId: currentConversationId
       });
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'Sorry, I encountered an error while processing your request. Please try again.',
-        sender: 'ai',
-        timestamp: new Date()
-      };
-      addMessageToConversation(conversationId, errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -560,11 +583,11 @@ const HomeContent = (): JSX.Element => {
 
   return (
     <div
-      className="flex min-w-[1024px] min-h-screen items-start relative bg-white"
+      className="flex w-full h-screen items-start relative bg-white overflow-hidden"
       data-model-id="8:49972"
     >
       {/* Sidebar */}
-      <aside className="flex flex-col w-[272px] items-start justify-between relative self-stretch bg-white border-r border-graytint5-ededed">
+      <aside className="flex flex-col w-[272px] h-screen items-start justify-between relative bg-white border-r border-graytint5-ededed overflow-hidden">
         {/* Sidebar top section */}
         <div className="flex flex-col w-full items-center flex-1 pt-0 pb-2">
           {/* Top icons */}
@@ -590,7 +613,7 @@ const HomeContent = (): JSX.Element => {
           <div className="px-5 py-0 self-stretch w-full flex flex-col items-center justify-center gap-2 relative">
             <div className="flex items-start relative self-stretch w-full">
               <Button
-                onClick={() => setCurrentConversationId(null)}
+                onClick={() => createConversation()}
                 className="w-[232px] h-[34px] flex items-center justify-center gap-2 px-3 py-1.5 border border-solid border-[#005B92] bg-white text-[#005B92] rounded-none hover:bg-gray-50"
               >
                 <WKIcons.Plus className="w-4 h-4 text-[#005B92]" />
@@ -650,9 +673,9 @@ const HomeContent = (): JSX.Element => {
       </aside>
 
       {/* Main content */}
-      <main className="flex flex-col items-start justify-center flex-1 self-stretch grow relative">
+      <main className="flex flex-col flex-1 h-screen overflow-hidden">
         {/* Header */}
-        <header className="flex h-14 items-center gap-4 px-4 py-3 relative self-stretch w-full bg-white">
+        <header className="flex h-14 items-center gap-4 px-4 py-3 w-full bg-white flex-shrink-0">
           <div className="flex items-center gap-2 relative flex-1 grow">
             <img
               className="relative w-6 h-6"
@@ -667,8 +690,8 @@ const HomeContent = (): JSX.Element => {
         </header>
 
         {/* Main content area */}
-        <div className="flex flex-col items-center justify-end gap-5 px-4 py-6 relative flex-1 self-stretch w-full grow bg-white">
-          <div className="flex flex-col items-center gap-5 relative flex-1 self-stretch w-full grow">
+        <div className="flex flex-col items-center flex-1 bg-white overflow-y-auto">
+          <div className="flex flex-col items-center gap-5 flex-1 w-full px-4 py-4">
             {/* Welcome message - only shown when no messages */}
             {messages.length === 0 && (
               <div className="flex flex-col w-[720px] items-start gap-4 relative">
@@ -719,7 +742,7 @@ const HomeContent = (): JSX.Element => {
 
             {/* Professional Messages display area */}
             {messages.length > 0 && (
-              <div className="flex flex-col w-[720px] max-h-[400px] overflow-y-auto gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex flex-col w-[720px] gap-4 pb-4">
                 {messages.map((message, index) => (
                   <div
                     key={message.id}
@@ -734,9 +757,12 @@ const HomeContent = (): JSX.Element => {
                         <div className="w-7 h-7 rounded-full bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
                           <img src="/src/styles/WK Icons/ai-generate.png" alt="" className="w-4 h-4" />
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col flex-1 min-w-0">
                           <div className="bg-white border border-gray-200 px-4 py-3 rounded-lg shadow-sm">
-                            <p className="text-sm leading-relaxed text-gray-800">{message.text}</p>
+                            <MarkdownRenderer
+                              content={message.text}
+                              className="text-sm leading-relaxed text-gray-800"
+                            />
                           </div>
 
                           {/* Always visible message actions */}
@@ -745,14 +771,22 @@ const HomeContent = (): JSX.Element => {
                               className="p-1 hover:bg-gray-100 rounded transition-colors"
                               title="Copy message"
                               onClick={async (e) => {
+                                console.log('📋 COPY: Button clicked!', { messageId: message.id, sender: message.sender, hasClipboard: !!navigator.clipboard, isSecure: window.isSecureContext });
                                 e.preventDefault();
                                 e.stopPropagation();
+
+                                // Capture button reference BEFORE async operation
+                                const button = e.currentTarget as HTMLButtonElement;
+                                console.log('📋 COPY: Captured button:', !!button);
 
                                 try {
                                   // Try modern clipboard API first
                                   if (navigator.clipboard && window.isSecureContext) {
+                                    console.log('📋 COPY: Using modern clipboard API');
                                     await navigator.clipboard.writeText(message.text);
+                                    console.log('📋 COPY: Modern clipboard success');
                                   } else {
+                                    console.log('📋 COPY: Using fallback method');
                                     // Fallback for older browsers
                                     const textArea = document.createElement('textarea');
                                     textArea.value = message.text;
@@ -762,28 +796,70 @@ const HomeContent = (): JSX.Element => {
                                     document.body.appendChild(textArea);
                                     textArea.focus();
                                     textArea.select();
-                                    document.execCommand('copy');
+                                    const success = document.execCommand('copy');
                                     textArea.remove();
+                                    console.log('📋 COPY: Fallback success:', success);
                                   }
 
                                   // Show brief success feedback
-                                  const button = e.currentTarget;
-                                  const originalTitle = button.getAttribute('title');
-                                  button.setAttribute('title', 'Copied!');
-                                  button.style.backgroundColor = '#dcfce7';
-                                  setTimeout(() => {
-                                    button.setAttribute('title', originalTitle || 'Copy message');
-                                    button.style.backgroundColor = '';
-                                  }, 1000);
+                                  console.log('📋 COPY: Showing success feedback');
+                                  if (button) {
+                                    const originalTitle = button.getAttribute('title');
+                                    const originalBg = button.style.backgroundColor;
+
+                                    // Update tooltip and background
+                                    button.setAttribute('title', 'Copied!');
+                                    button.style.backgroundColor = '#dcfce7';
+                                    button.style.transform = 'scale(1.05)';
+                                    console.log('📋 COPY: Applied success styles');
+
+                                    // Reset after 2 seconds
+                                    setTimeout(() => {
+                                      if (button) {
+                                        button.setAttribute('title', originalTitle || 'Copy message');
+                                        button.style.backgroundColor = originalBg;
+                                        button.style.transform = '';
+                                        console.log('📋 COPY: Reset styles');
+                                      }
+                                    }, 2000);
+
+                                    // Also show a temporary success message
+                                    const successMsg = document.createElement('div');
+                                    successMsg.textContent = 'Copied to clipboard!';
+                                    successMsg.style.cssText = `
+                                      position: fixed;
+                                      top: 20px;
+                                      right: 20px;
+                                      background: #4caf50;
+                                      color: white;
+                                      padding: 8px 16px;
+                                      border-radius: 4px;
+                                      z-index: 10000;
+                                      font-size: 14px;
+                                      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                                    `;
+                                    document.body.appendChild(successMsg);
+                                    setTimeout(() => {
+                                      if (successMsg.parentNode) {
+                                        successMsg.parentNode.removeChild(successMsg);
+                                      }
+                                    }, 3000);
+                                  } else {
+                                    console.error('📋 COPY: Button is null!');
+                                  }
                                 } catch (error) {
                                   console.error('Failed to copy text:', error);
-                                  const button = e.currentTarget;
-                                  button.style.backgroundColor = '#fef2f2';
-                                  button.setAttribute('title', 'Copy failed');
-                                  setTimeout(() => {
-                                    button.style.backgroundColor = '';
-                                    button.setAttribute('title', 'Copy message');
-                                  }, 2000);
+                                  const button = e.currentTarget as HTMLButtonElement;
+                                  if (button) {
+                                    button.style.backgroundColor = '#fef2f2';
+                                    button.setAttribute('title', 'Copy failed');
+                                    setTimeout(() => {
+                                      if (button) {
+                                        button.style.backgroundColor = '';
+                                        button.setAttribute('title', 'Copy message');
+                                      }
+                                    }, 2000);
+                                  }
                                 }
                               }}
                             >
@@ -794,42 +870,86 @@ const HomeContent = (): JSX.Element => {
                               className="p-1 hover:bg-gray-100 rounded transition-colors"
                               title="Regenerate response"
                               onClick={async (e) => {
+                                console.log('🔄 REGENERATE: Button clicked!', { messageId: message.id, messagesCount: messages.length });
                                 e.preventDefault();
                                 e.stopPropagation();
 
                                 // Regenerate the AI response
                                 const lastUserMessage = messages.slice().reverse().find(m => m.sender === 'user');
+                                console.log('🔄 REGENERATE: Found last user message:', lastUserMessage?.id);
+                                // Capture button reference BEFORE async operations
+                                const button = e.currentTarget as HTMLButtonElement;
+                                console.log('🔄 REGENERATE: Captured button:', !!button);
+
                                 if (lastUserMessage) {
-                                  const button = e.currentTarget;
-                                  button.style.backgroundColor = '#e0f2fe';
+                                  if (button) {
+                                    button.style.backgroundColor = '#e0f2fe';
+                                  }
                                   setIsLoading(true);
 
                                   try {
                                     // Simulate API delay
+                                    console.log('🔄 REGENERATE: Starting regeneration...');
                                     await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
                                     const newResponse = generateIntelligentResponse(lastUserMessage.text);
+                                    console.log('🔄 REGENERATE: Generated new response:', newResponse.substring(0, 50) + '...');
 
                                     // Update the specific message
-                                    setMessages(prev => prev.map(msg =>
-                                      msg.id === message.id
-                                        ? { ...msg, text: newResponse, timestamp: new Date() }
-                                        : msg
-                                    ));
+                                    updateMessage(message.id, { text: newResponse, timestamp: new Date() });
+                                    console.log('🔄 REGENERATE: Updated message');
 
                                     // Success feedback
-                                    button.style.backgroundColor = '#dcfce7';
-                                    setTimeout(() => button.style.backgroundColor = '', 1000);
+                                    if (button) {
+                                      button.style.backgroundColor = '#dcfce7';
+                                      button.style.transform = 'scale(1.05)';
+                                      setTimeout(() => {
+                                        if (button) {
+                                          button.style.backgroundColor = '';
+                                          button.style.transform = '';
+                                        }
+                                      }, 2000);
+                                    }
+
+                                    // Show success message
+                                    const successMsg = document.createElement('div');
+                                    successMsg.textContent = 'Response regenerated!';
+                                    successMsg.style.cssText = `
+                                      position: fixed;
+                                      top: 20px;
+                                      right: 20px;
+                                      background: #2196f3;
+                                      color: white;
+                                      padding: 8px 16px;
+                                      border-radius: 4px;
+                                      z-index: 10000;
+                                      font-size: 14px;
+                                      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                                    `;
+                                    document.body.appendChild(successMsg);
+                                    setTimeout(() => {
+                                      if (successMsg.parentNode) {
+                                        successMsg.parentNode.removeChild(successMsg);
+                                      }
+                                    }, 3000);
                                   } catch (error) {
-                                    console.error('Regeneration failed:', error);
-                                    button.style.backgroundColor = '#fef2f2';
-                                    setTimeout(() => button.style.backgroundColor = '', 1000);
+                                    console.error('🔄 REGENERATE: Failed:', error);
+                                    if (button) {
+                                      button.style.backgroundColor = '#fef2f2';
+                                      setTimeout(() => {
+                                        if (button) button.style.backgroundColor = '';
+                                      }, 1000);
+                                    }
                                   } finally {
                                     setIsLoading(false);
                                   }
                                 } else {
-                                  const button = e.currentTarget;
-                                  button.style.backgroundColor = '#fef2f2';
-                                  setTimeout(() => button.style.backgroundColor = '', 1000);
+                                  const button = e.currentTarget as HTMLButtonElement;
+                                  if (button) {
+                                    button.style.backgroundColor = '#fef2f2';
+                                    setTimeout(() => {
+                                      if (button) button.style.backgroundColor = '';
+                                    }, 1000);
+                                  }
                                   alert('No user message found to regenerate from');
                                 }
                               }}
@@ -841,18 +961,45 @@ const HomeContent = (): JSX.Element => {
                               className="p-1 hover:bg-gray-100 rounded transition-colors"
                               title="Good response"
                               onClick={(e) => {
+                                console.log('👍 THUMBS UP: Button clicked!', { messageId: message.id });
                                 e.preventDefault();
                                 e.stopPropagation();
 
                                 // Add visual feedback for thumbs up
-                                const button = e.currentTarget;
-                                button.style.backgroundColor = '#dcfce7';
-                                button.style.transform = 'scale(1.1)';
+                                const button = e.currentTarget as HTMLButtonElement;
+                                if (button) {
+                                  button.style.backgroundColor = '#dcfce7';
+                                  button.style.transform = 'scale(1.1)';
+                                  setTimeout(() => {
+                                    if (button) {
+                                      button.style.backgroundColor = '';
+                                      button.style.transform = '';
+                                    }
+                                  }, 2000);
+                                }
+
+                                // Show feedback message
+                                const successMsg = document.createElement('div');
+                                successMsg.textContent = 'Thanks for the positive feedback!';
+                                successMsg.style.cssText = `
+                                  position: fixed;
+                                  top: 20px;
+                                  right: 20px;
+                                  background: #4caf50;
+                                  color: white;
+                                  padding: 8px 16px;
+                                  border-radius: 4px;
+                                  z-index: 10000;
+                                  font-size: 14px;
+                                  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                                `;
+                                document.body.appendChild(successMsg);
                                 setTimeout(() => {
-                                  button.style.backgroundColor = '';
-                                  button.style.transform = '';
-                                }, 1000);
-                                logger.info('Positive feedback submitted', {
+                                  if (successMsg.parentNode) {
+                                    successMsg.parentNode.removeChild(successMsg);
+                                  }
+                                }, 3000);
+                                loggerInstance.info('Positive feedback submitted', {
                                   component: 'Home',
                                   messageId: message.id,
                                   action: 'feedback_positive'
@@ -866,23 +1013,50 @@ const HomeContent = (): JSX.Element => {
                               className="p-1 hover:bg-gray-100 rounded transition-colors"
                               title="Poor response"
                               onClick={(e) => {
+                                console.log('👎 THUMBS DOWN: Button clicked!', { messageId: message.id });
                                 e.preventDefault();
                                 e.stopPropagation();
 
                                 // Add visual feedback for thumbs down
-                                const button = e.currentTarget;
-                                button.style.backgroundColor = '#fef2f2';
-                                button.style.transform = 'scale(1.1)';
+                                const button = e.currentTarget as HTMLButtonElement;
+                                if (button) {
+                                  button.style.backgroundColor = '#fef2f2';
+                                  button.style.transform = 'scale(1.1)';
+                                  setTimeout(() => {
+                                    if (button) {
+                                      button.style.backgroundColor = '';
+                                      button.style.transform = '';
+                                    }
+                                  }, 2000);
+                                }
+
+                                // Show feedback message
+                                const feedbackMsg = document.createElement('div');
+                                feedbackMsg.textContent = 'Feedback received - we\'ll improve!';
+                                feedbackMsg.style.cssText = `
+                                  position: fixed;
+                                  top: 20px;
+                                  right: 20px;
+                                  background: #ff9800;
+                                  color: white;
+                                  padding: 8px 16px;
+                                  border-radius: 4px;
+                                  z-index: 10000;
+                                  font-size: 14px;
+                                  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                                `;
+                                document.body.appendChild(feedbackMsg);
                                 setTimeout(() => {
-                                  button.style.backgroundColor = '';
-                                  button.style.transform = '';
-                                }, 1000);
+                                  if (feedbackMsg.parentNode) {
+                                    feedbackMsg.parentNode.removeChild(feedbackMsg);
+                                  }
+                                }, 3000);
 
                                 // Open feedback modal for additional context
                                 setCurrentMessageId(message.id);
                                 setShowFeedbackModal(true);
 
-                                logger.info('Negative feedback submitted', { 
+                                loggerInstance.info('Negative feedback submitted', {
                                   component: 'Home',
                                   messageId: message.id,
                                   action: 'feedback_negative'
@@ -899,9 +1073,9 @@ const HomeContent = (): JSX.Element => {
                     {/* User Message Layout - Professional Style */}
                     {message.sender === 'user' && (
                       <div className="flex items-start gap-3 max-w-[75%]">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col flex-1 min-w-0">
                           <div className="bg-[#005B92] px-4 py-3 rounded-lg shadow-sm">
-                            <p className="text-sm leading-relaxed text-white">{message.text}</p>
+                            <p className="text-sm leading-relaxed text-white whitespace-pre-wrap break-words">{message.text}</p>
                           </div>
 
                           {/* Attached Documents Display */}
@@ -940,17 +1114,16 @@ const HomeContent = (): JSX.Element => {
                                 e.preventDefault();
                                 e.stopPropagation();
 
-                                const button = e.currentTarget;
-                                button.style.backgroundColor = '#e0f2fe';
+                                const button = e.currentTarget as HTMLButtonElement;
+                                if (button) {
+                                  button.style.backgroundColor = '#e0f2fe';
+                                }
 
                                 // Load message into input for editing
                                 setInputText(message.text);
 
                                 // Remove this message and all subsequent messages
-                                const messageIndex = messages.findIndex(m => m.id === message.id);
-                                if (messageIndex !== -1) {
-                                  setMessages(prev => prev.slice(0, messageIndex));
-                                }
+                                deleteMessage(message.id);
 
                                 // Focus input field after state update
                                 setTimeout(() => {
@@ -961,7 +1134,9 @@ const HomeContent = (): JSX.Element => {
                                 }, 100);
 
                                 // Reset button style
-                                setTimeout(() => button.style.backgroundColor = '', 500);
+                                setTimeout(() => {
+                                  if (button) button.style.backgroundColor = '';
+                                }, 500);
                               }}
                             >
                               <img src="/src/styles/WK Icons/pencil.png" alt="Edit" className="w-3 h-3 opacity-60 hover:opacity-100" />
@@ -970,14 +1145,22 @@ const HomeContent = (): JSX.Element => {
                               className="p-1 hover:bg-gray-100 rounded transition-colors"
                               title="Copy message"
                               onClick={async (e) => {
+                                console.log('📋 COPY: Button clicked!', { messageId: message.id, sender: message.sender, hasClipboard: !!navigator.clipboard, isSecure: window.isSecureContext });
                                 e.preventDefault();
                                 e.stopPropagation();
+
+                                // Capture button reference BEFORE async operation
+                                const button = e.currentTarget as HTMLButtonElement;
+                                console.log('📋 COPY: Captured button:', !!button);
 
                                 try {
                                   // Try modern clipboard API first
                                   if (navigator.clipboard && window.isSecureContext) {
+                                    console.log('📋 COPY: Using modern clipboard API');
                                     await navigator.clipboard.writeText(message.text);
+                                    console.log('📋 COPY: Modern clipboard success');
                                   } else {
+                                    console.log('📋 COPY: Using fallback method');
                                     // Fallback for older browsers
                                     const textArea = document.createElement('textarea');
                                     textArea.value = message.text;
@@ -987,28 +1170,70 @@ const HomeContent = (): JSX.Element => {
                                     document.body.appendChild(textArea);
                                     textArea.focus();
                                     textArea.select();
-                                    document.execCommand('copy');
+                                    const success = document.execCommand('copy');
                                     textArea.remove();
+                                    console.log('📋 COPY: Fallback success:', success);
                                   }
 
                                   // Show brief success feedback
-                                  const button = e.currentTarget;
-                                  const originalTitle = button.getAttribute('title');
-                                  button.setAttribute('title', 'Copied!');
-                                  button.style.backgroundColor = '#dcfce7';
-                                  setTimeout(() => {
-                                    button.setAttribute('title', originalTitle || 'Copy message');
-                                    button.style.backgroundColor = '';
-                                  }, 1000);
+                                  console.log('📋 COPY: Showing success feedback');
+                                  if (button) {
+                                    const originalTitle = button.getAttribute('title');
+                                    const originalBg = button.style.backgroundColor;
+
+                                    // Update tooltip and background
+                                    button.setAttribute('title', 'Copied!');
+                                    button.style.backgroundColor = '#dcfce7';
+                                    button.style.transform = 'scale(1.05)';
+                                    console.log('📋 COPY: Applied success styles');
+
+                                    // Reset after 2 seconds
+                                    setTimeout(() => {
+                                      if (button) {
+                                        button.setAttribute('title', originalTitle || 'Copy message');
+                                        button.style.backgroundColor = originalBg;
+                                        button.style.transform = '';
+                                        console.log('📋 COPY: Reset styles');
+                                      }
+                                    }, 2000);
+
+                                    // Also show a temporary success message
+                                    const successMsg = document.createElement('div');
+                                    successMsg.textContent = 'Copied to clipboard!';
+                                    successMsg.style.cssText = `
+                                      position: fixed;
+                                      top: 20px;
+                                      right: 20px;
+                                      background: #4caf50;
+                                      color: white;
+                                      padding: 8px 16px;
+                                      border-radius: 4px;
+                                      z-index: 10000;
+                                      font-size: 14px;
+                                      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                                    `;
+                                    document.body.appendChild(successMsg);
+                                    setTimeout(() => {
+                                      if (successMsg.parentNode) {
+                                        successMsg.parentNode.removeChild(successMsg);
+                                      }
+                                    }, 3000);
+                                  } else {
+                                    console.error('📋 COPY: Button is null!');
+                                  }
                                 } catch (error) {
                                   console.error('Failed to copy text:', error);
-                                  const button = e.currentTarget;
-                                  button.style.backgroundColor = '#fef2f2';
-                                  button.setAttribute('title', 'Copy failed');
-                                  setTimeout(() => {
-                                    button.style.backgroundColor = '';
-                                    button.setAttribute('title', 'Copy message');
-                                  }, 2000);
+                                  const button = e.currentTarget as HTMLButtonElement;
+                                  if (button) {
+                                    button.style.backgroundColor = '#fef2f2';
+                                    button.setAttribute('title', 'Copy failed');
+                                    setTimeout(() => {
+                                      if (button) {
+                                        button.style.backgroundColor = '';
+                                        button.setAttribute('title', 'Copy message');
+                                      }
+                                    }, 2000);
+                                  }
                                 }
                               }}
                             >
@@ -1047,7 +1272,7 @@ const HomeContent = (): JSX.Element => {
 
 
           {/* Input area */}
-          <div className="flex flex-col w-[720px] items-start gap-2 relative">
+          <div className="flex flex-col w-[720px] items-start gap-2 sticky bottom-0 bg-white pt-2 pb-4">
             {/* Document Context Display - Right above input */}
             {hasDocuments && (
               <div className="w-full px-4 pt-2">
@@ -1083,13 +1308,32 @@ const HomeContent = (): JSX.Element => {
               </div>
             )}
             <div className="flex flex-col items-start justify-center gap-2 px-4 py-3 self-stretch w-full bg-white border border-solid border-[#757575] relative">
-              <Input
-                className="w-full h-5 font-input-normal-placeholder text-[#474747] text-[length:var(--input-normal-placeholder-font-size)] leading-[var(--input-normal-placeholder-line-height)] border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 pl-0"
+              <textarea
+                ref={inputRef}
+                className="w-full min-h-[40px] max-h-[240px] resize-none font-input-normal-placeholder text-[#474747] text-[length:var(--input-normal-placeholder-font-size)] leading-[var(--input-normal-placeholder-line-height)] border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none pl-0 overflow-y-auto"
                 placeholder="Ask your assistant a question ..."
                 value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  // Auto-resize textarea
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 240) + 'px';
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleKeyPress(e as any);
+                  }
+                }}
                 disabled={isLoading}
+                rows={1}
+                style={{
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word',
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word',
+                  outline: 'none'
+                }}
               />
 
               <div className="items-center justify-between self-stretch w-full flex relative">
@@ -1100,214 +1344,155 @@ const HomeContent = (): JSX.Element => {
                     onSearchCCHClick={openCCHSearchModal}
                   />
 
-                  {/* AI Provider Selector */}
-                  <div className="relative" ref={providerDropdownRef}>
-                    <button
-                      onClick={() => setShowProviderDropdown(!showProviderDropdown)}
-                      className="inline-flex items-center justify-center p-2 relative rounded hover:bg-gray-100 transition-all"
-                      title={
-                        isInitializingAI
-                          ? 'Connecting to backend...'
-                          : selectedProvider
-                            ? `AI Provider: ${availableProviders.find(p => p.id === selectedProvider)?.displayName || selectedProvider}`
-                            : isBackendConnected
-                              ? 'Select AI Provider'
-                              : 'Backend not connected'
-                      }
-                      disabled={isInitializingAI}
-                    >
-                      {/* Status indicator dot */}
-                      <div className="absolute -top-0.5 -right-0.5 z-10">
-                        {isInitializingAI ? (
-                          <img
-                            src="/src/styles/WK Icons/spinner-alt.png"
-                            alt=""
-                            className="w-2 h-2 animate-spin"
-                          />
-                        ) : isBackendConnected && selectedProvider ? (
-                          <div className="w-2 h-2 bg-green-500 rounded-full border border-white shadow-sm"></div>
-                        ) : isBackendConnected ? (
-                          <div className="w-2 h-2 bg-yellow-500 rounded-full border border-white shadow-sm"></div>
-                        ) : (
-                          <div className="w-2 h-2 bg-red-500 rounded-full border border-white shadow-sm"></div>
-                        )}
-                      </div>
-
-                      <img
-                        src="/src/styles/WK Icons/ai-generate.png"
-                        alt="AI Provider"
-                        className={`w-4 h-4 ${isInitializingAI ? 'opacity-50' : ''}`}
-                      />
-                      {!isInitializingAI && availableProviders.length > 1 && (
-                        <img
-                          src="/src/styles/WK Icons/chevron-up.png"
-                          alt=""
-                          className="w-2 h-2 ml-1"
-                          style={{
-                            transform: showProviderDropdown ? 'rotate(180deg)' : 'rotate(0deg)',
-                            transition: 'transform 150ms ease'
-                          }}
-                        />
-                      )}
-                    </button>
-
-                    {/* Provider Selection Dropdown */}
-                    {showProviderDropdown && !isInitializingAI && (
-                      <div className="absolute bottom-full left-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px]">
-                        <div className="px-3 py-2 border-b border-gray-100">
-                          <p className="text-xs text-gray-500 font-medium">AI Provider</p>
-                        </div>
-                        {availableProviders.map((provider) => {
-                          const isSelected = selectedProvider === provider.id;
-                          const isAvailable = provider.isAvailable;
-
-                          return (
-                            <button
-                              key={provider.id}
-                              onClick={() => {
-                                if (isAvailable) {
-                                  setSelectedProvider(provider.id);
-                                  setShowProviderDropdown(false);
-                                  logger.info('Provider switched', { 
-                                    component: 'Home',
-                                    providerId: provider.id,
-                                    action: 'provider_switch'
-                                  });
-                                }
-                              }}
-                              disabled={!isAvailable}
-                              className={`flex items-center gap-3 w-full px-4 py-3 text-left text-sm transition-colors ${isSelected
-                                ? 'bg-blue-50 text-blue-700 border-l-2 border-blue-500'
-                                : isAvailable
-                                  ? 'text-gray-700 hover:bg-gray-50'
-                                  : 'text-gray-400 cursor-not-allowed'
-                                }`}
-                            >
-                              <div className="flex items-center gap-2 flex-1">
-                                <div className={`w-2 h-2 rounded-full ${isSelected
-                                  ? 'bg-blue-500'
-                                  : isAvailable
-                                    ? 'bg-green-400'
-                                    : 'bg-red-400'
-                                  }`}></div>
-                                <span className="font-medium">
-                                  {provider.displayName}
-                                </span>
-                                {!isAvailable && (
-                                  <span className="text-xs text-red-500">(Unavailable)</span>
-                                )}
-                              </div>
-                              {isSelected && (
-                                <img
-                                  src="/src/styles/WK Icons/chevron-up.png"
-                                  alt="Selected"
-                                  className="w-3 h-3"
-                                  style={{ transform: 'rotate(90deg)' }}
-                                />
-                              )}
-                            </button>
-                          );
-                        })}
-
-                        {availableProviders.length === 0 && (
-                          <div className="px-4 py-3 text-sm text-gray-500">
-                            No AI providers available
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
                   <div className="relative" ref={toolsDropdownRef}>
                     <button
                       onClick={() => setShowToolsDropdown(!showToolsDropdown)}
-                      className="inline-flex items-center justify-center p-2 relative rounded hover:bg-gray-100 transition-all"
-                      title="Tools & Settings"
+                      className="inline-flex items-center gap-2 p-2 relative rounded hover:bg-gray-100 transition-all"
+                      title={activeTools.length > 0 ? `Active: ${activeTools.join(', ')}` : "Tools & Settings"}
                     >
                       <img
                         src="/src/styles/WK Icons/sliders.png"
                         alt="Tools & Settings"
                         className="w-4 h-4"
                       />
+                      {activeTools.length > 0 && (
+                        <div className="flex items-center gap-1">
+                          {activeTools.slice(0, 2).map((tool, index) => (
+                            <span
+                              key={tool}
+                              className="text-xs text-[#005B92] font-medium bg-[#005B92]/10 px-1.5 py-0.5 rounded-full border border-[#005B92]/20"
+                            >
+                              {tool}
+                            </span>
+                          ))}
+                          {activeTools.length > 2 && (
+                            <span className="text-xs text-[#005B92] font-medium">
+                              +{activeTools.length - 2}
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </button>
 
                     {/* Tools Dropdown */}
                     {showToolsDropdown && (
-                      <div className="absolute bottom-full left-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[220px]">
-                        {/* Web Search */}
+                      <div className="absolute bottom-full left-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[240px]">
+                        {/* Search Category */}
+                        <div className="px-3 py-2 border-b border-gray-100">
+                          <p className="text-xs text-gray-500 font-medium">Search</p>
+                        </div>
+
+                        {/* CCH AnswerConnect Search */}
                         <button
                           onClick={() => {
-                            logger.info('Web Search tool clicked', { 
-                              component: 'Home',
-                              action: 'tool_web_search'
-                            });
-                            setShowToolsDropdown(false);
+                            const toolName = 'CCH® AnswerConnect';
+                            if (activeTools.includes(toolName)) {
+                              setActiveTools(activeTools.filter(t => t !== toolName));
+                              loggerInstance.info('CCH AnswerConnect Search deactivated', {
+                                component: 'Home',
+                                action: 'tool_cch_answerconnect_deactivate'
+                              });
+                            } else {
+                              setActiveTools([...activeTools, toolName]);
+                              loggerInstance.info('CCH AnswerConnect Search activated', {
+                                component: 'Home',
+                                action: 'tool_cch_answerconnect_activate'
+                              });
+                            }
                           }}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-t-lg"
+                          className={`flex items-center justify-between w-full px-4 py-3 text-left text-sm transition-colors ${activeTools.includes('CCH® AnswerConnect')
+                            ? 'bg-[#005B92]/10 text-[#005B92]'
+                            : 'text-gray-700 hover:bg-gray-50'
+                            }`}
                         >
-                          <img
-                            src="/src/styles/WK Icons/search.png"
-                            alt=""
-                            className="w-4 h-4"
-                          />
-                          <span>🔍 Web Search</span>
+                          <div className="flex items-center gap-3">
+                            <img
+                              src="/src/styles/WK Icons/globe.png"
+                              alt=""
+                              className="w-4 h-4"
+                            />
+                            <span>CCH® AnswerConnect</span>
+                          </div>
+                          {activeTools.includes('CCH® AnswerConnect') && (
+                            <div className="w-2 h-2 bg-[#005B92] rounded-full"></div>
+                          )}
                         </button>
 
-                        {/* Analyze Data */}
+                        {/* IRS.gov Search */}
                         <button
                           onClick={() => {
-                            logger.info('Analyze Data tool clicked', { 
-                              component: 'Home',
-                              action: 'tool_analyze_data'
-                            });
-                            setShowToolsDropdown(false);
+                            const toolName = 'IRS.gov';
+                            if (activeTools.includes(toolName)) {
+                              setActiveTools(activeTools.filter(t => t !== toolName));
+                              loggerInstance.info('IRS.gov Search deactivated', {
+                                component: 'Home',
+                                action: 'tool_irs_gov_deactivate'
+                              });
+                            } else {
+                              setActiveTools([...activeTools, toolName]);
+                              loggerInstance.info('IRS.gov Search activated', {
+                                component: 'Home',
+                                action: 'tool_irs_gov_activate'
+                              });
+                            }
                           }}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className={`flex items-center justify-between w-full px-4 py-3 text-left text-sm transition-colors ${activeTools.includes('IRS.gov')
+                            ? 'bg-[#005B92]/10 text-[#005B92]'
+                            : 'text-gray-700 hover:bg-gray-50'
+                            }`}
                         >
-                          <img
-                            src="/src/styles/WK Icons/ai-generate.png"
-                            alt=""
-                            className="w-4 h-4"
-                          />
-                          <span>📊 Analyze Data</span>
+                          <div className="flex items-center gap-3">
+                            <img
+                              src="/src/styles/WK Icons/shield.png"
+                              alt=""
+                              className="w-4 h-4"
+                            />
+                            <span>IRS.gov</span>
+                          </div>
+                          {activeTools.includes('IRS.gov') && (
+                            <div className="w-2 h-2 bg-[#005B92] rounded-full"></div>
+                          )}
                         </button>
 
-                        {/* Run Calculations */}
-                        <button
-                          onClick={() => {
-                            logger.info('Run Calculations tool clicked', { 
-                              component: 'Home',
-                              action: 'tool_run_calculations'
-                            });
-                            setShowToolsDropdown(false);
-                          }}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <img
-                            src="/src/styles/WK Icons/code.png"
-                            alt=""
-                            className="w-4 h-4"
-                          />
-                          <span>🧮 Run Calculations</span>
-                        </button>
+                        {/* Analysis Category */}
+                        <div className="px-3 py-2 border-b border-gray-100">
+                          <p className="text-xs text-gray-500 font-medium">Analysis</p>
+                        </div>
 
-                        {/* Generate Document */}
+                        {/* Tax Calculation Tool */}
                         <button
                           onClick={() => {
-                            logger.info('Generate Document tool clicked', { 
-                              component: 'Home',
-                              action: 'tool_generate_document'
-                            });
-                            setShowToolsDropdown(false);
+                            const toolName = 'Tax Calculator';
+                            if (activeTools.includes(toolName)) {
+                              setActiveTools(activeTools.filter(t => t !== toolName));
+                              loggerInstance.info('Tax Calculator deactivated', {
+                                component: 'Home',
+                                action: 'tool_tax_calculation_deactivate'
+                              });
+                            } else {
+                              setActiveTools([...activeTools, toolName]);
+                              loggerInstance.info('Tax Calculator activated', {
+                                component: 'Home',
+                                action: 'tool_tax_calculation_activate'
+                              });
+                            }
                           }}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-b-lg"
+                          className={`flex items-center justify-between w-full px-4 py-3 text-left text-sm transition-colors rounded-b-lg ${activeTools.includes('Tax Calculator')
+                            ? 'bg-[#005B92]/10 text-[#005B92]'
+                            : 'text-gray-700 hover:bg-gray-50'
+                            }`}
                         >
-                          <img
-                            src="/src/styles/WK Icons/text.png"
-                            alt=""
-                            className="w-4 h-4"
-                          />
-                          <span>📝 Generate Document</span>
+                          <div className="flex items-center gap-3">
+                            <img
+                              src="/src/styles/WK Icons/code.png"
+                              alt=""
+                              className="w-4 h-4"
+                            />
+                            <span>Tax Calculator</span>
+                          </div>
+                          {activeTools.includes('Tax Calculator') && (
+                            <div className="w-2 h-2 bg-[#005B92] rounded-full"></div>
+                          )}
                         </button>
                       </div>
                     )}
@@ -1410,7 +1595,7 @@ const HomeContent = (): JSX.Element => {
             <div className="flex gap-2 mt-4">
               <button
                 onClick={() => {
-                  logger.info('Detailed feedback submitted', { 
+                  loggerInstance.info('Detailed feedback submitted', {
                     component: 'Home',
                     messageId: currentMessageId,
                     action: 'feedback_detailed'
@@ -1431,6 +1616,13 @@ const HomeContent = (): JSX.Element => {
           </div>
         </div>
       )}
+
+      {/* Admin Dashboard */}
+      <AdminDashboard
+        isOpen={showAdminDashboard}
+        onClose={() => setShowAdminDashboard(false)}
+      />
+
     </div>
   );
 };

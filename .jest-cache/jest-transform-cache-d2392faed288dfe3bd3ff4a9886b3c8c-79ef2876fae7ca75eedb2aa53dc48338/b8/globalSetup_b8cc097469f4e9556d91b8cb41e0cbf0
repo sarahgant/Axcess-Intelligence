@@ -1,0 +1,10 @@
+ad21725b1f0caa674cd2798315118fc6
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = globalSetup;
+// Global setup for Jest tests
+async function globalSetup() {
+    // Global setup logic can go here
+    console.log('Setting up global test environment...');
+}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxzYXJhaFxcUmVwb3NcXENDSCBBeGNlc3MgSW50ZWxsaWdlbmNlIFZpYmVkXFx0ZXN0c1xcc2V0dXBcXGdsb2JhbFNldHVwLnRzIiwibWFwcGluZ3MiOiI7O0FBQ0EsOEJBR0M7QUFKRCw4QkFBOEI7QUFDZixLQUFLLFVBQVUsV0FBVztJQUN2QyxpQ0FBaUM7SUFDakMsT0FBTyxDQUFDLEdBQUcsQ0FBQyx1Q0FBdUMsQ0FBQyxDQUFDO0FBQ3ZELENBQUMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxzYXJhaFxcUmVwb3NcXENDSCBBeGNlc3MgSW50ZWxsaWdlbmNlIFZpYmVkXFx0ZXN0c1xcc2V0dXBcXGdsb2JhbFNldHVwLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIEdsb2JhbCBzZXR1cCBmb3IgSmVzdCB0ZXN0c1xuZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gZ2xvYmFsU2V0dXAoKSB7XG4gIC8vIEdsb2JhbCBzZXR1cCBsb2dpYyBjYW4gZ28gaGVyZVxuICBjb25zb2xlLmxvZygnU2V0dGluZyB1cCBnbG9iYWwgdGVzdCBlbnZpcm9ubWVudC4uLicpO1xufVxuIl0sInZlcnNpb24iOjN9

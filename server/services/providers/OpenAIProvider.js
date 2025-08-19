@@ -15,7 +15,7 @@ class OpenAIProvider {
         });
         // Map custom model names to actual API model IDs
         const modelMapping = {
-            'gpt-4.1': 'gpt-4-turbo',
+            'gpt-4.1': 'gpt-4.1',
             'gpt-4-turbo': 'gpt-4-turbo',
             'gpt-4': 'gpt-4'
         };

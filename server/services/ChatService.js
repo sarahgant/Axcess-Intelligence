@@ -21,7 +21,7 @@ class ChatService {
             if (process.env.ANTHROPIC_API_KEY) {
                 this.providers.set('anthropic', new AnthropicProvider({
                     apiKey: process.env.ANTHROPIC_API_KEY,
-                    defaultModel: process.env.ANTHROPIC_DEFAULT_MODEL || 'claude-3-sonnet-20240229'
+                    defaultModel: process.env.ANTHROPIC_DEFAULT_MODEL || 'claude-3-5-sonnet-20241022'
                 }));
                 logger.info('✅ Anthropic provider initialized');
             } else {
@@ -32,7 +32,7 @@ class ChatService {
             if (process.env.OPENAI_API_KEY) {
                 this.providers.set('openai', new OpenAIProvider({
                     apiKey: process.env.OPENAI_API_KEY,
-                    defaultModel: process.env.OPENAI_DEFAULT_MODEL || 'gpt-4'
+                    defaultModel: process.env.OPENAI_DEFAULT_MODEL || 'gpt-4.1'
                 }));
                 logger.info('✅ OpenAI provider initialized');
             } else {

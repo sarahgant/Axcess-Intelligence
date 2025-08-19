@@ -44,12 +44,13 @@ export async function initializeApplication() {
 
     // 4. Log configuration summary (in development)
     if (ConfigUtils.isDevelopment()) {
-      logger.info('🔧 Configuration Summary', DevHelpers.getConfigSummary());
+      const configSummary = DevHelpers.getConfigSummary();
+      logger.info('🔧 Configuration Summary', configSummary as any);
     }
 
     return { config, promptRegistry };
   } catch (error) {
-    logger.error('❌ Failed to initialize application', { error });
+    logger.error('❌ Failed to initialize application', { error: String(error) });
     throw error;
   }
 }
@@ -92,18 +93,16 @@ export function demonstratePromptUsage() {
     .name('Custom Example Prompt')
     .category('user')
     .template('Analyze the following tax scenario: {{scenario}}\n\nProvide guidance on {{focus}}.')
-    .description('Custom prompt for tax scenario analysis')
-    .author('developer')
-    .tags('example', 'tax', 'analysis')
-    .required('scenario', 'focus')
-    .example(
-      'Business Expense Analysis',
-      'Analyze business meal expenses',
-      {
+    .metadata({ author: 'developer', tags: ['example', 'tax', 'analysis'] })
+    .validation({ required: ['scenario', 'focus'] })
+    .examples({
+      name: 'Business Expense Analysis',
+      description: 'Analyze business meal expenses',
+      variables: {
         scenario: 'Client spent $5,000 on business meals in 2024',
         focus: 'deductibility and documentation requirements'
       }
-    )
+    })
     .build();
 
   // Register the custom prompt
@@ -128,7 +127,7 @@ export function demonstratePromptUsage() {
     complianceYear: '2024'
   });
 
-  console.log('✅ RAG prompt compiled:', ragPrompt.text.substring(0, 100) + '...');
+  logger.info('✅ RAG prompt compiled', { text: ragPrompt.text.substring(0, 100) + '...' });
 
   // Compile custom prompt
   const customCompiled = PromptManager.compile('example.custom', {
@@ -136,28 +135,28 @@ export function demonstratePromptUsage() {
     focus: 'eligibility requirements and calculation methods'
   });
 
-  console.log('✅ Custom prompt compiled:', customCompiled.text.substring(0, 100) + '...');
+  logger.info('✅ Custom prompt compiled', { text: customCompiled.text.substring(0, 100) + '...' });
 }
 
 /**
  * Example: Advanced prompt features
  */
 export function demonstrateAdvancedPromptFeatures() {
-  console.log('\n🔧 Advanced Prompt Features:');
+  logger.info('🔧 Advanced Prompt Features:');
 
   const registry = initializePromptRegistry();
 
   // Search prompts by category
   const systemPrompts = PromptManager.byCategory('system');
-  console.log(`Found ${systemPrompts.length} system prompts`);
+  logger.info(`Found ${systemPrompts.length} system prompts`);
 
   // Search prompts by tags
   const ragPrompts = PromptManager.byTags('rag', 'search');
-  console.log(`Found ${ragPrompts.length} RAG prompts`);
+  logger.info(`Found ${ragPrompts.length} RAG prompts`);
 
   // Get registry statistics
   const stats = PromptManager.getStats();
-  console.log('Registry stats:', {
+  logger.info('Registry stats', {
     totalPrompts: stats.totalPrompts,
     categories: Object.keys(stats.categories),
     mostUsed: stats.mostUsed.slice(0, 3) // Top 3
@@ -175,7 +174,7 @@ export function demonstrateAdvancedPromptFeatures() {
       },
       'anthropic'
     );
-    console.log('✅ Anthropic-specific prompt compiled');
+    logger.info('✅ Anthropic-specific prompt compiled');
 
     const openaiPrompt = PromptManager.compile(
       PROMPT_IDS.CCH_SYSTEM,
@@ -187,9 +186,9 @@ export function demonstrateAdvancedPromptFeatures() {
       },
       'openai'
     );
-    console.log('✅ OpenAI-specific prompt compiled');
+    logger.info('✅ OpenAI-specific prompt compiled');
   } catch (error) {
-    console.log('ℹ️ Model-specific variants not available for this prompt');
+    logger.info('ℹ️ Model-specific variants not available for this prompt');
   }
 }
 
@@ -197,7 +196,7 @@ export function demonstrateAdvancedPromptFeatures() {
  * Example: Configuration helpers for development
  */
 export function demonstrateDevHelpers() {
-  console.log('\n🛠️ Development Helper Examples:');
+  logger.info('🛠️ Development Helper Examples:');
 
   // Generate .env file content
   const envContent = DevHelpers.generateEnvFile({
@@ -217,12 +216,11 @@ export function demonstrateDevHelpers() {
     }
   });
 
-  console.log('📄 Generated .env file content (first 200 chars):');
-  console.log(envContent.substring(0, 200) + '...');
+  logger.info('📄 Generated .env file content (first 200 chars)', { content: envContent.substring(0, 200) + '...' });
 
   // Validate current setup
   const validation = DevHelpers.validateSetup();
-  console.log('🔍 Setup validation:', {
+  logger.info('🔍 Setup validation', {
     isValid: validation.isValid,
     missingCount: validation.missingRequired.length,
     warningCount: validation.warnings.length,
@@ -231,7 +229,7 @@ export function demonstrateDevHelpers() {
 
   // Get setup instructions
   if (!validation.isValid) {
-    console.log('📋 Setup instructions available via DevHelpers.getSetupInstructions()');
+    logger.info('📋 Setup instructions available via DevHelpers.getSetupInstructions()');
   }
 }
 
@@ -239,7 +237,7 @@ export function demonstrateDevHelpers() {
  * Example: Error handling and validation
  */
 export function demonstrateErrorHandling() {
-  console.log('\n⚠️ Error Handling Examples:');
+  logger.info('⚠️ Error Handling Examples:');
 
   const registry = initializePromptRegistry();
 
@@ -247,7 +245,7 @@ export function demonstrateErrorHandling() {
     // Try to get a non-existent prompt
     PromptManager.get('non.existent.prompt');
   } catch (error) {
-    console.log('✅ Caught expected error:', error.constructor.name);
+    logger.info('✅ Caught expected error', { errorType: error instanceof Error ? error.constructor.name : 'Unknown' });
   }
 
   try {
@@ -257,7 +255,7 @@ export function demonstrateErrorHandling() {
       // Missing other required variables
     });
   } catch (error) {
-    console.log('✅ Caught validation error:', error.constructor.name);
+    logger.info('✅ Caught validation error', { errorType: error instanceof Error ? error.constructor.name : 'Unknown' });
   }
 
   // Create an invalid prompt
@@ -266,12 +264,12 @@ export function demonstrateErrorHandling() {
       .id('invalid.prompt')
       .name('Invalid Prompt')
       .template('Hello {{undeclaredVar}}!')
-      .variables(['declaredVar']) // Mismatch
+      .variables('declaredVar') // Fix: pass as individual arguments
       .build();
 
     registry.register(invalidPrompt);
   } catch (error) {
-    console.log('✅ Caught template validation error:', error.constructor.name);
+    logger.info('✅ Caught template validation error', { errorType: error instanceof Error ? error.constructor.name : 'Unknown' });
   }
 }
 
@@ -287,19 +285,11 @@ export async function runAllExamples() {
     demonstrateDevHelpers();
     demonstrateErrorHandling();
 
-    console.log('\n🎉 All examples completed successfully!');
+    logger.info('🎉 All examples completed successfully!');
   } catch (error) {
-    console.error('\n❌ Example execution failed:', error);
+    logger.error('❌ Example execution failed', { error: String(error) });
   }
 }
 
-// Export for use in application
-export {
-  initializeApplication as default,
-  initializeApplication,
-  demonstrateConfigUsage,
-  demonstratePromptUsage,
-  demonstrateAdvancedPromptFeatures,
-  demonstrateDevHelpers,
-  demonstrateErrorHandling
-};
+// Default export
+export default initializeApplication;
