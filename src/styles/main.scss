@@ -1,9 +1,21 @@
 /* Import existing Tailwind CSS first */
 @import '../../tailwind.css';
 
-/* WK Theme - Main import with all components and utilities */
-@import 'node_modules/@wk/theme/assets/main';
+/* Base styles for the application */
+* {
+  box-sizing: border-box;
+}
 
-/* WK Theme - Font paths configuration */
-$font-path: 'node_modules/@wk/theme/assets/fonts/';
-$icon-font-path: "node_modules/@wk/theme/assets/fonts/bootstrap/";
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+}
+
+#app {
+  min-height: 100vh;
+}
